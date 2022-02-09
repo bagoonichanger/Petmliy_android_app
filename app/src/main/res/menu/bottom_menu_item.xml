@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/ic_free_icon_home"
+        android:title="홈" />
+
+    <item
+        android:id="@+id/story"
+        android:icon="@drawable/ic_free_icon_camera"
+        android:title="스토리" />
+
+    <item
+        android:id="@+id/walk"
+        android:icon="@drawable/ic_premium_icon_paw"
+        android:title="산책" />
+
+    <item
+        android:id="@+id/map"
+        android:icon="@drawable/ic_free_icon_marker"
+        android:title="지도" />
+
+</menu>
