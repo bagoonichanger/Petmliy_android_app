@@ -27,17 +27,15 @@ class MainActivity : AppCompatActivity() {
 
         viewpager.adapter = viewPagerFragmentAdapter(this)
 
-        bottomNavigationView.setOnItemSelectedListener(object: NavigationBarView.OnItemSelectedListener{
-            override fun onNavigationItemSelected(item: MenuItem): Boolean {
-                when(item.itemId){
-                    R.id.home -> viewpager.currentItem = 0
-                    R.id.story -> viewpager.currentItem = 1
-                    R.id.walk -> viewpager.currentItem = 2
-                    R.id.map -> viewpager.currentItem = 3
-                }
-                return false
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.home -> viewpager.currentItem = 0
+                R.id.story -> viewpager.currentItem = 1
+                R.id.walk -> viewpager.currentItem = 2
+                R.id.map -> viewpager.currentItem = 3
             }
-        })
+            false
+        }
 
         viewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
