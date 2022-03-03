@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         binding.viewPager
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) { //develop commit0303-1
+    override fun onCreate(savedInstanceState: Bundle?) { //develop commit0303-2
         binding = ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
