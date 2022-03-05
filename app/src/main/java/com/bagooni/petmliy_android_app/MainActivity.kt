@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     private val walkFragment: WalkFragment by lazy {
         WalkFragment()
     }
-//확인
+// master 병합
     private val mapFragment: MapFragment by lazy {
         MapFragment()
     }
