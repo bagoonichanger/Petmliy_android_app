@@ -8,8 +8,7 @@ import com.bagooni.petmliy_android_app.map.MapFragment
 import com.bagooni.petmliy_android_app.post.PostFragment
 import com.bagooni.petmliy_android_app.walk.WalkFragment
 
-class viewPagerFragmentAdapter(fragmentActivity: FragmentActivity) :
-    FragmentStateAdapter(fragmentActivity) {
+class viewPagerFragmentAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
     override fun getItemCount(): Int {
         return 4
     }

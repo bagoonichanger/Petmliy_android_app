@@ -2,47 +2,60 @@ package com.bagooni.petmliy_android_app
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
-import androidx.core.view.get
-import androidx.viewpager2.widget.ViewPager2
+import androidx.fragment.app.Fragment
 import com.bagooni.petmliy_android_app.databinding.ActivityMainBinding
+import com.bagooni.petmliy_android_app.home.HomeFragment
+import com.bagooni.petmliy_android_app.map.MapFragment
+import com.bagooni.petmliy_android_app.post.PostFragment
+import com.bagooni.petmliy_android_app.walk.WalkFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationBarView
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+
+    private val homeFragment: HomeFragment by lazy {
+        HomeFragment()
+    }
+
+    private val postFragment: PostFragment by lazy {
+        PostFragment()
+    }
+
+    private val walkFragment: WalkFragment by lazy {
+        WalkFragment()
+    }
+// master 병합
+    private val mapFragment: MapFragment by lazy {
+        MapFragment()
+    }
 
     private val bottomNavigationView: BottomNavigationView by lazy {
         binding.bottomNavigationView
     }
 
-    private val viewpager: ViewPager2 by lazy {
-        binding.viewPager
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) { //commit test03021
+    override fun onCreate(savedInstanceState: Bundle?) { //checkout commit0303-2
         binding = ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        viewpager.adapter = viewPagerFragmentAdapter(this)
+        replaceFragment(homeFragment) // 처음 페이지
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.home -> viewpager.currentItem = 0
-                R.id.story -> viewpager.currentItem = 1
-                R.id.walk -> viewpager.currentItem = 2
-                R.id.map -> viewpager.currentItem = 3
+                R.id.home -> replaceFragment(homeFragment)
+                R.id.story -> replaceFragment(postFragment)
+                R.id.walk -> replaceFragment(walkFragment)
+                R.id.map -> replaceFragment(mapFragment)
             }
-            false
+            true
         }
+    }
 
-        viewpager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                bottomNavigationView.menu.getItem(position).isChecked = true
+    private fun replaceFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .apply {
+                replace(R.id.fragmentContainer, fragment)
+                commit()
             }
-        })
-
     }
 }
