@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     private val walkFragment: WalkFragment by lazy {
         WalkFragment()
     }
-// develop
+// feature
     private val mapFragment: MapFragment by lazy {
         MapFragment()
     }

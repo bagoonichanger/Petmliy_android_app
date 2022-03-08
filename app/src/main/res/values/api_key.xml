@@ -1,2 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="naver_map_client_id">mkzcchsiil</string></resources>
+<resources>
+    <string name="naver_map_client_id">mkzcchsiil</string>
+    <string name="tmap_api_key">l7xxbfd03282ed6f44dda7dffa1b497acc44</string>
+</resources>
