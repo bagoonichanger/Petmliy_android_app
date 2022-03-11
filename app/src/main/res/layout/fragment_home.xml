@@ -4,16 +4,69 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/petImage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/weatherButton"
+            android:layout_marginStart="40dp" />
         <TextView
+            android:id="@+id/petName"
+            android:text="pet name"
+            android:textColor="@color/black"
+            android:textSize="30sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Home"
-            android:textColor="@color/black"
-            android:textSize="40sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/petImage"
+            app:layout_constraintStart_toEndOf="@id/petImage"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/petBirth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2022.03.08"
+            android:textSize="20sp"
+            app:layout_constraintTop_toBottomOf="@+id/petName"
+            app:layout_constraintStart_toEndOf="@+id/petImage"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"/>
+
+        <ImageButton
+            android:id="@+id/mypageButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_constraintTop_toTopOf="@+id/petImage"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="40dp"
+            android:src="@drawable/ic_baseline_person_outline_24"
+            android:background="@color/white"/>
+        <ImageButton
+            android:id="@+id/weatherButton"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:layout_constraintTop_toBottomOf="@+id/petImage"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toStartOf="@+id/bookmark"
+            app:layout_constraintBottom_toTopOf="@+id/album"/>
+        <ImageButton
+            android:id="@+id/bookmark"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:layout_constraintTop_toTopOf="@+id/weatherButton"
+            app:layout_constraintStart_toEndOf="@+id/weatherButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+        <ImageButton
+            android:id="@+id/album"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/weatherButton"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
