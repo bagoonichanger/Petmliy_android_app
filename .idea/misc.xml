@@ -24,18 +24,26 @@
         <entry key="app/src/main/res/drawable-v24/free-icon-paw-5527846_24.xml" value="0.1945" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1945" />
         <entry key="app/src/main/res/drawable/bottom_indicator.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/button_ripple_custom.xml" value="0.149" />
+        <entry key="app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.2595" />
         <entry key="app/src/main/res/drawable/ic_free_icon_paw_5527846_24.xml" value="0.1945" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1945" />
         <entry key="app/src/main/res/drawable/ic_premium_icon_paw_5068845.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/map_search_Button_background.xml" value="0.259" />
+        <entry key="app/src/main/res/drawable/map_search_bar_background.xml" value="0.1485" />
+        <entry key="app/src/main/res/drawable/map_search_button_background.xml" value="0.2595" />
         <entry key="app/src/main/res/drawable/selector_menu_color.xml" value="0.187" />
         <entry key="app/src/main/res/drawable/style.xml" value="0.1385" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
         <entry key="app/src/main/res/layout/blank_fragment.xml" value="0.271483539974348" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.2825994014536127" />
+        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_post.xml" value="0.2825994014536127" />
         <entry key="app/src/main/res/layout/fragment_walk.xml" value="0.2825994014536127" />
         <entry key="app/src/main/res/layout/layout_viewpager.xml" value="0.15106560802340158" />
+        <entry key="app/src/main/res/layout/map_bottom_sheet.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/map_recycleview_detail.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/map_viewpager_detail.xml" value="0.5" />
         <entry key="app/src/main/res/menu/bottom_menu_item.xml" value="0.2697734074390765" />
         <entry key="app/src/main/res/menu/bottom_navigation_view.xml" value="0.34427083333333336" />
       </map>
