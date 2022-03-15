@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:layout_marginStart="30dp"
     android:layout_marginEnd="30dp"
-    android:background="@color/white"
-    app:cardCornerRadius="16dp"
+    app:cardCornerRadius="25dp"
+    app:cardElevation="10dp"
     tools:layout_height="100dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -67,7 +67,7 @@
             tools:text="010-8881-9507" />
 
         <TextView
-            android:id="@+id/timeTextView"
+            android:id="@+id/urlTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
@@ -78,7 +78,7 @@
             android:textSize="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/callNumberTextView"
-            tools:text="운영시간 : 12:00-24:00" />
+            tools:text="http://place.map.kakao.com/20646966," />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@drawable/map_listadapter_background"
     android:layout_height="wrap_content">
 
     <ImageView
@@ -61,7 +62,7 @@
         tools:text="010-8881-9507" />
 
     <TextView
-        android:id="@+id/timeTextView"
+        android:id="@+id/urlTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
@@ -72,6 +73,6 @@
         android:textSize="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/callNumberTextView"
-        tools:text="운영시간 : 12:00-24:00" />
+        tools:text="http://place.map.kakao.com/20646966," />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
