@@ -2,12 +2,14 @@ package com.bagooni.petmliy_android_app.map
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,6 +32,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.net.URI
 
 
 class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback {
@@ -55,13 +58,12 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback {
     }
 
     private val viewpagerAdapter = PlaceViewPagerAdapter(itemClicked = {
-        val intent = Intent()
-            .apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, "${it.place_name} ${it.address_name} ${it.phone} ${it.place_url}")
-                type = "text/plain"
-            }
-        startActivity(Intent.createChooser(intent, null))
+        val intent = Intent().apply {
+            action = Intent.ACTION_VIEW
+            data = Uri.parse(it.place_url)
+        }
+        startActivity(intent)
+
     })
 
     private val recyclerView: RecyclerView by lazy {
@@ -92,7 +94,14 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback {
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
 
-        searchPlace("동물병원")
+        binding.searchButton.setOnClickListener {
+            val searchText = binding.searchBar.text.toString()
+            if(searchText == ""){
+                Toast.makeText(activity, "검색어를 입력해주세요.",Toast.LENGTH_SHORT).show()
+            } else {
+                searchPlace(searchText)
+            }
+        }
 
         viewPager.adapter = viewpagerAdapter
         recyclerView.adapter = recyclerAdapter

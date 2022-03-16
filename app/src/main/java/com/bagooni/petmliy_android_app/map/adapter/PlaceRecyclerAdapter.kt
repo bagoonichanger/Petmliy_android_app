@@ -15,12 +15,10 @@ class PlaceRecyclerAdapter: ListAdapter<PlaceModel, PlaceRecyclerAdapter.ItemVie
             val titleTextView = binding.titleTextView
             val addressTextView = binding.addressTextView
             val callNumberTextView = binding.callNumberTextView
-            val urlTextView = binding.urlTextView
 
             titleTextView.text = placeModel.place_name
             addressTextView.text = placeModel.address_name
             callNumberTextView.text = placeModel.phone
-            urlTextView.text = placeModel.place_url
 
 //            binding.root.setOnClickListener {
 //                itemClicked(placeModel)

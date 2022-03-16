@@ -3,25 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@drawable/map_listadapter_background"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/map_listadapter_background">
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/shareButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:background="?selectableItemBackground"
+        android:src="@drawable/ic_free_icon_share_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/thumbnailImageView"
         android:layout_width="150dp"
         android:layout_height="150dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintDimensionRatio="3:2"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="45dp"
         android:layout_marginEnd="12dp"
         android:textColor="@color/black"
         android:textSize="20dp"
@@ -39,6 +49,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="12dp"
         android:maxLines="2"
+        android:singleLine="true"
         android:textColor="@color/black"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -60,19 +71,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/addressTextView"
         tools:text="010-8881-9507" />
-
-    <TextView
-        android:id="@+id/urlTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="12dp"
-        android:maxLines="1"
-        android:textColor="@color/black"
-        android:textSize="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/callNumberTextView"
-        tools:text="http://place.map.kakao.com/20646966," />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
