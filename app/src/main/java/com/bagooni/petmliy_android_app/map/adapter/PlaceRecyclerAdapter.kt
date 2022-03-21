@@ -9,7 +9,7 @@ import com.bagooni.petmliy_android_app.databinding.MapRecycleviewDetailBinding
 import com.bagooni.petmliy_android_app.databinding.MapViewpagerDetailBinding
 import com.bagooni.petmliy_android_app.map.model.documents.PlaceModel
 
-class PlaceRecyclerAdapter: ListAdapter<PlaceModel, PlaceRecyclerAdapter.ItemViewHolder>(differ) {
+class PlaceRecyclerAdapter(val itemClicked : (PlaceModel) -> Unit): ListAdapter<PlaceModel, PlaceRecyclerAdapter.ItemViewHolder>(differ) {
     inner class ItemViewHolder(private val binding: MapRecycleviewDetailBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(placeModel: PlaceModel){
             val titleTextView = binding.titleTextView
@@ -20,9 +20,9 @@ class PlaceRecyclerAdapter: ListAdapter<PlaceModel, PlaceRecyclerAdapter.ItemVie
             addressTextView.text = placeModel.address_name
             callNumberTextView.text = placeModel.phone
 
-//            binding.root.setOnClickListener {
-//                itemClicked(placeModel)
-//            }
+            binding.root.setOnClickListener {
+                itemClicked(placeModel)
+            }
         }
     }
 

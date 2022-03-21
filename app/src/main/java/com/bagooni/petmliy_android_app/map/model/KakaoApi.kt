@@ -11,8 +11,8 @@ interface KakaoApi {
     fun getSearchPlaces(
         @Header("Authorization") key: String,
         @Query("query") query: String,
-//        @Query("x") x: String,
-//        @Query("y") y: String,
+        @Query("page") page: Int,
+//        @Query("size") size: Int,
 //        @Query("category_group_code") category: String
     ): Call<PlaceDto>
 }
