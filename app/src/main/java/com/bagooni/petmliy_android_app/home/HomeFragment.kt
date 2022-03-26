@@ -20,7 +20,6 @@ class HomeFragment : Fragment(){
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater,container,false)
         binding.mypageButton.setOnClickListener(ButtonListener())
-        binding.weatherButton.setOnClickListener(ButtonListener())
         binding.albumButton.setOnClickListener(ButtonListener())
         binding.bookmarkButton.setOnClickListener (ButtonListener())
         return binding.root
@@ -32,10 +31,6 @@ class HomeFragment : Fragment(){
             when (p0?.id) {
                 R.id.mypageButton -> {
                     intent = Intent(context, MyPageActivity::class.java)
-                    startActivity(intent)
-                }
-                R.id.weatherButton -> {
-                    intent = Intent(context, WeatherActivity::class.java)
                     startActivity(intent)
                 }
                 R.id.albumButton -> {
