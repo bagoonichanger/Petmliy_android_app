@@ -150,7 +150,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
             .build()
 
         val api = retrofit.create(KakaoApi::class.java)
-        val responsePlace = api.getSearchPlaces(API_KEY, keyword, 1, 30)
+        val responsePlace = api.getSearchPlaces(API_KEY, keyword, 1, 15)
 
         responsePlace.enqueue(object : Callback<PlaceDto> {
             override fun onResponse(call: Call<PlaceDto>, response: Response<PlaceDto>) {
