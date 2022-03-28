@@ -22,19 +22,21 @@
         <entry key="app/src/main/res/drawable/map_search_bar_background.xml" value="0.1485" />
         <entry key="app/src/main/res/drawable/map_search_button_background.xml" value="0.2595" />
         <entry key="app/src/main/res/drawable/map_viewdapter_background.xml" value="0.1765" />
+        <entry key="app/src/main/res/drawable/rectangle_button_background.xml" value="0.281" />
         <entry key="app/src/main/res/drawable/selector_menu_color.xml" value="0.187" />
         <entry key="app/src/main/res/drawable/style.xml" value="0.1385" />
         <entry key="app/src/main/res/drawable/top_radius_white_background.xml" value="0.1765" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
         <entry key="app/src/main/res/layout/blank_fragment.xml" value="0.271483539974348" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.44927215576171875" />
         <entry key="app/src/main/res/layout/fragment_post.xml" value="0.2825994014536127" />
         <entry key="app/src/main/res/layout/fragment_walk.xml" value="0.2825994014536127" />
         <entry key="app/src/main/res/layout/layout_viewpager.xml" value="0.15106560802340158" />
         <entry key="app/src/main/res/layout/map_bottom_sheet.xml" value="0.25" />
         <entry key="app/src/main/res/layout/map_recycleview_detail.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/map_viewpager_detail.xml" value="0.4512471655328798" />
+        <entry key="app/src/main/res/layout/map_viewpager_detail.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/new_map_recycleview_detail.xml" value="0.27105600684053016" />
         <entry key="app/src/main/res/layout/null_text.xml" value="0.29628046173578454" />
         <entry key="app/src/main/res/menu/bottom_menu_item.xml" value="0.2697734074390765" />
         <entry key="app/src/main/res/menu/bottom_navigation_view.xml" value="0.34427083333333336" />

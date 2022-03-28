@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bagooni.petmliy_android_app.databinding.MapRecycleviewDetailBinding
-import com.bagooni.petmliy_android_app.databinding.MapViewpagerDetailBinding
 import com.bagooni.petmliy_android_app.map.model.documents.PlaceModel
 
 class PlaceRecyclerAdapter(val itemClicked : (PlaceModel) -> Unit): ListAdapter<PlaceModel, PlaceRecyclerAdapter.ItemViewHolder>(differ) {
@@ -15,12 +14,14 @@ class PlaceRecyclerAdapter(val itemClicked : (PlaceModel) -> Unit): ListAdapter<
             val titleTextView = binding.titleTextView
             val addressTextView = binding.addressTextView
             val callNumberTextView = binding.callNumberTextView
+            val categoryTextView = binding.categoryTextView
 
             titleTextView.text = placeModel.place_name
             addressTextView.text = placeModel.address_name
             callNumberTextView.text = placeModel.phone
+            categoryTextView.text = placeModel.category_name
 
-            binding.root.setOnClickListener {
+            binding.recyclerViewShareButton.setOnClickListener {
                 itemClicked(placeModel)
             }
         }

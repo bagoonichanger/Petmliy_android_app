@@ -14,12 +14,14 @@ class PlaceViewPagerAdapter(val itemClicked: (PlaceModel) -> Unit) : ListAdapter
             val titleTextView = binding.titleTextView
             val addressTextView = binding.addressTextView
             val callNumberTextView = binding.callNumberTextView
+            val categoryTextView = binding.categoryTextView
 
             titleTextView.text = placeModel.place_name
             addressTextView.text = placeModel.address_name
             callNumberTextView.text = placeModel.phone
+            categoryTextView.text = placeModel.category_name
 
-            binding.root.setOnClickListener {
+            binding.viewpagerShareButton.setOnClickListener {
                 itemClicked(placeModel)
             }
         }

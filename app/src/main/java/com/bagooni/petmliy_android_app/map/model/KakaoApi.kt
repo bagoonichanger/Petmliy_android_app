@@ -12,7 +12,7 @@ interface KakaoApi {
         @Header("Authorization") key: String,
         @Query("query") query: String,
         @Query("page") page: Int,
-//        @Query("size") size: Int,
+        @Query("size") size: Int,
 //        @Query("category_group_code") category: String
     ): Call<PlaceDto>
 }

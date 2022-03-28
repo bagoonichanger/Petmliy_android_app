@@ -35,7 +35,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.net.URI
 
-
 class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay.OnClickListener {
     private var _binding: FragmentMapBinding? = null
     private val binding get() = _binding!!
@@ -73,8 +72,14 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
     }
 
     private val recyclerAdapter = PlaceRecyclerAdapter(itemClicked = {
-        // TODO: 공유 Intent 작성
-        // TODO: viewpager 수정, recyclerview 수정
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, it.place_url)
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
     })
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -145,7 +150,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
             .build()
 
         val api = retrofit.create(KakaoApi::class.java)
-        val responsePlace = api.getSearchPlaces(API_KEY, keyword, 45)
+        val responsePlace = api.getSearchPlaces(API_KEY, keyword, 1, 30)
 
         responsePlace.enqueue(object : Callback<PlaceDto> {
             override fun onResponse(call: Call<PlaceDto>, response: Response<PlaceDto>) {

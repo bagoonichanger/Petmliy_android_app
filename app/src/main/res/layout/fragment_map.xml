@@ -46,6 +46,32 @@
         app:layout_anchorGravity="end|top"
         tools:ignore="SpeakableTextPresentCheck" />
 
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/regionalButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/button_ripple_custom"
+        android:src="@drawable/ic_baseline_search_24"
+        app:layout_anchor="@+id/map_view"
+        app:layout_anchorGravity="end|top"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/industry_specific_Button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="80dp"
+        android:background="@drawable/button_ripple_custom"
+        android:src="@drawable/ic_baseline_search_24"
+        app:layout_anchor="@+id/map_view"
+        app:layout_anchorGravity="end|top"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+
+
     <com.naver.maps.map.widget.LocationButtonView
         android:id="@+id/currentLocationButton"
         android:layout_width="wrap_content"
