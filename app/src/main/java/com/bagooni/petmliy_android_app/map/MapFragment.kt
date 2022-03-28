@@ -16,7 +16,7 @@ import com.naver.maps.map.widget.LocationButtonView
 
 
 class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback {
-    private var _binding: FragmentMapBinding? = null // 잘 보고 해보도록
+    private var _binding: FragmentMapBinding? = null // test
     private val binding get() = _binding!!
 
     private lateinit var mapView: MapView
