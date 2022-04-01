@@ -6,33 +6,35 @@
     android:layout_height="match_parent"
     android:layout_marginStart="30dp"
     android:layout_marginEnd="30dp"
-    android:background="@color/white"
-    app:cardCornerRadius="16dp"
+    app:cardCornerRadius="25dp"
+    app:cardElevation="10dp"
     tools:layout_height="100dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/thumbnailImageView"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/viewpager_shareButton"
+            android:layout_width="19dp"
+            android:layout_height="19dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            android:background="?selectableItemBackground"
+            android:src="@drawable/ic_free_icon_share_12"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/titleTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="12dp"
             android:textColor="@color/black"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/thumbnailImageView"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="좋은동물병원" />
 
@@ -40,14 +42,12 @@
             android:id="@+id/addressTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
             android:layout_marginTop="6dp"
             android:layout_marginEnd="12dp"
             android:maxLines="2"
             android:textColor="@color/black"
             android:textSize="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/thumbnailImageView"
+            app:layout_constraintStart_toStartOf="@+id/titleTextView"
             app:layout_constraintTop_toBottomOf="@id/titleTextView"
 
             tools:text="서울시 광진구 군자동" />
@@ -56,29 +56,41 @@
             android:id="@+id/callNumberTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
             android:layout_marginTop="6dp"
             android:layout_marginEnd="12dp"
             android:maxLines="1"
             android:textColor="@color/black"
             android:textSize="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/addressTextView"
             app:layout_constraintTop_toBottomOf="@id/addressTextView"
             tools:text="010-8881-9507" />
 
         <TextView
-            android:id="@+id/timeTextView"
+            android:id="@+id/categoryStatic"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="6dp"
             android:layout_marginEnd="12dp"
             android:maxLines="1"
+            android:text="카테고리 : "
             android:textColor="@color/black"
             android:textSize="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/callNumberTextView"
-            tools:text="운영시간 : 12:00-24:00" />
+            app:layout_constraintStart_toEndOf="@+id/callNumberTextView"
+            app:layout_constraintTop_toBottomOf="@id/addressTextView" />
+
+        <TextView
+            android:id="@+id/categoryTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="12dp"
+            android:maxLines="1"
+            tools:text="음식점"
+            android:textColor="@color/black"
+            android:textSize="12dp"
+            app:layout_constraintStart_toEndOf="@+id/categoryStatic"
+            app:layout_constraintTop_toBottomOf="@id/addressTextView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
