@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -14,12 +16,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Petmliy_android_app">
         <activity
-            android:name=".home.WeatherActivity"
+            android:name=".post.PostUploadActivity"
             android:exported="false" />
         <activity
             android:name=".home.AlbumActivity"
             android:exported="false" />
-
         <activity
             android:name=".home.BookMarkActivity"
             android:exported="false" />

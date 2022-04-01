@@ -51,7 +51,7 @@
         app:layout_constraintTop_toBottomOf="@id/closeButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/petImage"
-        app:layout_constraintBottom_toTopOf="@id/nicknameView"/>
+        app:layout_constraintBottom_toTopOf="@id/userNameView"/>
     <ImageView
         android:id="@+id/petImage"
         android:layout_width="120dp"
@@ -62,7 +62,7 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
-        android:id="@+id/nicknameView"
+        android:id="@+id/userNameView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="닉네임 설정"
@@ -73,10 +73,10 @@
         app:layout_constraintBottom_toTopOf="@id/petnameView"
         android:layout_marginStart="40dp"/>
     <EditText
-        android:id="@+id/nicknameEdit"
+        android:id="@+id/userNameEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/nicknameView"
+        app:layout_constraintTop_toBottomOf="@+id/userNameView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="40dp"
@@ -89,7 +89,7 @@
         android:text="반려동물 이름"
         android:textSize="15dp"
         android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/nicknameView"
+        app:layout_constraintTop_toBottomOf="@id/userNameView"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="40dp"
         app:layout_constraintBottom_toTopOf="@+id/speciesView"/>
@@ -133,7 +133,7 @@
         android:textColor="@color/black"
         app:layout_constraintTop_toBottomOf="@+id/speciesView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/genderView"
+        app:layout_constraintBottom_toBottomOf="@+id/petBirthEdit"
         android:layout_marginStart="40dp"/>
     <EditText
         android:id="@+id/petBirthEdit"
@@ -141,7 +141,7 @@
         android:layout_height="wrap_content"
         android:inputType="date"
         app:layout_constraintTop_toBottomOf="@id/petBirthView"
-        app:layout_constraintBottom_toBottomOf="@+id/genderView"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="40dp"
@@ -161,37 +161,5 @@
         app:layout_constraintEnd_toEndOf="@id/myImage"
         android:src="@drawable/ic_free_icon_camera"
         android:background="@drawable/mypage_image_background"/>
-
-    <TextView
-        android:id="@+id/genderView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:text="성별"
-        android:textColor="@color/black"
-        android:textSize="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/petBirthView" />
-    <RadioGroup
-        android:id="@+id/radiogroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/genderView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginStart="40dp">
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="수컷"
-            android:layout_marginEnd="30dp"/>
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="암컷"/>
-    </RadioGroup>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
