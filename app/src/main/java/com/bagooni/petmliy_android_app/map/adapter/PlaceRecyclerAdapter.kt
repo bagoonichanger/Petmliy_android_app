@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bagooni.petmliy_android_app.databinding.MapRecycleviewDetailBinding
 import com.bagooni.petmliy_android_app.map.model.documents.PlaceModel
 
-class PlaceRecyclerAdapter(val itemClicked : (PlaceModel) -> Unit): ListAdapter<PlaceModel, PlaceRecyclerAdapter.ItemViewHolder>(differ) {
+class PlaceRecyclerAdapter(val shareButton: (PlaceModel) -> Unit, val likeButton: (PlaceModel) -> Unit): ListAdapter<PlaceModel, PlaceRecyclerAdapter.ItemViewHolder>(differ) {
     inner class ItemViewHolder(private val binding: MapRecycleviewDetailBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(placeModel: PlaceModel){
             val titleTextView = binding.titleTextView
@@ -22,7 +22,10 @@ class PlaceRecyclerAdapter(val itemClicked : (PlaceModel) -> Unit): ListAdapter<
             categoryTextView.text = placeModel.category_name
 
             binding.recyclerViewShareButton.setOnClickListener {
-                itemClicked(placeModel)
+                shareButton(placeModel)
+            }
+            binding.recyclerViewLikeButton.setOnClickListener {
+                likeButton(placeModel)
             }
         }
     }

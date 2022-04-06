@@ -1,6 +1,6 @@
-package com.bagooni.petmliy_android_app.map.model
+package com.bagooni.petmliy_android_app.map.model.Api
 
-import com.bagooni.petmliy_android_app.map.model.Response.PlaceDto
+import com.bagooni.petmliy_android_app.map.model.Dto.PlaceDto
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header

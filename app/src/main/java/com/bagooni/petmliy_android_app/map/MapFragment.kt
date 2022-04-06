@@ -17,10 +17,14 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bagooni.petmliy_android_app.MainActivity
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentMapBinding
+import com.bagooni.petmliy_android_app.map.Activity.IndustryActivity
+import com.bagooni.petmliy_android_app.map.Activity.RegionActivity
 import com.bagooni.petmliy_android_app.map.adapter.PlaceRecyclerAdapter
 import com.bagooni.petmliy_android_app.map.adapter.PlaceViewPagerAdapter
-import com.bagooni.petmliy_android_app.map.model.KakaoApi
-import com.bagooni.petmliy_android_app.map.model.Response.PlaceDto
+import com.bagooni.petmliy_android_app.map.model.Api.CustomMapApi
+import com.bagooni.petmliy_android_app.map.model.Api.KakaoApi
+import com.bagooni.petmliy_android_app.map.model.Dto.LikePlaceDto
+import com.bagooni.petmliy_android_app.map.model.Dto.PlaceDto
 import com.bagooni.petmliy_android_app.map.model.documents.PlaceModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
@@ -28,14 +32,19 @@ import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.widget.LocationButtonView
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.net.URI
+
 
 class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay.OnClickListener {
+    var client: OkHttpClient? =
+        httpLoggingInterceptor()?.let { OkHttpClient.Builder().addInterceptor(it).build() }
+
     private var _binding: FragmentMapBinding? = null
     private val binding get() = _binding!!
 
@@ -58,20 +67,29 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         binding.placeViewPager
     }
 
-    private val viewPagerAdapter = PlaceViewPagerAdapter(itemClicked = {
+    private val viewPagerAdapter = PlaceViewPagerAdapter(shareButton = {
         val intent = Intent().apply {
             action = Intent.ACTION_VIEW
             data = Uri.parse(it.place_url)
         }
         startActivity(intent)
 
+    }, likeButton = {
+        val name = it.place_name
+        val phone = it.phone
+        val address = it.address_name
+        val url = it.place_url
+        val categories = it.category_name
+
+        val data = LikePlaceDto(null, name, phone, address, url, categories)
+        customAPi(data)
     })
 
     private val recyclerView: RecyclerView by lazy {
         mainActivity.findViewById(R.id.recyclerView)
     }
 
-    private val recyclerAdapter = PlaceRecyclerAdapter(itemClicked = {
+    private val recyclerAdapter = PlaceRecyclerAdapter(shareButton = {
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, it.place_url)
@@ -80,6 +98,14 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
 
         val shareIntent = Intent.createChooser(sendIntent, null)
         startActivity(shareIntent)
+    }, likeButton = {
+        val name = it.place_name
+        val phone = it.phone
+        val address = it.address_name
+        val url = it.place_url
+        val categories = it.category_name
+        val data = LikePlaceDto(null, name, phone, address, url, categories)
+        customAPi(data)
     })
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,7 +119,11 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         mainActivity = context as MainActivity
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -105,6 +135,8 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         mapView.getMapAsync(this)
 
         clickSearchButton() // 장소 검색
+        clickRegionalButton()
+        clickIndustrySpecificButton()
         clickViewPager() // cardView 클릭시
 
         viewPager.adapter = viewPagerAdapter
@@ -112,7 +144,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         recyclerView.layoutManager = LinearLayoutManager(activity)
     }
 
-    private fun clickSearchButton(){
+    private fun clickSearchButton() {
         binding.searchButton.setOnClickListener {
             val searchText = binding.searchBar.text.toString()
             if (searchText == "") {
@@ -121,6 +153,18 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
                 deleteMarkers(markers)
                 searchPlace(searchText)
             }
+        }
+    }
+
+    private fun clickRegionalButton() {
+        binding.regionalButton.setOnClickListener {
+            startActivity(Intent(activity, RegionActivity::class.java))
+        }
+    }
+
+    private fun clickIndustrySpecificButton() {
+        binding.industrySpecificButton.setOnClickListener {
+            startActivity(Intent(activity, IndustryActivity::class.java))
         }
     }
 
@@ -143,9 +187,33 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         })
     }
 
+    private fun customAPi(data: LikePlaceDto) {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080")
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val api = retrofit.create(CustomMapApi::class.java)
+        val responseLikeList = api.sendLikePlaces(data)
+
+        responseLikeList.enqueue(object : Callback<LikePlaceDto>{
+            override fun onResponse(call: Call<LikePlaceDto>, response: Response<LikePlaceDto>) {
+                if (!response.isSuccessful) return
+
+                response.body()?.let { it.address?.let { it1 -> Log.d("chicken", it1) } }
+            }
+
+            override fun onFailure(call: Call<LikePlaceDto>, t: Throwable) {
+                Log.d("chicken", t.message.toString())
+            }
+
+        })
+    }
+
     private fun searchPlace(keyword: String) {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://dapi.kakao.com/")
+            .baseUrl("https://dapi.kakao.com")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -271,6 +339,16 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
             viewPager.currentItem = viewPagerAdapter.currentList.indexOf(it)
         }
         return false
+    }
+
+    private fun httpLoggingInterceptor(): HttpLoggingInterceptor? {
+        val interceptor = HttpLoggingInterceptor { message ->
+            Log.e(
+                "MyGitHubData :",
+                message + ""
+            )
+        }
+        return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
     }
 
 }
