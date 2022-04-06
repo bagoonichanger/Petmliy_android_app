@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/custom_preview.xml" value="0.35625" />
+        <entry key="app/src/main/res/drawable-v24/free-icon-font-star-3916582_24.xml" value="0.265" />
         <entry key="app/src/main/res/drawable-v24/free-icon-paw-5527846_24.xml" value="0.1945" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1945" />
         <entry key="app/src/main/res/drawable/bg_white_ripple.xml" value="0.234" />
@@ -12,24 +14,31 @@
         <entry key="app/src/main/res/drawable/free-icon-font-share-3917574_24.xml" value="0.3475" />
         <entry key="app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.2595" />
         <entry key="app/src/main/res/drawable/ic_free_icon_home.xml" value="0.3475" />
+        <entry key="app/src/main/res/drawable/ic_free_icon_like.xml" value="0.171" />
+        <entry key="app/src/main/res/drawable/ic_free_icon_marker.xml" value="0.265" />
         <entry key="app/src/main/res/drawable/ic_free_icon_paw_5527846_24.xml" value="0.1945" />
+        <entry key="app/src/main/res/drawable/ic_free_icon_share_12.xml" value="0.171" />
         <entry key="app/src/main/res/drawable/ic_free_icon_share_24.xml" value="0.3475" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1945" />
         <entry key="app/src/main/res/drawable/ic_premium_icon_paw_5068845.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/map_ListAdapter_background.xml" value="0.303" />
         <entry key="app/src/main/res/drawable/map_listaadapter_background.xml" value="0.1775" />
+        <entry key="app/src/main/res/drawable/map_listadapter_background.xml" value="0.281" />
         <entry key="app/src/main/res/drawable/map_search_Button_background.xml" value="0.259" />
         <entry key="app/src/main/res/drawable/map_search_bar_background.xml" value="0.1485" />
         <entry key="app/src/main/res/drawable/map_search_button_background.xml" value="0.2595" />
         <entry key="app/src/main/res/drawable/map_viewdapter_background.xml" value="0.1765" />
         <entry key="app/src/main/res/drawable/rectangle_button_background.xml" value="0.281" />
         <entry key="app/src/main/res/drawable/selector_menu_color.xml" value="0.187" />
+        <entry key="app/src/main/res/drawable/spinner_background.xml" value="0.1295" />
         <entry key="app/src/main/res/drawable/style.xml" value="0.1385" />
         <entry key="app/src/main/res/drawable/top_radius_white_background.xml" value="0.1765" />
+        <entry key="app/src/main/res/layout/activity_industry.xml" value="0.2806869506835938" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_region.xml" value="0.25" />
         <entry key="app/src/main/res/layout/blank_fragment.xml" value="0.271483539974348" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.44927215576171875" />
+        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_post.xml" value="0.2825994014536127" />
         <entry key="app/src/main/res/layout/fragment_walk.xml" value="0.2825994014536127" />
         <entry key="app/src/main/res/layout/layout_viewpager.xml" value="0.15106560802340158" />
@@ -40,6 +49,8 @@
         <entry key="app/src/main/res/layout/null_text.xml" value="0.29628046173578454" />
         <entry key="app/src/main/res/menu/bottom_menu_item.xml" value="0.2697734074390765" />
         <entry key="app/src/main/res/menu/bottom_navigation_view.xml" value="0.34427083333333336" />
+        <entry key="app/src/main/res/menu/industry_menu.xml" value="0.28388200085506626" />
+        <entry key="app/src/main/res/menu/region_menu.xml" value="0.28388200085506626" />
       </map>
     </option>
   </component>

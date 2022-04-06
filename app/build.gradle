@@ -66,4 +66,7 @@ dependencies {
     implementation "com.kakao.sdk:v2-story:2.8.6" // 카카오스토리
     implementation "com.kakao.sdk:v2-link:2.8.6" // 메시지(카카오링크)
     implementation "com.kakao.sdk:v2-navi:2.8.6" // 카카오내비
+
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
 }

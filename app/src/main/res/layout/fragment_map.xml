@@ -46,31 +46,63 @@
         app:layout_anchorGravity="end|top"
         tools:ignore="SpeakableTextPresentCheck" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/regionalButton"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="15dp"
-        android:background="@drawable/button_ripple_custom"
-        android:src="@drawable/ic_baseline_search_24"
-        app:layout_anchor="@+id/map_view"
-        app:layout_anchorGravity="end|top"
-        tools:ignore="SpeakableTextPresentCheck" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="90dp"
+        android:layout_marginEnd="110dp">
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/industry_specific_Button"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="80dp"
-        android:background="@drawable/button_ripple_custom"
-        android:src="@drawable/ic_baseline_search_24"
-        app:layout_anchor="@+id/map_view"
-        app:layout_anchorGravity="end|top"
-        tools:ignore="SpeakableTextPresentCheck" />
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/regionalButton"
+            android:layout_width="80dp"
+            android:layout_height="36dp"
+            android:background="@drawable/rectangle_button_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="지역별"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="90dp"
+        android:layout_marginEnd="16dp">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/industry_specific_Button"
+            android:layout_width="80dp"
+            android:layout_height="36dp"
+            android:background="@drawable/rectangle_button_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="업종별"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.naver.maps.map.widget.LocationButtonView
         android:id="@+id/currentLocationButton"
