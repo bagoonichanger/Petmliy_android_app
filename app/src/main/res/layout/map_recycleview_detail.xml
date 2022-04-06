@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/map_listadapter_background">
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/recyclerView_shareButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:background="?selectableItemBackground"
+        android:src="@drawable/ic_free_icon_share_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/recyclerView_LikeButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:background="?selectableItemBackground"
+        android:src="@drawable/ic_free_icon_like"
+        app:layout_constraintEnd_toStartOf="@id/recyclerView_shareButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="12dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="좋은동물병원" />
+
+    <TextView
+        android:id="@+id/addressTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
+        android:singleLine="true"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@id/titleTextView"
+        app:layout_constraintTop_toBottomOf="@id/titleTextView"
+        tools:text="서울시 광진구 군자동" />
+
+    <TextView
+        android:id="@+id/callNumberTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@id/addressTextView"
+        app:layout_constraintTop_toBottomOf="@id/addressTextView"
+        tools:text="010-8881-9507" />
+
+    <TextView
+        android:id="@+id/categoryStatic"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="카테고리 : "
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintStart_toStartOf="@id/callNumberTextView"
+        app:layout_constraintTop_toBottomOf="@id/callNumberTextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/categoryTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:maxLines="1"
+        tools:text="음식점"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@id/categoryStatic"
+        app:layout_constraintTop_toTopOf="@id/categoryStatic" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

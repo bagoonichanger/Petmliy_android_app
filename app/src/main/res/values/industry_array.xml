@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="industry_array">
+        <item>업종을 선택하세요</item>
+        <item>카페</item>
+        <item>호텔</item>
+        <item>미용</item>
+        <item>병원</item>
+        <item>간식</item>
+        <item>운동장</item>
+        <item>유치원</item>
+        <item>장례식장</item>
+        <item>펜션</item>
+        <item>식당</item>
+        <item>놀이방</item>
+        <item>휴게소</item>
+    </string-array>
+</resources>
