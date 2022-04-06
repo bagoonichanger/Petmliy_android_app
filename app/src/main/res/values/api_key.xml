@@ -1,2 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><string name="naver_map_client_id">mkzcchsiil</string></resources>
+<resources>
+    <string name="naver_map_client_id">mkzcchsiil</string>
+    <string name="kakao_key">992b4a88e33b8c5438e9a5999dd4ee26</string>
+</resources>
