@@ -148,7 +148,7 @@
         android:id="@+id/totalHour"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="총 산책 시간"
+        android:text="총 산책 시간"
         android:textSize="20dp"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="@+id/totalCount"

@@ -1,4 +1,4 @@
-package com.bagooni.petmliy_android_app.map.model.Response
+package com.bagooni.petmliy_android_app.map.model.Dto
 
 import com.bagooni.petmliy_android_app.map.model.documents.PlaceModel
 import com.bagooni.petmliy_android_app.map.model.metadata.Meta
