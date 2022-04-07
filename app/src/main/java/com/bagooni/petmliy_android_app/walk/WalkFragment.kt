@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bagooni.petmliy_android_app.R
 
-class WalkFragment : Fragment() {
+class WalkFragment : Fragment() { // 시작
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
