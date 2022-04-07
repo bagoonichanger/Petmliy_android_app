@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Petmliy_android_app">
         <activity
+            android:name=".post.Comment.CommentActivity"
+            android:exported="false" />
+        <activity
             android:name=".post.PostUploadActivity"
             android:exported="false" />
         <activity
@@ -29,6 +32,7 @@
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="@string/naver_map_client_id" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">

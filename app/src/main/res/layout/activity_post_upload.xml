@@ -51,23 +51,15 @@
         app:layout_constraintTop_toBottomOf="@+id/closeButton"
         android:background="@drawable/home_icon_button_background"
         android:layout_marginTop="10dp"/>
-    <Button
-        android:id="@+id/photoSelectButton"
-        android:text="select photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/postImg"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="@color/Light_Gray"/>
+
     <TextView
         android:id="@+id/postContentText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="내용"
-        app:layout_constraintTop_toBottomOf="@+id/photoSelectButton"
+        app:layout_constraintTop_toBottomOf="@+id/postImg"
         app:layout_constraintStart_toStartOf="@+id/postImg"
+        app:layout_constraintBottom_toTopOf="@id/postContent"
         android:layout_marginTop="10dp"/>
     <EditText
         android:id="@+id/postContent"
@@ -77,6 +69,7 @@
         app:layout_constraintTop_toBottomOf="@id/postContentText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/hashTagText"
         android:layout_marginTop="10dp"/>
     <TextView
         android:id="@+id/hashTagText"
@@ -85,6 +78,7 @@
         android:text="해시태그"
         app:layout_constraintTop_toBottomOf="@+id/postContent"
         app:layout_constraintStart_toStartOf="@id/postContentText"
+        app:layout_constraintBottom_toTopOf="@+id/hashTagEdit"
         android:layout_marginTop="10dp"/>
     <EditText
         android:id="@+id/hashTagEdit"
@@ -93,6 +87,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/hashTagText"
         app:layout_constraintTop_toBottomOf="@id/hashTagText"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="10dp"/>
 
 

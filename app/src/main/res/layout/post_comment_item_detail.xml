@@ -1,28 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <ImageView
+        android:id="@+id/petImg"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"/>
+
     <TextView
-        android:id="@+id/userName"
+        android:id="@+id/petName"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/petImg"
+        app:layout_constraintStart_toEndOf="@+id/petImg"
         tools:text="petmily"
-        android:textSize="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"/>
+        android:textSize="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"/>
 
     <TextView
         android:id="@+id/commentText"
-        android:layout_width="300dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
+        android:textSize="15dp"
         tools:text="안녕하세요~~"
-        app:layout_constraintStart_toEndOf="@+id/userName"
-        app:layout_constraintTop_toTopOf="@id/userName"/>
+        app:layout_constraintStart_toEndOf="@+id/petName"
+        app:layout_constraintBottom_toBottomOf="@+id/petName"
+        android:layout_marginStart="10dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

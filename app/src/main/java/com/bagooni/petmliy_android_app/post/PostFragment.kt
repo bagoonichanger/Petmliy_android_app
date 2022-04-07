@@ -49,13 +49,13 @@ class PostFragment : Fragment(){
 
         val feedListView = view.findViewById<RecyclerView>(R.id.feedList)
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://mellowcode.org/")
+            .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         retrofitService = retrofit.create(RetrofitService::class.java)
 
-        retrofitService.getPosts().enqueue(object : Callback<ArrayList<Post>>{
+        retrofitService.getPost().enqueue(object : Callback<ArrayList<Post>>{
             override fun onResponse(
                 call: Call<ArrayList<Post>>,
                 response: Response<ArrayList<Post>>
@@ -82,14 +82,14 @@ class PostFragment : Fragment(){
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
             val userImg : ImageView
-            val userName : TextView
+            val petName : TextView
             val postUserName : TextView
             val postImg : ImageView
             val postContent : TextView
 
             init{
                 userImg = itemView.findViewById(R.id.userImg)
-                userName = itemView.findViewById(R.id.userName)
+                petName = itemView.findViewById(R.id.userName)
                 postUserName = itemView.findViewById(R.id.postUserName)
                 postImg = itemView.findViewById(R.id.postImg)
                 postContent = itemView.findViewById(R.id.postContent)
@@ -104,14 +104,8 @@ class PostFragment : Fragment(){
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val post = postList.get(position)
 
-            post.owner_profile.image.let {
-                glide.load(it).centerCrop().circleCrop().into(holder.userImg)
-            }
-            post.image.let {
-                glide.load(it).centerCrop().into(holder.postImg)
-            }
-            holder.userName.text = post.owner_profile.username
-            holder.postUserName.text = post.owner_profile.username
+            holder.petName.text = post.author
+            holder.postUserName.text = post.author
             holder.postContent.text = post.content
         }
 
