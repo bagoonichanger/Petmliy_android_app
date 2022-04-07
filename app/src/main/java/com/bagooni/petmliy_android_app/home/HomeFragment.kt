@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentHomeBinding
+import com.bagooni.petmliy_android_app.home.Activity.AlbumActivity
+import com.bagooni.petmliy_android_app.home.Activity.BookMarkActivity
+import com.bagooni.petmliy_android_app.home.Activity.MyPageActivity
 
 class HomeFragment : Fragment(){
     private var _binding: FragmentHomeBinding?=null

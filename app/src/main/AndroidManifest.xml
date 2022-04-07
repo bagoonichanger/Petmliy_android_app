@@ -20,13 +20,13 @@
             android:name=".post.PostUploadActivity"
             android:exported="false" />
         <activity
-            android:name=".home.AlbumActivity"
+            android:name=".home.Activity.AlbumActivity"
             android:exported="false" />
         <activity
-            android:name=".home.BookMarkActivity"
+            android:name=".home.Activity.BookMarkActivity"
             android:exported="false" />
         <activity
-            android:name=".home.MyPageActivity"
+            android:name=".home.Activity.MyPageActivity"
             android:exported="false" />
 
         android:theme="@style/Theme.Petmliy_android_app"
