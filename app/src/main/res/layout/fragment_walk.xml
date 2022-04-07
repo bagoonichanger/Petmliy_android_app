@@ -2,18 +2,210 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
+        android:id="@+id/walkTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Walk"
         android:textColor="@color/black"
-        android:textSize="40sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="30sp"
+        android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/walkTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"/>
+    <TextView
+        android:id="@+id/distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="이동 거리"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/calendarView"
+        app:layout_constraintStart_toStartOf="@id/calendarView" />
+    <TextView
+        android:id="@+id/distanceKm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="km"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toEndOf="@+id/distanceKmView"
+        app:layout_constraintTop_toTopOf="@+id/distance"
+        android:layout_marginStart="10dp"/>
+    <TextView
+        android:id="@+id/distanceKmView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="00"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/walkTimeHourView"
+        app:layout_constraintTop_toTopOf="@+id/distance"/>
+    <TextView
+        android:id="@+id/walkTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="산책 시간"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@+id/distance"
+        app:layout_constraintStart_toStartOf="@+id/distance"
+        android:layout_marginTop="10dp"/>
+    <TextView
+        android:id="@+id/walkTimeHourView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="00"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/walkTimeHour"
+        app:layout_constraintTop_toTopOf="@+id/walkTime"/>
+    <TextView
+        android:id="@+id/walkTimeHour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hour"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="@+id/walkTime"
+        app:layout_constraintEnd_toStartOf="@id/walkTimeMinView"
+        android:layout_marginEnd="10dp"/>
+    <TextView
+        android:id="@+id/walkTimeMinView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="00"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="@+id/walkTime"
+        app:layout_constraintEnd_toStartOf="@id/walkTimeMin"
+        android:layout_marginEnd="10dp"/>
+    <TextView
+        android:id="@+id/walkTimeMin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="min"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@id/calendarView"
+        app:layout_constraintTop_toTopOf="@+id/walkTime"/>
+    <View
+        android:id="@+id/walkView"
+        android:layout_width="350dp"
+        android:layout_height="1dp"
+        android:background="@color/Light_Blue"
+        app:layout_constraintStart_toStartOf="@+id/calendarView"
+        app:layout_constraintEnd_toEndOf="@id/calendarView"
+        app:layout_constraintTop_toBottomOf="@+id/walkTime"
+        android:layout_marginTop="10dp"/>
+    <TextView
+        android:id="@+id/totalCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="총 횟수"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/walkTime"
+        app:layout_constraintTop_toBottomOf="@+id/walkView"
+        android:layout_marginTop="10dp"/>
+    <TextView
+        android:id="@+id/totalCountView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="00"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="@id/totalCount"
+        app:layout_constraintEnd_toStartOf="@+id/totalCountTimes"
+        android:layout_marginEnd="10dp"/>
+
+    <TextView
+        android:id="@+id/totalCountTimes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Times"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="@id/totalCount"
+        app:layout_constraintStart_toStartOf="@id/walkTimeHour"/>
+
+    <TextView
+        android:id="@+id/totalHour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="총 산책 시간"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/totalCount"
+        app:layout_constraintTop_toBottomOf="@+id/totalCount"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:id="@+id/totalHourView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="00"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintStart_toStartOf="@+id/totalCountView"
+        app:layout_constraintTop_toTopOf="@+id/totalHour"/>
+    <TextView
+        android:id="@+id/totalHourText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hour"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="@id/totalHour"
+        app:layout_constraintStart_toEndOf="@+id/totalHourView"
+        android:layout_marginStart="10dp"/>
+    <TextView
+        android:id="@+id/totalMinView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="00"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toEndOf="@+id/totalHourText"
+        app:layout_constraintTop_toTopOf="@id/totalHour"
+        android:layout_marginStart="10dp"/>
+    <TextView
+        android:id="@+id/totalTimeMin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="min"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@id/calendarView"
+        app:layout_constraintTop_toTopOf="@id/totalHour"/>
+
+    <View
+        android:id="@+id/totalView"
+        android:layout_width="350dp"
+        android:layout_height="1dp"
+        android:background="@color/Light_Blue"
+        app:layout_constraintStart_toStartOf="@+id/calendarView"
+        app:layout_constraintEnd_toEndOf="@id/calendarView"
+        app:layout_constraintTop_toBottomOf="@+id/totalHour"
+        android:layout_marginTop="10dp"/>
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
