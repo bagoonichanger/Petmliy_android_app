@@ -14,6 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Petmliy_android_app"
         android:usesCleartextTraffic="true">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAQNFZQbUk6i1FBwCId16YxODNjUnSNrpQ" />
+
+        <activity
+            android:name=".walk.Activity.TrackingActivity"
+            android:exported="false" />
         <activity
             android:name=".map.Activity.IndustryActivity"
             android:exported="false" />

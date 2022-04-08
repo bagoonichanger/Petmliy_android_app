@@ -4,6 +4,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        upload {
+            storeFile file('/Users/keystores/upload-keystores.jks')
+            storePassword 'petmily0000'
+            keyAlias 'upload'
+            keyPassword 'petmily0000'
+        }
+    }
     compileSdk 31
 
     defaultConfig {
@@ -67,6 +75,10 @@ dependencies {
     implementation "com.kakao.sdk:v2-link:2.8.6" // 메시지(카카오링크)
     implementation "com.kakao.sdk:v2-navi:2.8.6" // 카카오내비
 
-    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
+    // Glide
+    implementation 'com.github.bumptech.glide:glide:4.13.0'
+
+    //google Map
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    implementation 'com.google.android.gms:play-services-location:19.0.1'
 }
