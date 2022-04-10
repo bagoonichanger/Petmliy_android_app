@@ -14,30 +14,26 @@ import com.google.android.gms.maps.model.MarkerOptions
 
 
 class TrackingActivity : AppCompatActivity(), OnMapReadyCallback {
-    private lateinit var binding: ActivityTrackingBinding
     private lateinit var mMap: GoogleMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding = ActivityTrackingBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_tracking)
 
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment!!.getMapAsync(this)
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.googleMap) as SupportMapFragment
+        mapFragment.getMapAsync(this)
 
-        Glide.with(this).load(R.raw.dog).override(300, 300).into(binding.startImageView)
+//        Glide.with(this).load(R.raw.dog).override(300, 300).into(findViewById(R.id.trackingImageView))
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
-        val seoul = LatLng(37.56,126.97)
-        val markerOptions = MarkerOptions().also {
-            it.position(seoul)
-            it.title("서울")
-        }
-        mMap.addMarker(markerOptions)
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(seoul))
+        val sydney = LatLng(-34.0, 151.0)
+        mMap.addMarker(MarkerOptions()
+            .position(sydney)
+            .title("Marker in Sydney"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }
 }
