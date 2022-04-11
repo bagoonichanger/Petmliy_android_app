@@ -28,16 +28,18 @@
         <activity
             android:name=".home.Activity.MyPageActivity"
             android:exported="false" />
-
-        android:theme="@style/Theme.Petmliy_android_app"
-        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".walk.Activity.TrackingActivity"
+            android:exported="false" />
         <activity
             android:name=".map.Activity.IndustryActivity"
             android:exported="false" />
         <activity
             android:name=".map.Activity.RegionActivity"
             android:exported="false" />
-
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAQNFZQbUk6i1FBwCId16YxODNjUnSNrpQ" />
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="@string/naver_map_client_id" />
