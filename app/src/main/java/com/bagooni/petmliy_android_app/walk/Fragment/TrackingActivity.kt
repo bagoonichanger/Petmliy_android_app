@@ -1,4 +1,4 @@
-package com.bagooni.petmliy_android_app.walk.Activity
+package com.bagooni.petmliy_android_app.walk.Fragment
 
 import android.Manifest
 import android.app.Activity
@@ -10,15 +10,15 @@ import android.graphics.Bitmap
 import android.graphics.Rect
 import android.os.*
 import android.provider.MediaStore
-import android.util.Log
 import android.view.PixelCopy
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageButton
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import com.bagooni.petmliy_android_app.R
+import com.bagooni.petmliy_android_app.walk.Fragment.Constants.ACTION_START_OR_RESUME_SERVICE
+import com.bagooni.petmliy_android_app.walk.Fragment.Service.TrackingService
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -66,6 +66,12 @@ class TrackingActivity : AppCompatActivity(), OnMapReadyCallback {
         initButtons()
     }
 
+    private fun sendCommandToService(action: String){
+        val intent = Intent(applicationContext,TrackingService::class.java).also {
+            it.action = action
+        }
+        startService(intent)
+    }
     private fun initViews() {
         startButton.visibility = View.VISIBLE
         pauseButton.visibility = View.GONE
@@ -74,6 +80,7 @@ class TrackingActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun initButtons() {
         startButton.setOnClickListener {
+            sendCommandToService(ACTION_START_OR_RESUME_SERVICE)
             startButton.visibility = View.GONE
             pauseButton.visibility = View.VISIBLE
             disabledStopButton.visibility = View.VISIBLE
@@ -90,7 +97,6 @@ class TrackingActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         stopButton.setOnClickListener {
-            Log.d("cd", "b")
             walkTimeTextView.text = "00:00"
             walkTimeTextView.stopCountUp()
         }

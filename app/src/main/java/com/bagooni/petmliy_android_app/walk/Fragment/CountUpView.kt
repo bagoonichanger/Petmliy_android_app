@@ -1,8 +1,7 @@
-package com.bagooni.petmliy_android_app.walk.Activity
+package com.bagooni.petmliy_android_app.walk.Fragment
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.SystemClock
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 

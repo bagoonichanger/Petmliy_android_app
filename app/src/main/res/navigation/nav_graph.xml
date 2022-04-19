@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.bagooni.petmliy_android_app.home.HomeFragment"
+        android:label="HomeFragment" />
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.bagooni.petmliy_android_app.map.MapFragment"
+        android:label="MapFragment" />
+    <fragment
+        android:id="@+id/postFragment"
+        android:name="com.bagooni.petmliy_android_app.post.PostFragment"
+        android:label="PostFragment" />
+    <fragment
+        android:id="@+id/walkFragment"
+        android:name="com.bagooni.petmliy_android_app.walk.WalkFragment"
+        android:label="WalkFragment" >
+        <action
+            android:id="@+id/action_walkFragment_to_trackingFragment"
+            app:destination="@id/trackingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/trackingFragment"
+        android:name="com.bagooni.petmliy_android_app.walk.Fragment.TrackingFragment"
+        android:label="TrackingFragment" >
+        <action
+            android:id="@+id/action_trackingFragment_to_walkFragment"
+            app:destination="@id/walkFragment" />
+    </fragment>
+</navigation>

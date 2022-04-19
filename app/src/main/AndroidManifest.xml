@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
@@ -17,6 +19,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Petmliy_android_app">
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
         <activity
             android:name=".post.Comment.CommentActivity"
             android:exported="false" />
@@ -33,7 +40,7 @@
             android:name=".home.Activity.MyPageActivity"
             android:exported="false" />
         <activity
-            android:name=".walk.Activity.TrackingActivity"
+            android:name=".walk.Fragment.TrackingActivity"
             android:exported="false" />
         <activity
             android:name=".map.Activity.IndustryActivity"
@@ -52,6 +59,9 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_key" />
 
+        <service
+            android:name=".walk.Fragment.Service.TrackingService"
+            android:foregroundServiceType="location" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -62,5 +72,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

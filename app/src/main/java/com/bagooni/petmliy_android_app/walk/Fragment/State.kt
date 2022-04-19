@@ -1,4 +1,4 @@
-package com.bagooni.petmliy_android_app.walk.Activity
+package com.bagooni.petmliy_android_app.walk.Fragment
 
 enum class State {
     BEFORE_TRACKING,

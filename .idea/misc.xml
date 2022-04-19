@@ -37,18 +37,20 @@
         <entry key="app/src/main/res/drawable/walk_button_background.xml" value="0.1995" />
         <entry key="app/src/main/res/drawable/walk_button_background_disabled.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/walk_ic_free_icon_font_camera.xml" value="0.1995" />
+        <entry key="app/src/main/res/drawable/walk_ic_free_icon_font_camera_disabled.xml" value="0.2445" />
         <entry key="app/src/main/res/drawable/walk_ic_free_icon_font_pause.xml" value="0.1995" />
         <entry key="app/src/main/res/drawable/walk_ic_free_icon_font_play.xml" value="0.1995" />
         <entry key="app/src/main/res/drawable/walk_ic_free_icon_font_stop.xml" value="0.1995" />
         <entry key="app/src/main/res/drawable/walk_ic_free_icon_font_stop_disabled.xml" value="0.1995" />
         <entry key="app/src/main/res/layout/activity_industry.xml" value="0.2806869506835938" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_region.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_tracking.xml" value="0.1" />
         <entry key="app/src/main/res/layout/blank_fragment.xml" value="0.271483539974348" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_map.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_post.xml" value="0.2825994014536127" />
+        <entry key="app/src/main/res/layout/fragment_tracking.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_walk.xml" value="0.2825994014536127" />
         <entry key="app/src/main/res/layout/layout_viewpager.xml" value="0.15106560802340158" />
         <entry key="app/src/main/res/layout/map_bottom_sheet.xml" value="0.25" />
