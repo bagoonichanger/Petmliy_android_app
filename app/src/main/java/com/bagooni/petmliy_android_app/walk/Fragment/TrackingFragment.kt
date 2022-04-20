@@ -15,32 +15,42 @@ import android.os.Looper
 import android.provider.MediaStore
 import android.view.PixelCopy
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.bagooni.petmliy_android_app.R
-import com.bagooni.petmliy_android_app.walk.Fragment.Constants.ACTION_START_OR_RESUME_SERVICE
+import com.bagooni.petmliy_android_app.walk.Fragment.Service.Constants.ACTION_PAUSE_SERVICE
+import com.bagooni.petmliy_android_app.walk.Fragment.Service.Constants.ACTION_START_OR_RESUME_SERVICE
+import com.bagooni.petmliy_android_app.walk.Fragment.Service.Constants.MAP_ZOOM
+import com.bagooni.petmliy_android_app.walk.Fragment.Service.Constants.POLYLINE_COLOR
+import com.bagooni.petmliy_android_app.walk.Fragment.Service.Constants.POLYLINE_WIDTH
+import com.bagooni.petmliy_android_app.walk.Fragment.Service.Polyline
 import com.bagooni.petmliy_android_app.walk.Fragment.Service.TrackingService
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.bagooni.petmliy_android_app.walk.Fragment.Service.TrackingUtility
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.snackbar.Snackbar
 
 class TrackingFragment : Fragment(R.layout.fragment_tracking), OnMapReadyCallback {
     private lateinit var mapView: MapView
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var map: GoogleMap
+
+    private var curTimeInMillis = 0L
+
+    private var isTracking = false
+    private var pathPoints = mutableListOf<Polyline>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fusedLocationProviderClient =
-            LocationServices.getFusedLocationProviderClient(requireContext())
 
         mapView = view.findViewById(R.id.googleMapView)
         mapView.onCreate(savedInstanceState)
@@ -49,8 +59,54 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking), OnMapReadyCallbac
         initButtons(view)
 
         mapView.getMapAsync(this)
+        subscribeToObservers(view)
+    }
 
+    private fun subscribeToObservers(view:View) {
+        TrackingService.isTracking.observe(viewLifecycleOwner, Observer {
+            this.isTracking = it
+        })
 
+        TrackingService.pathPoints.observe(viewLifecycleOwner, Observer {
+            pathPoints = it
+            addLatestPolyline()
+            moveCameraToUser()
+        })
+        TrackingService.timeRunInMillis.observe(viewLifecycleOwner, Observer {
+            curTimeInMillis = it
+            val formattedTime = TrackingUtility.getFormattedStopWatchTime(curTimeInMillis, false)
+            view.findViewById<TextView>(R.id.walkTime).text = formattedTime
+        })
+    }
+
+    private fun moveCameraToUser() {
+        if (pathPoints.isNotEmpty() && pathPoints.last().isNotEmpty())
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(pathPoints.last().last(), MAP_ZOOM))
+    }
+
+    private fun addAllPolylines() {
+        for (polyline in pathPoints) {
+            val polylineOptions = PolylineOptions()
+                .color(POLYLINE_COLOR)
+                .width(POLYLINE_WIDTH)
+                .addAll(polyline)
+
+            map.addPolyline(polylineOptions)
+        }
+    }
+
+    private fun addLatestPolyline() {
+        if (pathPoints.isNotEmpty() && pathPoints.last().size > 1) {
+            val preLastLatLng = pathPoints.last()[pathPoints.last().size - 2]
+            val lastLatLng = pathPoints.last().last()
+            val polylineOptions = PolylineOptions()
+                .color(POLYLINE_COLOR)
+                .width(POLYLINE_WIDTH)
+                .add(preLastLatLng)
+                .add(lastLatLng)
+
+            map.addPolyline(polylineOptions)
+        }
     }
 
     private fun initViews(view: View) {
@@ -60,21 +116,29 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking), OnMapReadyCallbac
 
     private fun initButtons(view: View) {
         view.findViewById<AppCompatImageButton>(R.id.startButton).setOnClickListener {
-            sendCommandToService(ACTION_START_OR_RESUME_SERVICE)
-            view.findViewById<AppCompatImageButton>(R.id.startButton).visibility = View.GONE
-            view.findViewById<AppCompatImageButton>(R.id.pauseButton).visibility = View.VISIBLE
-            view.findViewById<AppCompatImageButton>(R.id.disabledStopButton).visibility =
-                View.VISIBLE
-            view.findViewById<AppCompatImageButton>(R.id.disabledCaptureButton).visibility =
-                View.VISIBLE
+            if(!isTracking) {
+                sendCommandToService(ACTION_START_OR_RESUME_SERVICE)
+                view.findViewById<AppCompatImageButton>(R.id.startButton).visibility = View.GONE
+                view.findViewById<AppCompatImageButton>(R.id.pauseButton).visibility = View.VISIBLE
+                view.findViewById<AppCompatImageButton>(R.id.disabledStopButton).visibility =
+                    View.VISIBLE
+                view.findViewById<AppCompatImageButton>(R.id.disabledCaptureButton).visibility =
+                    View.VISIBLE
+            }
+//            isTracking = true
         }
 
         view.findViewById<AppCompatImageButton>(R.id.pauseButton).setOnClickListener {
-            view.findViewById<AppCompatImageButton>(R.id.startButton).visibility = View.VISIBLE
-            view.findViewById<AppCompatImageButton>(R.id.pauseButton).visibility = View.GONE
-            view.findViewById<AppCompatImageButton>(R.id.disabledStopButton).visibility = View.GONE
-            view.findViewById<AppCompatImageButton>(R.id.disabledCaptureButton).visibility =
-                View.GONE
+            if(isTracking) {
+                sendCommandToService(ACTION_PAUSE_SERVICE)
+                view.findViewById<AppCompatImageButton>(R.id.startButton).visibility = View.VISIBLE
+                view.findViewById<AppCompatImageButton>(R.id.pauseButton).visibility = View.GONE
+                view.findViewById<AppCompatImageButton>(R.id.disabledStopButton).visibility =
+                    View.GONE
+                view.findViewById<AppCompatImageButton>(R.id.disabledCaptureButton).visibility =
+                    View.GONE
+            }
+//            isTracking = false
         }
 
         view.findViewById<AppCompatImageButton>(R.id.stopButton).setOnClickListener {
@@ -211,6 +275,8 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking), OnMapReadyCallbac
 
     override fun onMapReady(googleMap: GoogleMap) {
         getPermissions()
+        addAllPolylines()
+        map = googleMap
         googleMap.cameraPosition
         googleMap.setMinZoomPreference(16.0f)
         googleMap.setMaxZoomPreference(18.0f)

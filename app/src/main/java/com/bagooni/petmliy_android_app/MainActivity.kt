@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.bagooni.petmliy_android_app.walk.Fragment.Constants.ACTION_SHOW_TRACKING_FRAGMENT
+import com.bagooni.petmliy_android_app.walk.Fragment.Service.Constants.ACTION_SHOW_TRACKING_FRAGMENT
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() { // 수정 완료
