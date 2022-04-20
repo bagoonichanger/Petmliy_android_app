@@ -4,6 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/homeFragment">
+    <action android:id="@+id/action_global_trackingFragment"
+        app:destination="@id/trackingFragment"
+        app:launchSingleTop="true" />
+
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.bagooni.petmliy_android_app.home.HomeFragment"

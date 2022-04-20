@@ -40,9 +40,9 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.snackbar.Snackbar
 
-class TrackingFragment : Fragment(R.layout.fragment_tracking), OnMapReadyCallback {
+class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     private lateinit var mapView: MapView
-    private lateinit var map: GoogleMap
+    private var map: GoogleMap? = null
 
     private var curTimeInMillis = 0L
 
@@ -58,11 +58,15 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking), OnMapReadyCallbac
         initViews(view)
         initButtons(view)
 
-        mapView.getMapAsync(this)
+        mapView.getMapAsync {
+            map = it
+            addAllPolylines()
+        }
+
         subscribeToObservers(view)
     }
 
-    private fun subscribeToObservers(view:View) {
+    private fun subscribeToObservers(view: View) {
         TrackingService.isTracking.observe(viewLifecycleOwner, Observer {
             this.isTracking = it
         })
@@ -81,7 +85,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking), OnMapReadyCallbac
 
     private fun moveCameraToUser() {
         if (pathPoints.isNotEmpty() && pathPoints.last().isNotEmpty())
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(pathPoints.last().last(), MAP_ZOOM))
+            map?.animateCamera(CameraUpdateFactory.newLatLngZoom(pathPoints.last().last(), MAP_ZOOM))
     }
 
     private fun addAllPolylines() {
@@ -91,7 +95,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking), OnMapReadyCallbac
                 .width(POLYLINE_WIDTH)
                 .addAll(polyline)
 
-            map.addPolyline(polylineOptions)
+            map?.addPolyline(polylineOptions)
         }
     }
 
@@ -105,7 +109,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking), OnMapReadyCallbac
                 .add(preLastLatLng)
                 .add(lastLatLng)
 
-            map.addPolyline(polylineOptions)
+            map?.addPolyline(polylineOptions)
         }
     }
 
@@ -116,7 +120,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking), OnMapReadyCallbac
 
     private fun initButtons(view: View) {
         view.findViewById<AppCompatImageButton>(R.id.startButton).setOnClickListener {
-            if(!isTracking) {
+            if (!isTracking) {
                 sendCommandToService(ACTION_START_OR_RESUME_SERVICE)
                 view.findViewById<AppCompatImageButton>(R.id.startButton).visibility = View.GONE
                 view.findViewById<AppCompatImageButton>(R.id.pauseButton).visibility = View.VISIBLE
@@ -129,7 +133,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking), OnMapReadyCallbac
         }
 
         view.findViewById<AppCompatImageButton>(R.id.pauseButton).setOnClickListener {
-            if(isTracking) {
+            if (isTracking) {
                 sendCommandToService(ACTION_PAUSE_SERVICE)
                 view.findViewById<AppCompatImageButton>(R.id.startButton).visibility = View.VISIBLE
                 view.findViewById<AppCompatImageButton>(R.id.pauseButton).visibility = View.GONE
@@ -273,59 +277,6 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking), OnMapReadyCallbac
         }
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
-        getPermissions()
-        addAllPolylines()
-        map = googleMap
-        googleMap.cameraPosition
-        googleMap.setMinZoomPreference(16.0f)
-        googleMap.setMaxZoomPreference(18.0f)
-        val home = LatLng(40.58674223379605, -73.82349947514406)
-        googleMap.addMarker(
-            MarkerOptions()
-                .position(home)
-        )
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(home))
-    }
-
-    private fun getPermissions() {
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-            != PackageManager.PERMISSION_GRANTED &&
-            ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
-            != PackageManager.PERMISSION_GRANTED &&
-            ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            )
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
-                PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION_AND_WRITE_EXTERNAL_STORAGE_PERMISSION
-            )
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
-
-
     override fun onResume() {
         super.onResume()
         mapView.onResume()
@@ -359,11 +310,6 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking), OnMapReadyCallbac
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         mapView.onSaveInstanceState(outState)
-    }
-
-    companion object {
-        const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION_AND_WRITE_EXTERNAL_STORAGE_PERMISSION =
-            100
     }
 }
 

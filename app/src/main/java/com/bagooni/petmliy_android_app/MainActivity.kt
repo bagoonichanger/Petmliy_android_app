@@ -3,6 +3,7 @@ package com.bagooni.petmliy_android_app
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -51,10 +52,11 @@ class MainActivity : AppCompatActivity() { // 수정 완료
 
     private fun navigateToTrackingFragmentIfNeed(intent: Intent?) {
         if(intent?.action == ACTION_SHOW_TRACKING_FRAGMENT) {
+            Log.d("123456","SDAFSDFSDFSDFASDFDSFDSFASFDSFASDFASDF")
             val navHostFragment =
                 supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
             val navController = navHostFragment.navController
-            navController.navigate(R.id.trackingFragment)
+            navController.navigate(R.id.action_global_trackingFragment)
         }
     }
 }

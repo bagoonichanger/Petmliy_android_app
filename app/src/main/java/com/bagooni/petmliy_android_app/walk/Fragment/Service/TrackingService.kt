@@ -53,6 +53,9 @@ class TrackingService : LifecycleService() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
 
+    lateinit var basenotificationBuilder: NotificationCompat.Builder
+    lateinit var curNotificationBuilder: NotificationCompat.Builder
+
     private var isTimerEnabled = false // 타이머 실행 여부
     private var lapTime = 0L // 시작 후 측정한 시간
     private var totalTime = 0L // 정지 시 저장되는 시간
@@ -68,8 +71,7 @@ class TrackingService : LifecycleService() {
             while (isTracking.value!!) {
                 lapTime = System.currentTimeMillis() - timeStarted
                 timeRunInMillis.postValue(totalTime + lapTime)
-
-                if(timeRunInSeconds.value!! >= lastSecondTimestamp + 1000L){
+                if (timeRunInMillis.value!! >= lastSecondTimestamp + 1000L) {
                     timeRunInSeconds.postValue(timeRunInSeconds.value!! + 1)
                     lastSecondTimestamp += 1000L
                 }
@@ -119,15 +121,15 @@ class TrackingService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
-
+        initNotificationBuilder()
         postInitialValues()
         initLocationRequest()
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         isTracking.observe(this, Observer {
             startLocationUpdates(it)
+            updateNotificationTrackingState(it)
         })
-
         initLocationClient()
     }
 
@@ -158,6 +160,18 @@ class TrackingService : LifecycleService() {
             }
         }
         return super.onStartCommand(intent, flags, startId)
+    }
+
+    private fun initNotificationBuilder() {
+        basenotificationBuilder =
+            NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID).setAutoCancel(false)
+                .setOngoing(true)
+                .setSmallIcon(R.drawable.ic_premium_icon_paw)
+                .setContentTitle("Petmily")
+                .setContentText("00:00")
+                .setContentIntent(getTrackingActivityPendingIntent())
+
+        curNotificationBuilder = basenotificationBuilder
     }
 
     private fun initLocationRequest() {
@@ -209,22 +223,6 @@ class TrackingService : LifecycleService() {
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
     }
 
-//    private fun requestLastLocation() { // 현재위치
-//        if (ActivityCompat.checkSelfPermission(
-//                this,
-//                Manifest.permission.ACCESS_FINE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-//                this,
-//                Manifest.permission.ACCESS_COARSE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            return
-//        }
-//        fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-//
-//        }
-//    }
-
     private fun startForegroundService() {
         startTimer()
         isTracking.postValue(true)
@@ -232,19 +230,43 @@ class TrackingService : LifecycleService() {
 
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
         createNotificationChannel(notificationManager)
 
-        val notificationBuilder =
-            NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID).setAutoCancel(false)
-                .setOngoing(true)
-                .setSmallIcon(R.drawable.ic_premium_icon_paw)
-                .setContentTitle("Petmily")
-                .setContentText("00:00:00")
-                .setContentIntent(getTrackingActivityPendingIntent())
+        startForeground(NOTIFICATION_ID, basenotificationBuilder.build())
 
+        timeRunInSeconds.observe(this, Observer {
+            val notification = curNotificationBuilder
+                .setContentText(TrackingUtility.getFormattedStopWatchTime(it * 1000L))
+            notificationManager.notify(NOTIFICATION_ID, notification.build())
+        })
+    }
 
-        startForeground(NOTIFICATION_ID, notificationBuilder.build())
+    private fun updateNotificationTrackingState(isTracking: Boolean) {
+        val notificationActionText = if (isTracking) "Pause" else "Resume"
+
+        val pendingIntent = if (isTracking) {
+            val pauseIntent = Intent(this, TrackingService::class.java).apply {
+                action = ACTION_PAUSE_SERVICE
+            }
+            PendingIntent.getService(this, 1, pauseIntent, FLAG_UPDATE_CURRENT)
+        } else {
+            val resumeIntent = Intent(this, TrackingService::class.java).apply {
+                action = ACTION_START_OR_RESUME_SERVICE
+            }
+            PendingIntent.getService(this, 2, resumeIntent, FLAG_UPDATE_CURRENT)
+        }
+
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        curNotificationBuilder.javaClass.getDeclaredField("mActions").apply {
+            isAccessible = true
+            set(curNotificationBuilder, ArrayList<NotificationCompat.Action>())
+        }
+
+        curNotificationBuilder = basenotificationBuilder
+            .addAction(R.drawable.ic_baseline_pause_24, notificationActionText, pendingIntent)
+        notificationManager.notify(NOTIFICATION_ID, curNotificationBuilder.build())
     }
 
     @SuppressLint("UnspecifiedImmutableFlag")

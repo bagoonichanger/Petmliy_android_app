@@ -5,6 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+        android:id="@+id/cancel_tracking"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.gms.maps.MapView
         android:id="@+id/googleMapView"
         android:name="com.google.android.gms.maps.MapFragment"
@@ -50,8 +59,8 @@
             android:layout_height="50dp"
             android:layout_marginEnd="30dp"
             android:background="@drawable/walk_button_background_disabled"
-            android:visibility="gone"
             android:src="@drawable/walk_ic_free_icon_font_camera_disabled"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/timeButtonContainer"
             app:layout_constraintEnd_toStartOf="@id/timeButtonContainer"
             app:layout_constraintTop_toTopOf="@id/timeButtonContainer" />
