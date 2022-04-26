@@ -12,8 +12,8 @@ import com.bagooni.petmliy_android_app.databinding.FragmentWalkBinding
 import com.bagooni.petmliy_android_app.MainActivity
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentMapBinding
-import com.bagooni.petmliy_android_app.databinding.FragmentWalkBinding
 import com.bagooni.petmliy_android_app.walk.Activity.TrackingActivity
+import com.bagooni.petmliy_android_app.walk.Activity.WriteActivity
 
 @Suppress("UNREACHABLE_CODE")
 class WalkFragment : Fragment() { // 시작
@@ -32,6 +32,12 @@ class WalkFragment : Fragment() { // 시작
 
         binding.changeActivity.setOnClickListener {
             startActivity(Intent(activity, TrackingActivity::class.java))
+        }
+        binding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+            binding.selectDate.text = String.format("%d년 %d월 %d일", year, month+1, dayOfMonth)
+        }
+        binding.writeButton.setOnClickListener{
+            startActivity(Intent(activity, WriteActivity::class.java))
         }
     }
 

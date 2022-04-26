@@ -3,8 +3,6 @@ package com.bagooni.petmliy_android_app.walk.Activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bagooni.petmliy_android_app.R
-import com.bagooni.petmliy_android_app.databinding.ActivityTrackingBinding
-import com.bumptech.glide.Glide
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback

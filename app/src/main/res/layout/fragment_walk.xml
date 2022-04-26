@@ -29,7 +29,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/today"
-        android:layout_width="320dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/calendarView"
         app:layout_constraintEnd_toEndOf="@id/calendarView"
@@ -43,6 +43,7 @@
             android:textSize="15dp"
             android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/distance"
             app:layout_constraintTop_toTopOf="parent"/>
         <TextView
             android:id="@+id/distance"
@@ -97,13 +98,54 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/date"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/selectDay"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/today"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="30dp">
+
+        <TextView
+            android:id="@+id/walkContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="산책 내역"
+            android:textSize="20dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="30dp"/>
+        <TextView
+            android:id="@+id/selectDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="000년 0월 00일"
+            app:layout_constraintTop_toBottomOf="@id/walkContent"
+            app:layout_constraintStart_toStartOf="@id/walkContent"
+            android:layout_marginTop="10dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="000분, 00km, 00.0kcal"
+            android:textSize="15dp"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/selectDate"
+            app:layout_constraintStart_toStartOf="@id/walkContent"/>
+        <ImageButton
+            android:id="@+id/writeButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:backgroundTint="@color/white"
+            app:layout_constraintTop_toTopOf="@id/walkContent"
+            app:layout_constraintEnd_toEndOf="@+id/selectDay"
+            android:src="@drawable/walk_icon_content_plus"
+            android:padding="0dp"
+            android:scaleType="centerCrop"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/changeActivity"
