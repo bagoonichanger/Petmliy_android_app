@@ -1,11 +1,9 @@
 package com.bagooni.petmliy_android_app.walk.Fragment
 
-import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.os.Build
@@ -15,32 +13,44 @@ import android.os.Looper
 import android.provider.MediaStore
 import android.view.PixelCopy
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageButton
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.bagooni.petmliy_android_app.R
-import com.bagooni.petmliy_android_app.walk.Fragment.Service.Constants.ACTION_PAUSE_SERVICE
-import com.bagooni.petmliy_android_app.walk.Fragment.Service.Constants.ACTION_START_OR_RESUME_SERVICE
-import com.bagooni.petmliy_android_app.walk.Fragment.Service.Constants.MAP_ZOOM
-import com.bagooni.petmliy_android_app.walk.Fragment.Service.Constants.POLYLINE_COLOR
-import com.bagooni.petmliy_android_app.walk.Fragment.Service.Constants.POLYLINE_WIDTH
+import com.bagooni.petmliy_android_app.walk.Db.Tracking
+import com.bagooni.petmliy_android_app.walk.Db.TrackingDAO
+import com.bagooni.petmliy_android_app.walk.Db.TrackingRepository
+import com.bagooni.petmliy_android_app.walk.Db.TrackingViewModel
+import com.bagooni.petmliy_android_app.Constants.ACTION_PAUSE_SERVICE
+import com.bagooni.petmliy_android_app.Constants.ACTION_START_OR_RESUME_SERVICE
+import com.bagooni.petmliy_android_app.Constants.ACTION_STOP_SERVICE
+import com.bagooni.petmliy_android_app.Constants.MAP_ZOOM
+import com.bagooni.petmliy_android_app.Constants.POLYLINE_COLOR
+import com.bagooni.petmliy_android_app.Constants.POLYLINE_WIDTH
 import com.bagooni.petmliy_android_app.walk.Fragment.Service.Polyline
 import com.bagooni.petmliy_android_app.walk.Fragment.Service.TrackingService
 import com.bagooni.petmliy_android_app.walk.Fragment.Service.TrackingUtility
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.snackbar.Snackbar
+import java.util.*
+import kotlin.math.round
 
 class TrackingFragment : Fragment(R.layout.fragment_tracking) {
+
+    private val viewModel by lazy {
+        ViewModelProvider(this, TrackingViewModel.Factory(requireActivity().application)).get(TrackingViewModel::class.java)
+    }
     private lateinit var mapView: MapView
     private var map: GoogleMap? = null
 
@@ -48,6 +58,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
 
     private var isTracking = false
     private var pathPoints = mutableListOf<Polyline>()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -85,7 +96,55 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
 
     private fun moveCameraToUser() {
         if (pathPoints.isNotEmpty() && pathPoints.last().isNotEmpty())
-            map?.animateCamera(CameraUpdateFactory.newLatLngZoom(pathPoints.last().last(), MAP_ZOOM))
+            map?.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    pathPoints.last().last(),
+                    MAP_ZOOM
+                )
+            )
+    }
+
+    private fun zoomToSeeWholeTrack() {
+        val bounds = LatLngBounds.builder()
+        for (polyline in pathPoints) {
+            for (pos in polyline) {
+                bounds.include(pos)
+            }
+        }
+
+        map?.moveCamera(
+            CameraUpdateFactory.newLatLngBounds(
+                bounds.build(), mapView.width, mapView.height, (mapView.height * 0.05f).toInt()
+            )
+        )
+    }
+
+    private fun endTracking_saveToDb() {
+        map?.snapshot { bitmap ->
+            var distanceInMeters = 0
+            for (polyline in pathPoints) {
+                distanceInMeters += TrackingUtility.calculatePolylineLength(polyline).toInt()
+            }
+            val avgSpeed =
+                round((distanceInMeters / 100f) / (curTimeInMillis / 1000f / 60 / 60) * 10) / 10f
+            val dateTimestamp = Calendar.getInstance().timeInMillis
+            val caloriesBurned = ((distanceInMeters / 1000f) * 70f).toInt()
+
+            val tracking = Tracking(
+                bitmap,
+                dateTimestamp,
+                avgSpeed,
+                distanceInMeters,
+                curTimeInMillis,
+                caloriesBurned
+            )
+
+            viewModel.insertRun(tracking)
+            view?.let {
+                Snackbar.make(it, "산책이 저장되었습니다.", Snackbar.LENGTH_LONG).show()
+            }
+            stopTracking()
+        }
     }
 
     private fun addAllPolylines() {
@@ -146,7 +205,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         }
 
         view.findViewById<AppCompatImageButton>(R.id.stopButton).setOnClickListener {
-
+            showSaveTrackingDialog()
         }
 
         view.findViewById<AppCompatImageButton>(R.id.disabledStopButton).setOnClickListener {
@@ -159,12 +218,15 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         view.findViewById<AppCompatImageButton>(R.id.disabledCaptureButton).setOnClickListener {
             Toast.makeText(requireContext(), "산책을 멈추고 스크린샷 해주세요", Toast.LENGTH_SHORT).show()
         }
+        view.findViewById<Button>(R.id.cancel_tracking).setOnClickListener {
+            showCancelTrackingDialog()
+        }
     }
 
     private fun showCaptureTrackingDialog() {
         AlertDialog.Builder(requireContext())
-            .setMessage("산책 기록을 저장하시겠습니까?")
-            .setPositiveButton("저장") { dialog, _ ->
+            .setMessage("산책 기록을 캡쳐하시겠습니까?")
+            .setPositiveButton("캡쳐") { dialog, _ ->
                 view?.let {
                     getBitmapFromView(it, requireActivity()) { bitmap ->
                         captureTracking(bitmap)
@@ -275,6 +337,40 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             it.action = action
             requireContext().startService(it)
         }
+    }
+
+    private fun showCancelTrackingDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("산책 기록을 취소하시겠습니까?")
+            .setMessage("현재까지의 기록을 취소하고 모든 데이터를 삭제하시겠습니까?")
+            .setPositiveButton("삭제") { _, _ ->
+                stopTracking()
+            }
+            .setNegativeButton("아니오") { dialog, _ ->
+                dialog.cancel()
+            }
+            .create()
+            .show()
+    }
+
+    private fun showSaveTrackingDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("산책 기록을 저장하시겠습니까?")
+            .setMessage("현재까지의 기록을 취소하고 모든 데이터를 삭제하시겠습니까?")
+            .setPositiveButton("저장") { _, _ ->
+                zoomToSeeWholeTrack()
+                endTracking_saveToDb()
+            }
+            .setNegativeButton("취소") { dialog, _ ->
+                dialog.cancel()
+            }
+            .create()
+            .show()
+    }
+
+    private fun stopTracking() {
+        sendCommandToService(ACTION_STOP_SERVICE)
+        findNavController().navigate(R.id.action_trackingFragment_to_walkFragment)
     }
 
     override fun onResume() {

@@ -19,16 +19,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.bagooni.petmliy_android_app.MainActivity
 import com.bagooni.petmliy_android_app.R
-import com.bagooni.petmliy_android_app.walk.Fragment.Service.Constants.ACTION_PAUSE_SERVICE
-import com.bagooni.petmliy_android_app.walk.Fragment.Service.Constants.ACTION_SHOW_TRACKING_FRAGMENT
-import com.bagooni.petmliy_android_app.walk.Fragment.Service.Constants.ACTION_START_OR_RESUME_SERVICE
-import com.bagooni.petmliy_android_app.walk.Fragment.Service.Constants.ACTION_STOP_SERVICE
-import com.bagooni.petmliy_android_app.walk.Fragment.Service.Constants.FASTEST_LOCATION_INTERVAL
-import com.bagooni.petmliy_android_app.walk.Fragment.Service.Constants.LOCATION_UPDATE_INTERVAL
-import com.bagooni.petmliy_android_app.walk.Fragment.Service.Constants.NOTIFICATION_CHANNEL_ID
-import com.bagooni.petmliy_android_app.walk.Fragment.Service.Constants.NOTIFICATION_CHANNEL_NAME
-import com.bagooni.petmliy_android_app.walk.Fragment.Service.Constants.NOTIFICATION_ID
-import com.bagooni.petmliy_android_app.walk.Fragment.Service.Constants.TIMER_UPDATE_INTERVAL
+import com.bagooni.petmliy_android_app.Constants.ACTION_PAUSE_SERVICE
+import com.bagooni.petmliy_android_app.Constants.ACTION_SHOW_TRACKING_FRAGMENT
+import com.bagooni.petmliy_android_app.Constants.ACTION_START_OR_RESUME_SERVICE
+import com.bagooni.petmliy_android_app.Constants.ACTION_STOP_SERVICE
+import com.bagooni.petmliy_android_app.Constants.FASTEST_LOCATION_INTERVAL
+import com.bagooni.petmliy_android_app.Constants.LOCATION_UPDATE_INTERVAL
+import com.bagooni.petmliy_android_app.Constants.NOTIFICATION_CHANNEL_ID
+import com.bagooni.petmliy_android_app.Constants.NOTIFICATION_CHANNEL_NAME
+import com.bagooni.petmliy_android_app.Constants.NOTIFICATION_ID
+import com.bagooni.petmliy_android_app.Constants.TIMER_UPDATE_INTERVAL
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
@@ -49,6 +49,7 @@ class TrackingService : LifecycleService() {
     }
 
     var isFirstRun = true
+    var serviceKilled = false
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
@@ -147,19 +148,32 @@ class TrackingService : LifecycleService() {
                     }
                 }
                 ACTION_PAUSE_SERVICE -> {
-                    isTracking.postValue(false)
-                    isTimerEnabled = false
-//                    stopLocationUpdates()
+                    pauseService()
                     Log.d("service", "Pause service")
                 }
                 ACTION_STOP_SERVICE -> {
                     Log.d("service", "Stop service")
+                    killService()
                 }
 
                 else -> {}
             }
         }
         return super.onStartCommand(intent, flags, startId)
+    }
+
+    private fun pauseService() {
+        isTracking.postValue(false)
+        isTimerEnabled = false
+    }
+
+    private fun killService() {
+        serviceKilled = true
+        isFirstRun = true
+        pauseService()
+        postInitialValues()
+        stopForeground(true)
+        stopSelf()
     }
 
     private fun initNotificationBuilder() {
@@ -235,9 +249,11 @@ class TrackingService : LifecycleService() {
         startForeground(NOTIFICATION_ID, basenotificationBuilder.build())
 
         timeRunInSeconds.observe(this, Observer {
-            val notification = curNotificationBuilder
-                .setContentText(TrackingUtility.getFormattedStopWatchTime(it * 1000L))
-            notificationManager.notify(NOTIFICATION_ID, notification.build())
+            if (!serviceKilled) {
+                val notification = curNotificationBuilder
+                    .setContentText(TrackingUtility.getFormattedStopWatchTime(it * 1000L))
+                notificationManager.notify(NOTIFICATION_ID, notification.build())
+            }
         })
     }
 
@@ -264,9 +280,11 @@ class TrackingService : LifecycleService() {
             set(curNotificationBuilder, ArrayList<NotificationCompat.Action>())
         }
 
-        curNotificationBuilder = basenotificationBuilder
-            .addAction(R.drawable.ic_baseline_pause_24, notificationActionText, pendingIntent)
-        notificationManager.notify(NOTIFICATION_ID, curNotificationBuilder.build())
+        if(!serviceKilled){
+            curNotificationBuilder = basenotificationBuilder
+                .addAction(R.drawable.ic_baseline_pause_24, notificationActionText, pendingIntent)
+            notificationManager.notify(NOTIFICATION_ID, curNotificationBuilder.build())
+        }
     }
 
     @SuppressLint("UnspecifiedImmutableFlag")

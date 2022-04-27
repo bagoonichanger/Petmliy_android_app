@@ -10,9 +10,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bagooni.petmliy_android_app.R
-import com.bagooni.petmliy_android_app.walk.Fragment.TrackingFragment
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class WalkFragment : Fragment(R.layout.fragment_walk){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

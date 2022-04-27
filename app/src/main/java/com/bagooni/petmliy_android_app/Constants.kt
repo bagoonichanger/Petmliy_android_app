@@ -1,8 +1,10 @@
-package com.bagooni.petmliy_android_app.walk.Fragment.Service
+package com.bagooni.petmliy_android_app
 
 import android.graphics.Color
 
 object Constants {
+    const val TRACKING_DATABASE_NAME = "tracking_db"
+
     const val ACTION_START_OR_RESUME_SERVICE = "ACTION_START_OR_RESUME_SERVICE"
     const val ACTION_PAUSE_SERVICE = "ACTION_PAUSE_SERVICE"
     const val ACTION_STOP_SERVICE = "ACTION_STOP_SERVICE"

@@ -1,5 +1,6 @@
 package com.bagooni.petmliy_android_app.walk.Fragment.Service
 
+import android.location.Location
 import java.util.concurrent.TimeUnit
 
 object TrackingUtility {
@@ -23,5 +24,19 @@ object TrackingUtility {
         return "${if (minutes < 10) "0" else ""}$minutes:" +
                 "${if (seconds < 10) "0" else ""}$seconds:" +
                 "${if (milliseconds < 10) "0" else ""}$milliseconds"
+    }
+
+    fun calculatePolylineLength(polyline: Polyline): Float{
+        var distance = 0f
+        for(i in 0..polyline.size -2){
+            val pos1 = polyline[i]
+            val pos2 = polyline[i+1]
+
+            val result = FloatArray(1)
+            Location.distanceBetween(pos1.latitude,pos1.longitude,pos2.latitude,pos2.longitude, result)
+
+            distance += result[0]
+        }
+        return distance
     }
 }

@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -69,12 +70,12 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
     //okhttp3
-    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.7'
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.7'
 
     //Glide
-    implementation 'com.github.bumptech.glide:glide:4.10.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
+    implementation 'com.github.bumptech.glide:glide:4.13.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.1'
 
     //kakao
     implementation "com.kakao.sdk:v2-user:2.8.6" // 카카오 로그인
@@ -84,10 +85,16 @@ dependencies {
     implementation "com.kakao.sdk:v2-navi:2.8.6" // 카카오내비
 
     // Glide
-    implementation 'com.github.bumptech.glide:glide:4.13.0'
+    implementation 'com.github.bumptech.glide:glide:4.13.1'
 
     //google Map
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
     implementation 'com.google.android.gms:play-services-location:19.0.1'
 
+    implementation("androidx.room:room-runtime:2.4.2")
+    kapt 'androidx.room:room-compiler:2.4.2'
+
+    implementation("androidx.room:room-ktx:2.4.2")
+
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1"
 }
