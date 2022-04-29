@@ -5,6 +5,12 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -28,16 +34,6 @@
         <activity
             android:name=".home.Activity.MyPageActivity"
             android:exported="false" />
-
-        android:theme="@style/Theme.Petmliy_android_app"
-        android:usesCleartextTraffic="true">
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAQNFZQbUk6i1FBwCId16YxODNjUnSNrpQ" />
-
-        <activity
-            android:name=".walk.Activity.TrackingActivity"
-            android:exported="false" />
         <activity
             android:name=".map.Activity.IndustryActivity"
             android:exported="false" />
@@ -46,15 +42,21 @@
             android:exported="false" />
 
         <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAQNFZQbUk6i1FBwCId16YxODNjUnSNrpQ" />
+        <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="@string/naver_map_client_id" />
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_key" />
 
-
+        <service
+            android:name=".walk.Fragment.Service.TrackingService"
+            android:foregroundServiceType="location" />
         <activity
             android:name=".MainActivity"
+            android:launchMode="singleInstance"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -62,6 +64,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
     </application>
-
 </manifest>
