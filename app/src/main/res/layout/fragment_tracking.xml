@@ -197,7 +197,7 @@
             app:layout_constraintStart_toEndOf="@id/velocityTitle"
             app:layout_constraintTop_toTopOf="@id/velocityTitle" />
 
-        <com.bagooni.petmliy_android_app.walk.Fragment.CountUpView
+        <TextView
             android:id="@+id/walkTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

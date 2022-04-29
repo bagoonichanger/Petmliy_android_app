@@ -11,9 +11,6 @@ interface TrackingDAO {
     @Delete
     suspend fun deleteTracking(tracking: Tracking)
 
-    @Query("SELECT * FROM tracking_table ORDER BY timestamp DESC")
-    fun getAllTrackingSortedByDate(): LiveData<List<Tracking>>
-
     @Query("SELECT * FROM tracking_table ORDER BY timeInMillis DESC")
     fun getAllTrackingSortedByTimeInMillis(): LiveData<List<Tracking>>
 
@@ -26,15 +23,6 @@ interface TrackingDAO {
     @Query("SELECT * FROM tracking_table ORDER BY distanceInMeters DESC")
     fun getAllTrackingSortedByDistance(): LiveData<List<Tracking>>
 
-    @Query("SELECT SUM(timeInMillis) FROM tracking_table")
-    fun getTotalTimeInMillis() : LiveData<Long>
-
-    @Query("SELECT SUM(caloriesBurned) FROM tracking_table")
-    fun getTotalCaloriesBurned() : LiveData<Int>
-
-    @Query("SELECT SUM(distanceInMeters) FROM tracking_table")
-    fun getTotalDistance() : LiveData<Int>
-
-    @Query("SELECT SUM(avgSpeedInKMH) FROM tracking_table")
-    fun getTotalAvgSpeed() : LiveData<Float>
+    @Query("SELECT * FROM tracking_table WHERE year = :year AND month = :month AND day = :day ORDER BY id DESC")
+    fun getAllTrackingSortedByCalendar(year : Int, month : Int, day : Int) : LiveData<List<Tracking>>
 }

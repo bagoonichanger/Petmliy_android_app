@@ -6,7 +6,7 @@ class TrackingRepository(private val trackingDAO: TrackingDAO) {
 
     suspend fun deleteTracking(tracking: Tracking) = trackingDAO.deleteTracking(tracking)
 
-    fun getAllTrackingSortedByDate() = trackingDAO.getAllTrackingSortedByDate()
+    fun getAllTrackingSortedByCalendar(year:Int, month:Int, day:Int) = trackingDAO.getAllTrackingSortedByCalendar(year,month,day)
 
     fun getAllTrackingSortedByTimeInMillis() = trackingDAO.getAllTrackingSortedByTimeInMillis()
 
@@ -15,12 +15,4 @@ class TrackingRepository(private val trackingDAO: TrackingDAO) {
     fun getAllTrackingSortedByAvgSpeed() = trackingDAO.getAllTrackingSortedByAvgSpeed()
 
     fun getAllTrackingSortedByDistance() = trackingDAO.getAllTrackingSortedByDistance()
-
-    fun getTotalTimeInMillis() = trackingDAO.getTotalTimeInMillis()
-
-    fun getTotalCaloriesBurned() = trackingDAO.getTotalCaloriesBurned()
-
-    fun getTotalDistance() = trackingDAO.getTotalDistance()
-
-    fun getTotalAvgSpeed() = trackingDAO.getTotalAvgSpeed()
 }

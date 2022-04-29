@@ -16,14 +16,22 @@ class TrackingViewModel(application: Application) : AndroidViewModel(application
         }
 
     }
-    private val trackingRepository : TrackingRepository
+
+    private val trackingRepository: TrackingRepository
 
     init {
         val trackingDAO = TrackingDatabase.getDatabase(application)!!.getTrackingDao()
         trackingRepository = TrackingRepository(trackingDAO)
     }
 
-    fun insertRun(tracking: Tracking) = viewModelScope.launch(Dispatchers.IO) {
+    fun insertTracking(tracking: Tracking) = viewModelScope.launch(Dispatchers.IO) {
         trackingRepository.insertTracking(tracking)
     }
+
+    fun deleteTracking(tracking: Tracking) = viewModelScope.launch(Dispatchers.IO) {
+        trackingRepository.deleteTracking(tracking)
+    }
+
+    fun trackingSortedByCalendar(year: Int, month: Int, day: Int) =
+        trackingRepository.getAllTrackingSortedByCalendar(year, month, day)
 }

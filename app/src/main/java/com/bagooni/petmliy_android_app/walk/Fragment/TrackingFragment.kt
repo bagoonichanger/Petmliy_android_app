@@ -18,15 +18,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.walk.Db.Tracking
-import com.bagooni.petmliy_android_app.walk.Db.TrackingDAO
-import com.bagooni.petmliy_android_app.walk.Db.TrackingRepository
 import com.bagooni.petmliy_android_app.walk.Db.TrackingViewModel
 import com.bagooni.petmliy_android_app.Constants.ACTION_PAUSE_SERVICE
 import com.bagooni.petmliy_android_app.Constants.ACTION_START_OR_RESUME_SERVICE
@@ -127,19 +123,23 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             }
             val avgSpeed =
                 round((distanceInMeters / 100f) / (curTimeInMillis / 1000f / 60 / 60) * 10) / 10f
-            val dateTimestamp = Calendar.getInstance().timeInMillis
+            val year = Calendar.getInstance().get(Calendar.YEAR)
+            val month = Calendar.getInstance().get(Calendar.MONTH)
+            val day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
             val caloriesBurned = ((distanceInMeters / 1000f) * 70f).toInt()
 
             val tracking = Tracking(
+                year,
+                month,
+                day,
                 bitmap,
-                dateTimestamp,
                 avgSpeed,
                 distanceInMeters,
                 curTimeInMillis,
                 caloriesBurned
             )
 
-            viewModel.insertRun(tracking)
+            viewModel.insertTracking(tracking)
             view?.let {
                 Snackbar.make(it, "산책이 저장되었습니다.", Snackbar.LENGTH_LONG).show()
             }
@@ -306,16 +306,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
 
         view?.let {
             Snackbar.make(it, "저장된 사진을 확인하시겠습니까?", Snackbar.LENGTH_SHORT).apply {
-//                setAction("공유", object : View.OnClickListener {
-//                    override fun onClick(v: View?) {
-//                        val sharing_intent = Intent(Intent.ACTION_SEND).apply {
-//                            type = "image/png"
-//                            putExtra(Intent.EXTRA_STREAM, imageUri)
-//                        }
-//                        startActivity(Intent.createChooser(sharing_intent, "공유하기"))
-//                    }
-//
-//                })
+
                 setAction("확인하기", object : View.OnClickListener {
                     override fun onClick(v: View?) {
                         val loadIntent = Intent(Intent.ACTION_GET_CONTENT).apply {
