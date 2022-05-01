@@ -1,61 +1,65 @@
 package com.bagooni.petmliy_android_app
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import com.bagooni.petmliy_android_app.databinding.ActivityMainBinding
-import com.bagooni.petmliy_android_app.home.HomeFragment
-import com.bagooni.petmliy_android_app.map.MapFragment
-import com.bagooni.petmliy_android_app.post.PostFragment
-import com.bagooni.petmliy_android_app.walk.WalkFragment
+import android.util.Log
+import android.view.View
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
+import com.bagooni.petmliy_android_app.Constants.ACTION_SHOW_TRACKING_FRAGMENT
+import com.bagooni.petmliy_android_app.walk.Db.TrackingDAO
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
-
-    private val homeFragment: HomeFragment by lazy {
-        HomeFragment()
-    }
-
-    private val postFragment: PostFragment by lazy {
-        PostFragment()
-    }
-
-    private val walkFragment: WalkFragment by lazy {
-        WalkFragment()
-    }
-// feature
-    private val mapFragment: MapFragment by lazy {
-        MapFragment()
-    }
+class MainActivity : AppCompatActivity() { // 수정 완료
+    lateinit var trackingDAO: TrackingDAO
 
     private val bottomNavigationView: BottomNavigationView by lazy {
-        binding.bottomNavigationView
+        findViewById<BottomNavigationView>(R.id.bottomNavigationView)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) { //checkout commit0303-2
-        binding = ActivityMainBinding.inflate(layoutInflater)
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_main)
 
-        replaceFragment(homeFragment) // 처음 페이지
+        navigateToTrackingFragmentIfNeed(intent)
+
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+
+        bottomNavigationView.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.trackingFragment -> bottomNavigationView.visibility = View.GONE
+                else -> bottomNavigationView.visibility = View.VISIBLE
+            }
+        }
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.home -> replaceFragment(homeFragment)
-                R.id.story -> replaceFragment(postFragment)
-                R.id.walk -> replaceFragment(walkFragment)
-                R.id.map -> replaceFragment(mapFragment)
+                R.id.home -> navController.navigate(R.id.homeFragment)
+                R.id.story -> navController.navigate(R.id.postFragment)
+                R.id.walk -> navController.navigate(R.id.walkFragment)
+                R.id.map -> navController.navigate(R.id.mapFragment)
             }
             true
         }
     }
 
-    private fun replaceFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .apply {
-                replace(R.id.fragmentContainer, fragment)
-                commit()
-            }
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        navigateToTrackingFragmentIfNeed(intent)
+    }
+
+    private fun navigateToTrackingFragmentIfNeed(intent: Intent?) {
+        if(intent?.action == ACTION_SHOW_TRACKING_FRAGMENT) {
+            Log.d("123456","SDAFSDFSDFSDFASDFDSFDSFASFDSFASDFASDF")
+            val navHostFragment =
+                supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            val navController = navHostFragment.navController
+            navController.navigate(R.id.action_global_trackingFragment)
+        }
     }
 }

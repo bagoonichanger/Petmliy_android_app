@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.ActivityRegionBinding
 
-
 class RegionActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegionBinding
 

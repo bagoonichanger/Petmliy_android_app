@@ -30,7 +30,7 @@ class HomeFragment : Fragment(){
 
     inner class ButtonListener: View.OnClickListener {
         override fun onClick(p0: View?) {
-            var intent = Intent()
+            var intent: Intent
             when (p0?.id) {
                 R.id.mypageButton -> {
                     intent = Intent(context, MyPageActivity::class.java)
