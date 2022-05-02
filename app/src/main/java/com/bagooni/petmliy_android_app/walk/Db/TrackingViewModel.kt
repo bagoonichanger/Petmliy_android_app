@@ -34,4 +34,7 @@ class TrackingViewModel(application: Application) : AndroidViewModel(application
 
     fun trackingSortedByCalendar(year: Int, month: Int, day: Int) =
         trackingRepository.getAllTrackingSortedByCalendar(year, month, day)
+
+    fun allTracking() =
+        trackingRepository.getAllTracking()
 }

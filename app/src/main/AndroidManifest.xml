@@ -26,13 +26,13 @@
             android:name=".post.PostUploadActivity"
             android:exported="false" />
         <activity
-            android:name=".home.Activity.AlbumActivity"
+            android:name=".home.Fragment.AlbumActivity"
             android:exported="false" />
         <activity
-            android:name=".home.Activity.BookMarkActivity"
+            android:name=".home.Fragment.BookMarkActivity"
             android:exported="false" />
         <activity
-            android:name=".home.Activity.MyPageActivity"
+            android:name=".home.Fragment.MyPageActivity"
             android:exported="false" />
         <activity
             android:name=".map.Activity.IndustryActivity"

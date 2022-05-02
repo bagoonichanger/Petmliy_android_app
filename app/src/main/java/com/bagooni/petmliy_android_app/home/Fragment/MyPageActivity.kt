@@ -1,4 +1,4 @@
-package com.bagooni.petmliy_android_app.home.Activity
+package com.bagooni.petmliy_android_app.home.Fragment
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity

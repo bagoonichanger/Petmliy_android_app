@@ -6,14 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentHomeBinding
-import com.bagooni.petmliy_android_app.home.Activity.AlbumActivity
-import com.bagooni.petmliy_android_app.home.Activity.BookMarkActivity
-import com.bagooni.petmliy_android_app.home.Activity.MyPageActivity
+import com.bagooni.petmliy_android_app.databinding.FragmentMapBinding
+import com.bagooni.petmliy_android_app.home.Fragment.AlbumActivity
+import com.bagooni.petmliy_android_app.home.Fragment.BookMarkActivity
+import com.bagooni.petmliy_android_app.home.Fragment.MyPageActivity
 
-class HomeFragment : Fragment(){
-    private var _binding: FragmentHomeBinding?=null
+class HomeFragment : Fragment(R.layout.fragment_home) {
+    private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -21,30 +24,20 @@ class HomeFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentHomeBinding.inflate(inflater,container,false)
-        binding.mypageButton.setOnClickListener(ButtonListener())
-        binding.albumButton.setOnClickListener(ButtonListener())
-        binding.bookmarkButton.setOnClickListener (ButtonListener())
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    inner class ButtonListener: View.OnClickListener {
-        override fun onClick(p0: View?) {
-            var intent: Intent
-            when (p0?.id) {
-                R.id.mypageButton -> {
-                    intent = Intent(context, MyPageActivity::class.java)
-                    startActivity(intent)
-                }
-                R.id.albumButton -> {
-                    intent = Intent(context, AlbumActivity::class.java)
-                    startActivity(intent)
-                }
-                R.id.bookmarkButton -> {
-                    intent = Intent(context, BookMarkActivity::class.java)
-                    startActivity(intent)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.mypageButton.setOnClickListener {
+//            findNavController().navigate()
+        }
+        binding.albumButton.setOnClickListener {
+//            findNavController().navigate()
+        }
+        binding.bookmarkButton.setOnClickListener {
+//            findNavController().navigate()
         }
     }
 }
