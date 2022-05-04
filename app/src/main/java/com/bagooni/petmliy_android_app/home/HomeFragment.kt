@@ -1,8 +1,14 @@
 package com.bagooni.petmliy_android_app.home
 
-
+import android.content.ContentResolver
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
+import android.media.MediaScannerConnection
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,18 +17,24 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bagooni.petmliy_android_app.MainActivity
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentHomeBinding
+import com.bagooni.petmliy_android_app.databinding.FragmentMapBinding
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 
 
+//start
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -98,6 +110,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.signInButton.setOnClickListener {
@@ -105,14 +126,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             Log.d("Google", intent.toString())
             activityResultLauncher.launch(intent)
         }
-        binding.mypageButton.setOnClickListener {
-//            findNavController().navigate()
-        }
         binding.albumButton.setOnClickListener {
-//            findNavController().navigate()
+            findNavController().navigate(R.id.action_homeFragment_to_albumFragment)
         }
         binding.bookmarkButton.setOnClickListener {
-//            findNavController().navigate()
+            findNavController().navigate(R.id.action_homeFragment_to_bookMarkFragment)
         }
     }
 
@@ -120,7 +138,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onStart()
         val account = GoogleSignIn.getLastSignedInAccount(requireContext())
         if (account != null && account.id != null) {
+
         }
+
     }
 
     override fun onDestroy() {

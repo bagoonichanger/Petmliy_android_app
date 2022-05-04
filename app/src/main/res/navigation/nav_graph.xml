@@ -19,9 +19,6 @@
         <action
             android:id="@+id/action_homeFragment_to_bookMarkFragment"
             app:destination="@id/bookMarkFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_myPageFragment"
-            app:destination="@id/myPageFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapFragment"
@@ -81,15 +78,6 @@
         tools:layout="@layout/fragment_book_mark" >
         <action
             android:id="@+id/action_bookMarkFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/myPageFragment"
-        android:name="com.bagooni.petmliy_android_app.home.Fragment.MyPageFragment"
-        android:label="fragment_my_page"
-        tools:layout="@layout/fragment_my_page" >
-        <action
-            android:id="@+id/action_myPageFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
     <fragment
