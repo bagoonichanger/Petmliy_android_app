@@ -24,9 +24,6 @@ import com.bagooni.petmliy_android_app.MainActivity
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentHomeBinding
 import com.bagooni.petmliy_android_app.databinding.FragmentMapBinding
-import com.bagooni.petmliy_android_app.home.Fragment.AlbumActivity
-import com.bagooni.petmliy_android_app.home.Fragment.BookMarkActivity
-import com.bagooni.petmliy_android_app.home.Fragment.MyPageActivity
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -117,10 +114,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        binding.mypageButton.setOnClickListener { ButtonListener() }
-        binding.albumButton.setOnClickListener { ButtonListener()}
-        binding.bookmarkButton.setOnClickListener { ButtonListener()}
-                return binding.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -130,14 +124,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             Log.d("Google", intent.toString())
             activityResultLauncher.launch(intent)
         }
-        binding.mypageButton.setOnClickListener {
-//            findNavController().navigate()
-        }
         binding.albumButton.setOnClickListener {
-//            findNavController().navigate()
+            findNavController().navigate(R.id.action_homeFragment_to_albumFragment)
         }
         binding.bookmarkButton.setOnClickListener {
-//            findNavController().navigate()
+            findNavController().navigate(R.id.action_homeFragment_to_bookMarkFragment)
         }
     }
 

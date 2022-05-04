@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".home.Fragment.BookMarkFragment">
 
     <TextView
@@ -28,7 +27,8 @@
         android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
         android:src="@drawable/ic_baseline_arrow_back_ios_new_24"
-        android:backgroundTint="@color/white"/>
+        android:backgroundTint="@color/white"
+        tools:ignore="ContentDescription" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="0dp"
