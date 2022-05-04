@@ -48,7 +48,7 @@ class MyPageFragment : Fragment() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             .build()
-//
+
         mGoogleSignInClient = GoogleSignIn.getClient(activity as MainActivity, gso)
 
         binding.signInButton.setOnClickListener{ signIn(); signOutLayout()}
