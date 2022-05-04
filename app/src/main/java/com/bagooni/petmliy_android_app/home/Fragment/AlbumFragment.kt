@@ -22,7 +22,7 @@ class AlbumFragment : Fragment() {
     ): View? {
         _binding = FragmentAlbumBinding.inflate(inflater,container,false)
         binding.closeButton.setOnClickListener {
-            findNavController().navigate(R.id.action_albumFragment_to_homeFragment)
+            findNavController().navigate(R.id.homeFragment)
         }
         val imagePickerLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()){

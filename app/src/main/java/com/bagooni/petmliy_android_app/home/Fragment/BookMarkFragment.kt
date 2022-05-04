@@ -19,7 +19,7 @@ class BookMarkFragment : Fragment() {
     ): View? {
         _binding = FragmentBookMarkBinding.inflate(inflater,container,false)
         binding.closeButton.setOnClickListener {
-            findNavController().navigate(R.id.action_bookMarkFragment_to_homeFragment)
+            findNavController().navigate(R.id.homeFragment)
         }
         return binding.root
     }

@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.plusAssign
 import androidx.navigation.ui.setupWithNavController
 import com.bagooni.petmliy_android_app.Constants.ACTION_SHOW_TRACKING_FRAGMENT
 import com.bagooni.petmliy_android_app.walk.Db.TrackingDAO
@@ -22,12 +24,21 @@ class MainActivity : AppCompatActivity() { // 수정 완료
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         navigateToTrackingFragmentIfNeed(intent)
 
-
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
+
+// KeepStateNavigator navController에 추가
+        val navigator = KeepStateNavigator(this, navHostFragment.childFragmentManager, R.id.nav_host_fragment)
+        navController.navigatorProvider.addNavigator(navigator)
+
+        navController.setGraph(R.navigation.nav_graph)
+
+//        val navHostFragment =
+//            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+//        val navController = navHostFragment.navController
 
         bottomNavigationView.setupWithNavController(navController)
 
