@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bagooni.petmliy_android_app">
+    package="com.bagooni.petmliy_android_app" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -18,7 +18,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Petmliy_android_app">
+        android:theme="@style/Theme.Petmliy_android_app" >
         <activity
             android:name=".post.Comment.CommentActivity"
             android:exported="false" />
@@ -54,16 +54,21 @@
         <service
             android:name=".walk.Fragment.Service.TrackingService"
             android:foregroundServiceType="location" />
+
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleInstance"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleInstance" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
     </application>
+
 </manifest>

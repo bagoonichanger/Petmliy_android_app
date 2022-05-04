@@ -3,4 +3,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="map_search_hint">검색어를 입력해주세요.</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <!-- Strings used for fragments for navigation -->
+
+    <string name="server_client_id">888676227247-keki43t7at854brv89r5oh1lnsvu7ec1.apps.googleusercontent.com</string>
 </resources>
