@@ -17,6 +17,7 @@ class CalendarRecyclerAdapter(val detailRecyclerView: (Tracking) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(tracking: Tracking){
             val trackingImageView = binding.trackingImage
+            trackingImageView.clipToOutline = true
             val trackingDateTextView = binding.trackingDate
             val trackingAvgSpeedTextView = binding.trackingAvgSpeed
             val trackingDistanceTextView = binding.trackingDistance

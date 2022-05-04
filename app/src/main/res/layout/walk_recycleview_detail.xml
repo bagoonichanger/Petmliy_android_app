@@ -3,16 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="5dp"
     android:background="@drawable/walk_listadapter_background">
 
-    <ImageView
-        android:id="@+id/trackingImage"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        app:layout_constraintDimensionRatio="3:2"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardBackgroundView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="25dp"
+        android:layout_margin="10dp"
+        app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="3:2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/trackingImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop" />
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/trackingDate"
@@ -21,7 +32,9 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:text="DATE"
-        app:layout_constraintStart_toEndOf="@id/trackingImage"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/cardBackgroundView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -30,6 +43,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="시간 : "
+        android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/trackingDate"
         app:layout_constraintTop_toBottomOf="@id/trackingDate" />
 
@@ -38,6 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="00:00:00"
+        android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@id/Time"
         app:layout_constraintTop_toTopOf="@id/Time" />
 
@@ -48,6 +64,8 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="8dp"
         android:text="거리 : "
+        android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/trackingTime"
         app:layout_constraintTop_toBottomOf="@id/trackingDate" />
 
@@ -56,6 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="100Km"
+        android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@id/Distance"
         app:layout_constraintTop_toTopOf="@id/Distance" />
 
@@ -65,6 +84,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="평균 속도 : "
+        android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/Time"
         app:layout_constraintTop_toBottomOf="@id/Time" />
 
@@ -73,6 +94,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="500Km/h"
+        android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@id/AvgSpeed"
         app:layout_constraintTop_toTopOf="@id/AvgSpeed" />
 
@@ -83,6 +105,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="10dp"
         android:text="칼로리 : "
+        android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/AvgSpeed"
         app:layout_constraintTop_toBottomOf="@id/AvgSpeed" />
@@ -92,6 +116,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="100kcal"
+        android:textColor="@color/black"
         app:layout_constraintStart_toEndOf="@id/Calories"
         app:layout_constraintTop_toTopOf="@id/Calories" />
 </androidx.constraintlayout.widget.ConstraintLayout>

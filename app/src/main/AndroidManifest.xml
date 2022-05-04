@@ -24,6 +24,18 @@
             android:name=".post.Comment.CommentActivity"
             android:exported="false" />
         <activity
+            android:name=".post.PostUploadActivity"
+            android:exported="false" />
+        <activity
+            android:name=".home.Fragment.AlbumActivity"
+            android:exported="false" />
+        <activity
+            android:name=".home.Fragment.BookMarkActivity"
+            android:exported="false" />
+        <activity
+            android:name=".home.Fragment.MyPageActivity"
+            android:exported="false" />
+        <activity
             android:name=".map.Activity.IndustryActivity"
             android:exported="false" />
         <activity
@@ -55,5 +67,4 @@
         </activity>
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
     </application>
-
 </manifest>

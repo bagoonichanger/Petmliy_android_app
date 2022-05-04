@@ -7,11 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentHomeBinding
+import com.bagooni.petmliy_android_app.databinding.FragmentMapBinding
+import com.bagooni.petmliy_android_app.home.Fragment.AlbumActivity
+import com.bagooni.petmliy_android_app.home.Fragment.BookMarkActivity
+import com.bagooni.petmliy_android_app.home.Fragment.MyPageActivity
 
-class HomeFragment : Fragment(){
-    private var _binding: FragmentHomeBinding?=null
+class HomeFragment : Fragment(R.layout.fragment_home) {
+    private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -19,10 +25,7 @@ class HomeFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentHomeBinding.inflate(inflater,container,false)
-        binding.mypageButton.setOnClickListener(ButtonListener())
-        binding.albumButton.setOnClickListener(ButtonListener())
-        binding.bookmarkButton.setOnClickListener (ButtonListener())
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -39,6 +42,16 @@ class HomeFragment : Fragment(){
                     findNavController().navigate(R.id.action_homeFragment_to_bookMarkFragment)
                 }
             }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.mypageButton.setOnClickListener {
+//            findNavController().navigate()
+        }
+        binding.albumButton.setOnClickListener {
+//            findNavController().navigate()
+        }
+        binding.bookmarkButton.setOnClickListener {
+//            findNavController().navigate()
         }
     }
 }

@@ -11,6 +11,9 @@ interface TrackingDAO {
     @Delete
     suspend fun deleteTracking(tracking: Tracking)
 
+    @Query("SELECT * FROM tracking_table")
+    fun getAllTracking(): Array<Tracking>
+
     @Query("SELECT * FROM tracking_table ORDER BY timeInMillis DESC")
     fun getAllTrackingSortedByTimeInMillis(): LiveData<List<Tracking>>
 

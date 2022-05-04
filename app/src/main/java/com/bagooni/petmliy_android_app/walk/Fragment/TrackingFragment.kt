@@ -39,6 +39,7 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.snackbar.Snackbar
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import java.util.*
 import kotlin.math.round
 
@@ -85,8 +86,21 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         })
         TrackingService.timeRunInMillis.observe(viewLifecycleOwner, Observer {
             curTimeInMillis = it
+            var checkDistanceInMeters = 0
+            for (polyline in pathPoints) {
+                checkDistanceInMeters += TrackingUtility.calculatePolylineLength(polyline).toInt()
+            }
+            val checkAvgSpeed =
+                round((checkDistanceInMeters / 100f) / (curTimeInMillis / 1000f / 60 / 60) * 10) / 10f
+            view.findViewById<TextView>(R.id.velocity).text = checkAvgSpeed.toString()
+
+            val checkCaloriesBurned = ((checkDistanceInMeters / 1000f) * 70f).toInt()
+            view.findViewById<TextView>(R.id.calorie).text = checkCaloriesBurned.toString()
+
             val formattedTime = TrackingUtility.getFormattedStopWatchTime(curTimeInMillis, false)
             view.findViewById<TextView>(R.id.walkTime).text = formattedTime
+
+            view.findViewById<TextView>(R.id.distance).text = (checkDistanceInMeters/ 1000f).toString()
         })
     }
 
@@ -124,7 +138,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             val avgSpeed =
                 round((distanceInMeters / 100f) / (curTimeInMillis / 1000f / 60 / 60) * 10) / 10f
             val year = Calendar.getInstance().get(Calendar.YEAR)
-            val month = Calendar.getInstance().get(Calendar.MONTH)
+            val month = Calendar.getInstance().get(Calendar.MONTH)+1
             val day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
             val caloriesBurned = ((distanceInMeters / 1000f) * 70f).toInt()
 
@@ -218,7 +232,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         view.findViewById<AppCompatImageButton>(R.id.disabledCaptureButton).setOnClickListener {
             Toast.makeText(requireContext(), "산책을 멈추고 스크린샷 해주세요", Toast.LENGTH_SHORT).show()
         }
-        view.findViewById<Button>(R.id.cancel_tracking).setOnClickListener {
+        view.findViewById<AppCompatImageButton>(R.id.cancel_tracking).setOnClickListener {
             showCancelTrackingDialog()
         }
     }

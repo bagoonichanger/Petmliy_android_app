@@ -10,27 +10,32 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="300dp"
-        android:background="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/backButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
+        android:background="?selectableItemBackground"
+        android:elevation="10dp"
+        android:src="@drawable/ic_free_icon_font_cross_small_3917195"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/shareButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
+        android:background="?selectableItemBackground"
+        android:elevation="10dp"
+        android:src="@drawable/ic_free_icon_font_share_48"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -50,15 +55,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/deleteButton"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:text="삭제하기"
+            android:background="@drawable/delete_rectangle_button_background"
+            android:elevation="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="10dp"
+            android:text="삭제하기"
+            android:textColor="#F37EB0"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/deleteButton"
+            app:layout_constraintEnd_toEndOf="@+id/deleteButton"
+            app:layout_constraintStart_toStartOf="@+id/deleteButton"
+            app:layout_constraintTop_toTopOf="@+id/deleteButton" />
 
         <TextView
             android:id="@+id/detailVelocity"
@@ -136,16 +155,16 @@
             android:id="@+id/detailDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="10dp"
             android:text="1999월 6월 9일"
             android:textColor="@color/black"
-            android:textSize="35sp"
+            android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/detailWalkTime"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <com.bagooni.petmliy_android_app.walk.Fragment.CountUpView
+        <TextView
             android:id="@+id/detailWalkTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
