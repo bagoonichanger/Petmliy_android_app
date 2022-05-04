@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home.Fragment.MyPageActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".home.Fragment.MyPageFragment">
 
     <TextView
         android:id="@+id/titletext"
@@ -43,16 +44,24 @@
         android:padding="5sp"
         android:scaleType="centerCrop"/>
 
-
     <ImageView
         android:id="@+id/petImage"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:background="@drawable/map_search_button_background"
         app:layout_constraintTop_toBottomOf="@+id/titletext"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="30dp"/>
+
+    <ImageButton
+        android:id="@+id/petImgSelectBtn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintBottom_toBottomOf="@+id/petImage"
+        app:layout_constraintEnd_toEndOf="@id/petImage"
+        android:src="@drawable/ic_free_icon_camera"
+        android:background="@drawable/mypage_image_background"/>
 
     <TextView
         android:id="@+id/petnameView"
@@ -64,7 +73,7 @@
         app:layout_constraintTop_toBottomOf="@id/petImage"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="40dp"
-        app:layout_constraintBottom_toTopOf="@+id/speciesView"/>
+        android:layout_marginTop="20dp"/>
     <EditText
         android:id="@+id/petnameEdit"
         android:layout_width="match_parent"
@@ -113,20 +122,43 @@
         android:layout_height="wrap_content"
         android:inputType="date"
         app:layout_constraintTop_toBottomOf="@id/petBirthView"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/logoutButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"/>
 
-    <ImageButton
-        android:id="@+id/petImgSelectBtn"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:layout_constraintBottom_toBottomOf="@+id/petImage"
-        app:layout_constraintEnd_toEndOf="@id/petImage"
-        android:src="@drawable/ic_free_icon_camera"
-        android:background="@drawable/mypage_image_background"/>
+    <View
+        android:id="@+id/signInLayout"
+        android:layout_width="match_parent"
+        android:layout_height="700dp"
+        app:layout_constraintTop_toBottomOf="@id/titletext"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/white"
+        android:visibility="invisible"/>
 
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/signInButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titletext"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"
+        android:visibility="invisible"/>
+
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        android:textSize="20dp"
+        android:textColor="@color/Dark_Gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/petBirthEdit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="@color/Extra_Light_Gray"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

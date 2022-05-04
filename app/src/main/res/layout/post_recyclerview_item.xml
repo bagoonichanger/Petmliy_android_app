@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
-        android:id="@+id/userImg"
+        android:id="@+id/petImg"
         android:layout_width="60dp"
         android:layout_height="60dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,8 +18,8 @@
         android:id="@+id/userName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/userImg"
-        app:layout_constraintTop_toTopOf="@id/userImg"
+        app:layout_constraintStart_toEndOf="@+id/petImg"
+        app:layout_constraintTop_toTopOf="@id/petImg"
         android:layout_marginTop="15dp"
         android:layout_marginStart="15dp"
         android:textColor="@color/black"
@@ -30,10 +30,54 @@
         android:id="@+id/postImg"
         android:layout_width="400dp"
         android:layout_height="400dp"
-        app:layout_constraintTop_toBottomOf="@+id/userImg"
+        app:layout_constraintTop_toBottomOf="@+id/petImg"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="20dp"/>
+
+    <FrameLayout
+        android:id="@+id/favoriteView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintTop_toBottomOf="@+id/postImg"
+        app:layout_constraintStart_toStartOf="@id/postImg"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp">
+
+        <ImageButton
+            android:id="@+id/favoriteBtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/post_favorite_border_ic"
+            android:backgroundTint="@color/white"
+            android:padding="0dp"
+            android:scaleType="centerCrop"/>
+
+        <ImageButton
+            android:id="@+id/favoriteColorBtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/post_favorite_color_24"
+            android:backgroundTint="@color/white"
+            android:visibility="invisible"
+            android:padding="0dp"
+            android:scaleType="centerCrop"/>
+
+    </FrameLayout>
+
+    <ImageButton
+        android:id="@+id/commentBtn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/post_comment_icon_24"
+        android:backgroundTint="@color/white"
+        app:layout_constraintTop_toTopOf="@id/favoriteView"
+        app:layout_constraintStart_toEndOf="@id/favoriteView"
+        android:layout_marginStart="10dp"
+        app:layout_goneMarginStart="10dp"
+        android:padding="0dp"
+        android:scaleType="centerCrop"/>
+
 
     <TextView
         android:id="@+id/postUserName"
@@ -42,11 +86,10 @@
         tools:text = "petmily"
         android:textSize="15dp"
         android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/postImg"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/favoriteView"
+        app:layout_constraintStart_toStartOf="@id/postImg"
         app:layout_constraintEnd_toStartOf="@+id/postContent"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="10dp"/>
 
     <TextView
         android:id="@+id/postContent"

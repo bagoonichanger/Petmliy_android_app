@@ -5,12 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
-import com.bagooni.petmliy_android_app.R
-import com.bagooni.petmliy_android_app.databinding.ActivityAlbumBinding
 import com.bagooni.petmliy_android_app.databinding.ActivityCommentBinding
+import com.bagooni.petmliy_android_app.post.RetrofitService
 
 class CommentActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCommentBinding
+    lateinit var retrofitService: RetrofitService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityCommentBinding.inflate(layoutInflater)
