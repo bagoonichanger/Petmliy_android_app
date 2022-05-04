@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() { // 수정 완료
 
         navigateToTrackingFragmentIfNeed(intent)
 
+
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
@@ -55,7 +56,6 @@ class MainActivity : AppCompatActivity() { // 수정 완료
 
     private fun navigateToTrackingFragmentIfNeed(intent: Intent?) {
         if(intent?.action == ACTION_SHOW_TRACKING_FRAGMENT) {
-            Log.d("123456","SDAFSDFSDFSDFASDFDSFDSFASFDSFASDFASDF")
             val navHostFragment =
                 supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
             val navController = navHostFragment.navController
