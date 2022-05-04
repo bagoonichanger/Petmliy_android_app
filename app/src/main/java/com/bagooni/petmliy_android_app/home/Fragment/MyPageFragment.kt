@@ -44,6 +44,7 @@ class MyPageFragment : Fragment() {
         binding.closeButton.setOnClickListener {
             findNavController().navigate(R.id.action_myPageFragment_to_homeFragment)
         }
+        //oo
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             .build()

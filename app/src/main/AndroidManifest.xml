@@ -3,6 +3,8 @@
     package="com.bagooni.petmliy_android_app">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
@@ -22,18 +24,6 @@
 
         <activity
             android:name=".post.Comment.CommentActivity"
-            android:exported="false" />
-        <activity
-            android:name=".post.PostUploadActivity"
-            android:exported="false" />
-        <activity
-            android:name=".home.Fragment.AlbumActivity"
-            android:exported="false" />
-        <activity
-            android:name=".home.Fragment.BookMarkActivity"
-            android:exported="false" />
-        <activity
-            android:name=".home.Fragment.MyPageActivity"
             android:exported="false" />
         <activity
             android:name=".map.Activity.IndustryActivity"

@@ -36,6 +36,7 @@ class PostFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPostBinding.inflate(inflater,container,false)
+        binding.uploadButton.setOnClickListener { ButtonListener() }
         return binding.root
     }
 
@@ -45,7 +46,6 @@ class PostFragment : Fragment(){
             override fun onResponse(call: Call<Any>, response: Response<Any>) {
 
             }
-
             override fun onFailure(call: Call<Any>, t: Throwable) {
 
             }
