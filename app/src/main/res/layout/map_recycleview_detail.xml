@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:elevation="10dp"
     android:background="@drawable/map_listadapter_background">
 
     <androidx.appcompat.widget.AppCompatImageButton
@@ -11,9 +13,9 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginEnd="30dp"
         android:background="?selectableItemBackground"
-        android:src="@drawable/ic_free_icon_share_24"
+        android:src="@drawable/ic_free_icon_font_plus_"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,9 +24,9 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginEnd="15dp"
         android:background="?selectableItemBackground"
-        android:src="@drawable/ic_free_icon_like"
+        android:src="@drawable/ic_free_icon_font_share"
         app:layout_constraintEnd_toStartOf="@id/recyclerView_shareButton"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,7 +34,7 @@
         android:id="@+id/titleTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="12dp"
         android:textColor="@color/black"

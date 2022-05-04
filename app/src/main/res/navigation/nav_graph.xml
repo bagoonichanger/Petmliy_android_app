@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+    <action
+        android:id="@+id/action_global_trackingFragment"
+        app:destination="@id/trackingFragment"
+        app:launchSingleTop="true" />
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.bagooni.petmliy_android_app.home.HomeFragment"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_albumFragment"
+            app:destination="@id/albumFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_bookMarkFragment"
+            app:destination="@id/bookMarkFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.bagooni.petmliy_android_app.map.MapFragment"
+        android:label="MapFragment" />
+    <fragment
+        android:id="@+id/postFragment"
+        android:name="com.bagooni.petmliy_android_app.post.PostFragment"
+        android:label="PostFragment" >
+        <action
+            android:id="@+id/action_postFragment_to_postUploadFragment"
+            app:destination="@id/postUploadFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/walkFragment"
+        android:name="com.bagooni.petmliy_android_app.walk.WalkFragment"
+        android:label="WalkFragment">
+        <action
+            android:id="@+id/action_walkFragment_to_trackingFragment"
+            app:destination="@id/trackingFragment" />
+        <action
+            android:id="@+id/action_walkFragment_to_detailTrackingFragment"
+            app:destination="@id/detailTrackingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/trackingFragment"
+        android:name="com.bagooni.petmliy_android_app.walk.Fragment.TrackingFragment"
+        android:label="TrackingFragment">
+        <action
+            android:id="@+id/action_trackingFragment_to_walkFragment"
+            app:destination="@id/walkFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailTrackingFragment"
+        android:name="com.bagooni.petmliy_android_app.walk.Fragment.DetailTrackingFragment"
+        android:label="DetailTrackingFragment">
+        <action
+            android:id="@+id/action_detailTrackingFragment_to_walkFragment"
+            app:destination="@id/walkFragment" />
+        <argument
+            android:name="tracking"
+            app:argType="com.bagooni.petmliy_android_app.walk.Db.Tracking" />
+    </fragment>
+    <fragment
+        android:id="@+id/albumFragment"
+        android:name="com.bagooni.petmliy_android_app.home.Fragment.AlbumFragment"
+        android:label="fragment_album"
+        tools:layout="@layout/fragment_album" >
+        <action
+            android:id="@+id/action_albumFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookMarkFragment"
+        android:name="com.bagooni.petmliy_android_app.home.Fragment.BookMarkFragment"
+        android:label="fragment_book_mark"
+        tools:layout="@layout/fragment_book_mark" >
+        <action
+            android:id="@+id/action_bookMarkFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myPageFragment"
+        android:name="com.bagooni.petmliy_android_app.home.Fragment.MyPageFragment"
+        android:label="fragment_my_page"
+        tools:layout="@layout/fragment_my_page" >
+        <action
+            android:id="@+id/action_myPageFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/postUploadFragment"
+        android:name="com.bagooni.petmliy_android_app.post.PostUploadFragment"
+        android:label="fragment_post_upload"
+        tools:layout="@layout/fragment_post_upload" >
+        <action
+            android:id="@+id/action_postUploadFragment_to_postFragment"
+            app:destination="@id/postFragment" />
+    </fragment>
+</navigation>

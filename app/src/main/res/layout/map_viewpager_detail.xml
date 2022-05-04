@@ -16,12 +16,12 @@
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/viewpager_shareButton"
-            android:layout_width="19dp"
-            android:layout_height="19dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="15dp"
             android:background="?selectableItemBackground"
-            android:src="@drawable/ic_free_icon_share_12"
+            android:src="@drawable/ic_free_icon_font_plus_"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,10 +29,10 @@
             android:id="@+id/viewPager_LikeButton"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
             android:background="?selectableItemBackground"
-            android:src="@drawable/ic_free_icon_like"
+            android:src="@drawable/ic_free_icon_font_share"
             app:layout_constraintEnd_toStartOf="@id/viewpager_shareButton"
             app:layout_constraintTop_toTopOf="parent" />
 

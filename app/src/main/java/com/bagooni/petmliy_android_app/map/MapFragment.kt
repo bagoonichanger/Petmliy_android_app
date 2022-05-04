@@ -2,15 +2,15 @@ package com.bagooni.petmliy_android_app.map
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -31,6 +31,7 @@ import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.util.FusedLocationSource
+import com.naver.maps.map.util.MarkerIcons
 import com.naver.maps.map.widget.LocationButtonView
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -112,6 +113,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         super.onCreate(savedInstanceState)
         locationSource =
             FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
+
     }
 
     override fun onAttach(context: Context) {
@@ -130,6 +132,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         mapView = binding.mapView
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
@@ -197,7 +200,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         val api = retrofit.create(CustomMapApi::class.java)
         val responseLikeList = api.sendLikePlaces(data)
 
-        responseLikeList.enqueue(object : Callback<LikePlaceDto>{
+        responseLikeList.enqueue(object : Callback<LikePlaceDto> {
             override fun onResponse(call: Call<LikePlaceDto>, response: Response<LikePlaceDto>) {
                 if (!response.isSuccessful) return
 
@@ -248,6 +251,8 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
             val lng = document.x.toDouble()
 
             marker.position = LatLng(lat, lng)
+            marker.icon = MarkerIcons.BLACK
+            marker.iconTintColor = Color.rgb(245, 189, 213)
             marker.onClickListener = this // marker 클릭시
             marker.tag = document.id // marker 구분을 위한 태그
             markers.add(marker)

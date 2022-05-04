@@ -1,9 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/Light_Blue"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Extra_Light_Gray"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/profile"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@drawable/background3"
+        android:elevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/petImage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/home_icon_button_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.3" />
+
+        <TextView
+            android:id="@+id/testTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Petmily"
+            android:textColor="#474B4F"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/testTitleImage"
+            app:layout_constraintStart_toEndOf="@id/testTitleImage"
+            app:layout_constraintTop_toTopOf="@id/testTitleImage" />
+
+        <ImageView
+            android:id="@+id/testTitleImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_premium_icon_paw"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/testImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_baseline_filter_drama_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/testTitleImage" />
+
+        <TextView
+            android:id="@+id/testText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="오늘 하루도 수고 했어요"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/testImage"
+            app:layout_constraintStart_toEndOf="@id/testImage"
+            app:layout_constraintTop_toTopOf="@id/testImage" />
+
+        <TextView
+            android:id="@+id/petName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="강아지 이름"
+            android:textColor="@color/white"
+            android:textSize="25sp"
+            app:layout_constraintEnd_toEndOf="@id/petImage"
+            app:layout_constraintStart_toStartOf="@id/petImage"
+            app:layout_constraintTop_toBottomOf="@id/petImage" />
+
+        <TextView
+            android:id="@+id/petBirth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0000.00.00"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@id/petName"
+            app:layout_constraintStart_toStartOf="@id/petName"
+            app:layout_constraintTop_toBottomOf="@id/petName" />
+
+        <ImageButton
+            android:id="@+id/mypageButton"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@color/transparent"
+            android:src="@drawable/ic_free_icon_font_settings_3917058"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/albumButton"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="265dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/home_album_button_background"
+        android:elevation="15dp"
+        android:padding="20dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_picture_free_icon_font"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/bookmarkButton"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/home_book_button_background"
+        android:elevation="15dp"
+        android:padding="20dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_heart_free_icon_font__1_"
+        app:layout_constraintBottom_toBottomOf="@id/albumButton"
+        app:layout_constraintEnd_toStartOf="@id/albumButton"
+        app:layout_constraintTop_toTopOf="@id/albumButton" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="미세먼지 구현할 예정"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

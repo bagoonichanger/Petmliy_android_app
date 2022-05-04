@@ -37,4 +37,11 @@
     <color name="fbutton_color_silver">#bdc3c7</color>
     <color name="fbutton_color_concrete">#95a5a6</color>
     <color name="fbutton_color_asbestos">#7f8c8d</color>
+
+    <color name="pastelBlue">#7EA5EE</color>
+    <color name="pastelPink">#F5BDD5</color>
+    <color name="pastelYellow">#F8E28D</color>
+    <color name="pastelLightGray">#B2BAC2</color>
+    <color name="pastelGray">#787E87</color>
+    <color name="pastelPurple">#8581F3</color>
 </resources>
