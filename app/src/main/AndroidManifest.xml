@@ -19,26 +19,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Petmliy_android_app">
-        <activity
-            android:name=".walk.Activity.WriteActivity"
-            android:exported="false" />
+
         <activity
             android:name=".post.Comment.CommentActivity"
-            android:exported="false" />
-        <activity
-            android:name=".post.PostUploadActivity"
-            android:exported="false" />
-        <activity
-            android:name=".home.Activity.AlbumActivity"
-            android:exported="false" />
-        <activity
-            android:name=".home.Activity.BookMarkActivity"
-            android:exported="false" />
-        <activity
-            android:name=".home.Activity.MyPageActivity"
-            android:exported="false" />
-        <activity
-            android:name=".walk.Activity.TrackingActivity"
             android:exported="false" />
         <activity
             android:name=".map.Activity.IndustryActivity"

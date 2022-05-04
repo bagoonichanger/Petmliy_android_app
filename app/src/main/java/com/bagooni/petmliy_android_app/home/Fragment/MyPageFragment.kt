@@ -1,16 +1,20 @@
-package com.bagooni.petmliy_android_app.home.Activity
+package com.bagooni.petmliy_android_app.home.Fragment
 
-import android.content.ContentValues.TAG
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.MotionEvent
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
-import com.bagooni.petmliy_android_app.databinding.ActivityMyPageBinding
+import androidx.navigation.fragment.findNavController
+import com.bagooni.petmliy_android_app.MainActivity
+import com.bagooni.petmliy_android_app.R
+import com.bagooni.petmliy_android_app.databinding.FragmentMyPageBinding
 import com.bagooni.petmliy_android_app.home.Retrofit.MypageRetrofitService
 import com.bagooni.petmliy_android_app.post.UserInfo
 import com.bumptech.glide.Glide
@@ -26,27 +30,33 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
-class MyPageActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMyPageBinding
+class MyPageFragment : Fragment() {
+    private var _binding: FragmentMyPageBinding?=null
+    private val binding get() = _binding!!
     private val RC_SIGN_IN = 123
     var mGoogleSignInClient: GoogleSignInClient? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        binding = ActivityMyPageBinding.inflate(layoutInflater)
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentMyPageBinding.inflate(inflater,container,false)
+        binding.closeButton.setOnClickListener {
+            findNavController().navigate(R.id.action_myPageFragment_to_homeFragment)
+        }
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             .build()
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mGoogleSignInClient = GoogleSignIn.getClient(activity as MainActivity, gso)
 
-        binding.closeButton.setOnClickListener{ finish() }
         binding.signInButton.setOnClickListener{ signIn(); signOutLayout()}
         binding.logoutButton.setOnClickListener{ signOut() }
 
+        return binding.root
+    }
+
+    private fun saveMyPage(){
         val retrofit = Retrofit.Builder()
             .baseUrl("http://mellowcode.org/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -55,13 +65,13 @@ class MyPageActivity : AppCompatActivity() {
 
         //헤더
         val header = HashMap<String,String>()
-        val sp = getSharedPreferences("user_info", Context.MODE_PRIVATE)
+        val sp = (activity as MainActivity).getSharedPreferences("user_info", Context.MODE_PRIVATE)
         val token = sp.getString("token","")
 
         val glide = Glide.with(this)
 
         header.put("Authorization","token" + token!!) //헤더 Authorization에 token 값 전송
-        retrofitService.getUserInfo(header).enqueue(object : Callback<UserInfo>{
+        retrofitService.getUserInfo(header).enqueue(object : Callback<UserInfo> {
             override fun onResponse(call: Call<UserInfo>, response: Response<UserInfo>) {
                 if(response.isSuccessful){
                     val userInfo : UserInfo = response.body()!!
@@ -84,14 +94,14 @@ class MyPageActivity : AppCompatActivity() {
 
     private fun signOut(){
         mGoogleSignInClient!!.signOut()
-            .addOnCompleteListener(this) {
+            .addOnCompleteListener(activity as MainActivity) {
                 signInLayout()
             }
     }
 
     override fun onStart() {
         super.onStart()
-        val account = GoogleSignIn.getLastSignedInAccount(this)
+        val account = GoogleSignIn.getLastSignedInAccount(activity as MainActivity)
         if (account == null){
             signInLayout()
         }else{
@@ -100,16 +110,16 @@ class MyPageActivity : AppCompatActivity() {
     }
 
     private fun signInLayout(){
-        binding.signInButton.visibility = VISIBLE
-        binding.signInLayout.visibility = VISIBLE
-        binding.saveButton.visibility = INVISIBLE
-        binding.logoutButton.visibility = INVISIBLE
+        binding.signInButton.visibility = View.VISIBLE
+        binding.signInLayout.visibility = View.VISIBLE
+        binding.saveButton.visibility = View.INVISIBLE
+        binding.logoutButton.visibility = View.INVISIBLE
     }
     private fun signOutLayout(){
-        binding.signInButton.visibility = INVISIBLE
-        binding.signInLayout.visibility = INVISIBLE
-        binding.saveButton.visibility = VISIBLE
-        binding.logoutButton.visibility = VISIBLE
+        binding.signInButton.visibility = View.INVISIBLE
+        binding.signInLayout.visibility = View.INVISIBLE
+        binding.saveButton.visibility = View.VISIBLE
+        binding.logoutButton.visibility = View.VISIBLE
     }
 
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
@@ -122,15 +132,15 @@ class MyPageActivity : AppCompatActivity() {
                 val personEmail = acct.email
                 val personId = acct.id
                 val personPhoto = acct.photoUrl
-                Log.d(TAG, "handleSignInResult:personName $personName")
-                Log.d(TAG, "handleSignInResult:personGivenName $personGivenName")
-                Log.d(TAG, "handleSignInResult:personEmail $personEmail")
-                Log.d(TAG, "handleSignInResult:personId $personId")
-                Log.d(TAG, "handleSignInResult:personFamilyName $personFamilyName")
-                Log.d(TAG, "handleSignInResult:personPhoto $personPhoto")
+                Log.d(ContentValues.TAG, "handleSignInResult:personName $personName")
+                Log.d(ContentValues.TAG, "handleSignInResult:personGivenName $personGivenName")
+                Log.d(ContentValues.TAG, "handleSignInResult:personEmail $personEmail")
+                Log.d(ContentValues.TAG, "handleSignInResult:personId $personId")
+                Log.d(ContentValues.TAG, "handleSignInResult:personFamilyName $personFamilyName")
+                Log.d(ContentValues.TAG, "handleSignInResult:personPhoto $personPhoto")
             }
         } catch (e: ApiException) {
-            Log.e(TAG, "signInResult:failed code=" + e.statusCode)
+            Log.e(ContentValues.TAG, "signInResult:failed code=" + e.statusCode)
         }
     }
 
@@ -146,9 +156,10 @@ class MyPageActivity : AppCompatActivity() {
         }
     }
 
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        val imm: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+    fun onTouchEvent(event: MotionEvent): Boolean {
+        val imm: InputMethodManager = (activity as MainActivity).getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow((activity as MainActivity).currentFocus?.windowToken, 0)
         return true
     }
+
 }

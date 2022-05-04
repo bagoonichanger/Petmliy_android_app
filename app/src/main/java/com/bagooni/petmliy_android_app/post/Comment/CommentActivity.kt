@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
-import com.bagooni.petmliy_android_app.R
-import com.bagooni.petmliy_android_app.databinding.ActivityAlbumBinding
 import com.bagooni.petmliy_android_app.databinding.ActivityCommentBinding
 import com.bagooni.petmliy_android_app.post.RetrofitService
 

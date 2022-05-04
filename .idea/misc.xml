@@ -48,10 +48,15 @@
         <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/activity_tracking.xml" value="0.1716485507246377" />
         <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/activity_weather.xml" value="0.1716485507246377" />
         <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/activity_write.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_album.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_book_mark.xml" value="0.1716485507246377" />
         <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_home.xml" value="0.14666666666666667" />
         <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_map.xml" value="0.14666666666666667" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_my_page.xml" value="0.1716485507246377" />
         <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_mypage.xml" value="0.17844202898550723" />
         <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_post.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_post_upload.xml" value="0.16354166666666667" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_tracking.xml" value="0.1716485507246377" />
         <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_walk.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/map_bottom_sheet.xml" value="0.1716485507246377" />
         <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/map_recycleview_detail.xml" value="0.1716485507246377" />
@@ -102,11 +107,10 @@
         <entry key="app/src/main/res/drawable/walk_ic_free_icon_font_stop_disabled.xml" value="0.1995" />
         <entry key="app/src/main/res/drawable/walk_listadapter_background.xml" value="0.189" />
         <entry key="app/src/main/res/layout/activity_industry.xml" value="0.2806869506835938" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.165" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_region.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_tracking.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_walk_detail.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
         <entry key="app/src/main/res/layout/blank_fragment.xml" value="0.271483539974348" />
         <entry key="app/src/main/res/layout/fragment_detail_tracking.xml" value="0.2466866182129115" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25" />

@@ -12,6 +12,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bagooni.petmliy_android_app.MainActivity
 import com.bagooni.petmliy_android_app.R
@@ -35,7 +36,6 @@ class PostFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPostBinding.inflate(inflater,container,false)
-        binding.uploadButton.setOnClickListener(ButtonListener())
         return binding.root
     }
 
@@ -56,8 +56,7 @@ class PostFragment : Fragment(){
         override fun onClick(p0: View?){
             when (p0?.id) {
                 R.id.uploadButton -> {
-                    val intent = Intent(context, PostUploadActivity::class.java)
-                    startActivity(intent)
+                    findNavController().navigate(R.id.action_postFragment_to_postUploadFragment)
                 }
             }
         }

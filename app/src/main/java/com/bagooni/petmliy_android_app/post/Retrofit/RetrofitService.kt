@@ -29,9 +29,9 @@ interface RetrofitService {
     @POST("instagram/post/")
     fun uploadPost(
         @HeaderMap headers: Map<String, String>,  //토큰 헤더값으로 전달
-        //@Part image: MultipartBody.Part,
+        @Part image: MultipartBody.Part,
         @Part("content") content: RequestBody
-    )
+    ): Call<Any>
 
     //petmily 포스트 업로드
     @POST("api/post/save")

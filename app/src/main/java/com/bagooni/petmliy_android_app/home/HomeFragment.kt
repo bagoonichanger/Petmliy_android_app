@@ -6,11 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentHomeBinding
-import com.bagooni.petmliy_android_app.home.Activity.AlbumActivity
-import com.bagooni.petmliy_android_app.home.Activity.BookMarkActivity
-import com.bagooni.petmliy_android_app.home.Activity.MyPageActivity
 
 class HomeFragment : Fragment(){
     private var _binding: FragmentHomeBinding?=null
@@ -30,19 +28,15 @@ class HomeFragment : Fragment(){
 
     inner class ButtonListener: View.OnClickListener {
         override fun onClick(p0: View?) {
-            var intent: Intent
             when (p0?.id) {
                 R.id.mypageButton -> {
-                    intent = Intent(context, MyPageActivity::class.java)
-                    startActivity(intent)
+                    findNavController().navigate(R.id.action_homeFragment_to_myPageFragment)
                 }
                 R.id.albumButton -> {
-                    intent = Intent(context, AlbumActivity::class.java)
-                    startActivity(intent)
+                    findNavController().navigate(R.id.action_homeFragment_to_albumFragment)
                 }
                 R.id.bookmarkButton -> {
-                    intent = Intent(context, BookMarkActivity::class.java)
-                    startActivity(intent)
+                    findNavController().navigate(R.id.action_homeFragment_to_bookMarkFragment)
                 }
             }
         }
