@@ -101,9 +101,10 @@ class PostUploadFragment : Fragment() {
             Log.d("log",file.toString())
             val requestFile = file!!.toRequestBody("image/jpg".toMediaType())
             Log.d("log",requestFile.toString())
-            val body = MultipartBody.Part.createFormData("image", file!!, requestFile)
+            val body = MultipartBody.Part.createFormData("postImg", file!!, requestFile)
             Log.d("log", body.toString())
-            val postContent = contentInput.toRequestBody(MultipartBody.FORM)
+//            val postContent = contentInput.toRequestBody(MultipartBody.FORM)
+            val postContent = MultipartBody.Part.createFormData("postContent", contentInput)
 
             retrofitService.postUpload(personEmailInput,body,postContent).enqueue(object : Callback<Any> {
                 override fun onResponse(call: Call<Any>, response: Response<Any>) {

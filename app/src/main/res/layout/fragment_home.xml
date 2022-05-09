@@ -152,8 +152,7 @@
             android:layout_height="150dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/currentTemp"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/weather_image_icon_background"/>
+            app:layout_constraintTop_toTopOf="parent"/>
         <TextView
             android:id="@+id/currentTemp"
             android:layout_width="wrap_content"
@@ -162,7 +161,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/weatherImg"
             android:layout_marginTop="20dp"
-            android:text="24.00 'C"
+            android:text="00.00 'C"
             android:textSize="40sp"
             android:textColor="@color/black"/>
 
@@ -225,7 +224,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="40"
                 android:gravity="center_horizontal"
-                android:text="4.6 m/s"
+                android:text="0.0 m/s"
                 android:textColor="@color/black"
                 android:textSize="20sp"/>
         </LinearLayout>
@@ -258,7 +257,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="40"
                     android:gravity="center_horizontal"
-                    android:text="75%"
+                    android:text="00%"
                     android:textColor="@color/black"
                     android:textSize="20sp"/>
         </LinearLayout>
@@ -291,7 +290,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="40"
                 android:gravity="center_horizontal"
-                android:text="45%"
+                android:text="00%"
                 android:textColor="@color/black"
                 android:textSize="20sp"/>
         </LinearLayout>

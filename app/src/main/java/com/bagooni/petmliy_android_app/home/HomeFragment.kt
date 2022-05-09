@@ -167,6 +167,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun setWeatherData(model: WeatherModel){
+        Glide.with(this).load(model.weather[0].icon).into(binding.weatherImg)
         val temp = model.main.temp!!.toDouble() - 273.15
         binding.currentTemp.text = StringBuilder().append(String.format("%.2f", temp)).append(" 'C").toString()
         binding.currentMain.text = model.weather[0].main

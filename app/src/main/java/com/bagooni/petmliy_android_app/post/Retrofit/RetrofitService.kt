@@ -23,7 +23,7 @@ interface RetrofitService {
     fun postUpload(
         @Header("email") email: String,
         @Part postImg: MultipartBody.Part,
-        @Part ("postContent") postContent: RequestBody
+        @Part postContent: MultipartBody.Part
     ): Call<Any>
 
     //ex.좋아요
