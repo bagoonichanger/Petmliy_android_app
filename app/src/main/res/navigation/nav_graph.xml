@@ -9,30 +9,23 @@
         app:destination="@id/trackingFragment"
         app:launchSingleTop="true" />
 
-    <fragment
+    <keep_state_fragment
         android:id="@+id/homeFragment"
         android:name="com.bagooni.petmliy_android_app.home.HomeFragment"
-        android:label="HomeFragment" >
-        <action
-            android:id="@+id/action_homeFragment_to_albumFragment"
-            app:destination="@id/albumFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_bookMarkFragment"
-            app:destination="@id/bookMarkFragment" />
-    </fragment>
-    <fragment
+        android:label="HomeFragment" />
+    <keep_state_fragment
         android:id="@+id/mapFragment"
         android:name="com.bagooni.petmliy_android_app.map.MapFragment"
         android:label="MapFragment" />
-    <fragment
+    <keep_state_fragment
         android:id="@+id/postFragment"
         android:name="com.bagooni.petmliy_android_app.post.PostFragment"
         android:label="PostFragment" >
         <action
             android:id="@+id/action_postFragment_to_postUploadFragment"
             app:destination="@id/postUploadFragment" />
-    </fragment>
-    <fragment
+    </keep_state_fragment>
+    <keep_state_fragment
         android:id="@+id/walkFragment"
         android:name="com.bagooni.petmliy_android_app.walk.WalkFragment"
         android:label="WalkFragment">
@@ -42,16 +35,16 @@
         <action
             android:id="@+id/action_walkFragment_to_detailTrackingFragment"
             app:destination="@id/detailTrackingFragment" />
-    </fragment>
-    <fragment
+    </keep_state_fragment>
+    <keep_state_fragment
         android:id="@+id/trackingFragment"
         android:name="com.bagooni.petmliy_android_app.walk.Fragment.TrackingFragment"
         android:label="TrackingFragment">
         <action
             android:id="@+id/action_trackingFragment_to_walkFragment"
             app:destination="@id/walkFragment" />
-    </fragment>
-    <fragment
+    </keep_state_fragment>
+    <keep_state_fragment
         android:id="@+id/detailTrackingFragment"
         android:name="com.bagooni.petmliy_android_app.walk.Fragment.DetailTrackingFragment"
         android:label="DetailTrackingFragment">
@@ -61,26 +54,18 @@
         <argument
             android:name="tracking"
             app:argType="com.bagooni.petmliy_android_app.walk.Db.Tracking" />
-    </fragment>
-    <fragment
+    </keep_state_fragment>
+    <keep_state_fragment
         android:id="@+id/albumFragment"
         android:name="com.bagooni.petmliy_android_app.home.Fragment.AlbumFragment"
         android:label="fragment_album"
-        tools:layout="@layout/fragment_album" >
-        <action
-            android:id="@+id/action_albumFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-    </fragment>
-    <fragment
+        tools:layout="@layout/fragment_album" />
+    <keep_state_fragment
         android:id="@+id/bookMarkFragment"
         android:name="com.bagooni.petmliy_android_app.home.Fragment.BookMarkFragment"
         android:label="fragment_book_mark"
-        tools:layout="@layout/fragment_book_mark" >
-        <action
-            android:id="@+id/action_bookMarkFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-    </fragment>
-    <fragment
+        tools:layout="@layout/fragment_book_mark" />
+    <keep_state_fragment
         android:id="@+id/postUploadFragment"
         android:name="com.bagooni.petmliy_android_app.post.PostUploadFragment"
         android:label="fragment_post_upload"
@@ -88,5 +73,5 @@
         <action
             android:id="@+id/action_postUploadFragment_to_postFragment"
             app:destination="@id/postFragment" />
-    </fragment>
+    </keep_state_fragment>
 </navigation>

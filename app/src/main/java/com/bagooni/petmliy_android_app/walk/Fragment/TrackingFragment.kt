@@ -4,49 +4,87 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Intent
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.Rect
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
+import android.util.Log
 import android.view.PixelCopy
 import android.view.View
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.bagooni.petmliy_android_app.R
-import com.bagooni.petmliy_android_app.walk.Db.Tracking
-import com.bagooni.petmliy_android_app.walk.Db.TrackingViewModel
 import com.bagooni.petmliy_android_app.Constants.ACTION_PAUSE_SERVICE
 import com.bagooni.petmliy_android_app.Constants.ACTION_START_OR_RESUME_SERVICE
 import com.bagooni.petmliy_android_app.Constants.ACTION_STOP_SERVICE
 import com.bagooni.petmliy_android_app.Constants.MAP_ZOOM
 import com.bagooni.petmliy_android_app.Constants.POLYLINE_COLOR
 import com.bagooni.petmliy_android_app.Constants.POLYLINE_WIDTH
+import com.bagooni.petmliy_android_app.MainActivity
+import com.bagooni.petmliy_android_app.R
+import com.bagooni.petmliy_android_app.walk.Db.Tracking
+import com.bagooni.petmliy_android_app.walk.Db.TrackingViewModel
+import com.bagooni.petmliy_android_app.walk.Fragment.Api.CustomWalkApi
+import com.bagooni.petmliy_android_app.walk.Fragment.Dto.sendTrackingDto
 import com.bagooni.petmliy_android_app.walk.Fragment.Service.Polyline
 import com.bagooni.petmliy_android_app.walk.Fragment.Service.TrackingService
 import com.bagooni.petmliy_android_app.walk.Fragment.Service.TrackingUtility
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
 import java.util.*
+import kotlin.collections.HashMap
 import kotlin.math.round
 
+
 class TrackingFragment : Fragment(R.layout.fragment_tracking) {
+    var client: OkHttpClient? =
+        httpLoggingInterceptor()?.let { OkHttpClient.Builder().addInterceptor(it).build() }
+
+    private var googleEmail : String? = null
+    private var mGoogleSignInClient: GoogleSignInClient? = null
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
     private val viewModel by lazy {
-        ViewModelProvider(this, TrackingViewModel.Factory(requireActivity().application)).get(TrackingViewModel::class.java)
+        ViewModelProvider(this, TrackingViewModel.Factory(requireActivity().application)).get(
+            TrackingViewModel::class.java
+        )
     }
     private lateinit var mapView: MapView
     private var map: GoogleMap? = null
@@ -56,6 +94,57 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     private var isTracking = false
     private var pathPoints = mutableListOf<Polyline>()
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        initLauncher()
+        googleSet()
+
+    }
+
+    private fun initLauncher() {
+        activityResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode != AppCompatActivity.RESULT_OK) {
+                    Log.d("Google", "1")
+                    return@registerForActivityResult
+                }
+                val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+                handleSignInResult(task)
+            }
+    }
+
+    private fun googleSet() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//            .requestIdToken("888676227247-keki43t7at854brv89r5oh1lnsvu7ec1.apps.googleusercontent.com")
+            .requestEmail()
+            .build()
+
+        mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+    }
+
+    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+        try {
+            Log.d("Google", "3")
+            val account = completedTask.getResult(ApiException::class.java)
+//            val idToken = account.idToken
+
+            // TODO(developer): send ID Token to server and validate
+
+            updateUI(account)
+        } catch (e: ApiException) {
+            Log.w("Google", "signInResult:failed code=" + e.statusCode)
+            updateUI(null)
+        }
+    }
+
+    private fun updateUI(account: GoogleSignInAccount?) {
+        if (account != null) {
+            Log.d("map",account.email.toString())
+            googleEmail  = account.email
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -100,7 +189,8 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             val formattedTime = TrackingUtility.getFormattedStopWatchTime(curTimeInMillis, false)
             view.findViewById<TextView>(R.id.walkTime).text = formattedTime
 
-            view.findViewById<TextView>(R.id.distance).text = (checkDistanceInMeters/ 1000f).toString()
+            view.findViewById<TextView>(R.id.distance).text =
+                (checkDistanceInMeters / 1000f).toString()
         })
     }
 
@@ -138,10 +228,39 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             val avgSpeed =
                 round((distanceInMeters / 100f) / (curTimeInMillis / 1000f / 60 / 60) * 10) / 10f
             val year = Calendar.getInstance().get(Calendar.YEAR)
-            val month = Calendar.getInstance().get(Calendar.MONTH)+1
+            val month = Calendar.getInstance().get(Calendar.MONTH) + 1
             val day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
             val caloriesBurned = ((distanceInMeters / 1000f) * 70f).toInt()
 
+            //////////////////////////////////////////////////////////////////////
+            val post_year =
+                year.toString().toRequestBody("application/json;charset=utf-8".toMediaType())
+            val post_month =
+                month.toString().toRequestBody("application/json;charset=utf-8".toMediaType())
+            val post_day =
+                day.toString().toRequestBody("application/json;charset=utf-8".toMediaType())
+            val post_time = curTimeInMillis.toString()
+                .toRequestBody("application/json;charset=utf-8".toMediaType())
+            val post_distance = distanceInMeters.toString()
+                .toRequestBody("application/json;charset=utf-8".toMediaType())
+            val post_speed =
+                avgSpeed.toString().toRequestBody("application/json;charset=utf-8".toMediaType())
+            val post_calories = caloriesBurned.toString()
+                .toRequestBody("application/json;charset=utf-8".toMediaType())
+            val textHashMap = hashMapOf<String, RequestBody>()
+            textHashMap["id"] = 1.toString().toRequestBody("application/json;charset=utf-8".toMediaType())
+            textHashMap["year"] = post_year
+            textHashMap["month"] = post_month
+            textHashMap["day"] = post_day
+            textHashMap["timeInMillis"] = post_time
+            textHashMap["distanceInMeters"] = post_distance
+            textHashMap["avgSpeedInKMH"] = post_speed
+            textHashMap["caloriesBurned"] = post_calories
+
+            val post_img = bitmapToRequestBody(bitmap)
+
+            customAPi(post_img, textHashMap)
+            //////////////////////////////////////////////////////////////////////
             val tracking = Tracking(
                 year,
                 month,
@@ -158,6 +277,91 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
                 Snackbar.make(it, "산책이 저장되었습니다.", Snackbar.LENGTH_LONG).show()
             }
             stopTracking()
+        }
+    }
+
+    private fun bitmapToRequestBody(bitmap: Bitmap?): MultipartBody.Part {
+        val fileName = "${System.currentTimeMillis()}.png"
+        val resolver = requireContext().contentResolver
+        val imageCollections =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                MediaStore.Images.Media.getContentUri(
+                    MediaStore.VOLUME_EXTERNAL_PRIMARY
+                )
+            } else {
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            }
+        val imageDetails = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
+            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                put(MediaStore.Images.Media.IS_PENDING, 1)
+            }
+        }
+
+        val imageUri = resolver.insert(imageCollections, imageDetails)
+
+
+        if (imageUri != null) {
+            resolver.openOutputStream(imageUri).use { outputStream ->
+                bitmap?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            }
+        }
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            imageDetails.clear()
+            imageDetails.put(MediaStore.Images.Media.IS_PENDING, 0)
+            if (imageUri != null) {
+                resolver.update(imageUri, imageDetails, null, null)
+            }
+        }
+
+        Log.d("filename",imageUri.toString()+"_"+imageUri?.encodedPath+"_"+fileName)
+//        val file = File(imageUri?.encodedPath+"/${fileName}")
+        val path = imageUri?.let { getRealFile(it) }
+        val file = File(path)
+        val file_RequestBody = file.asRequestBody("image/png".toMediaTypeOrNull())
+        var uploadFile = MultipartBody.Part.createFormData ("img", fileName, file_RequestBody)
+
+        return uploadFile
+    }
+
+    private fun getRealFile(uri: Uri): String?{
+        var project: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
+        var c: Cursor? = (activity as MainActivity).contentResolver.query(uri!!,project,null,null,null)
+        var index = c?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        c?.moveToFirst()
+
+        var result = c?.getString(index!!)
+        return result
+    }
+
+    private fun customAPi(postImg: MultipartBody.Part, data: HashMap<String, RequestBody>) {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080")
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        MediaType
+        val api = retrofit.create(CustomWalkApi::class.java)
+        val sendWalk = googleEmail?.let { email ->
+            api.sendTrackingData(email,postImg, data)
+        }
+
+        if (sendWalk != null) {
+            sendWalk.enqueue(object : Callback<sendTrackingDto> {
+                override fun onResponse(call: Call<sendTrackingDto>, response: Response<sendTrackingDto>) {
+                    if (!response.isSuccessful) return
+                }
+
+                override fun onFailure(call: Call<sendTrackingDto>, t: Throwable) {
+                    Log.d("walk Error", t.message.toString())
+                }
+
+            })
         }
     }
 
@@ -385,6 +589,11 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
 
     override fun onStart() {
         super.onStart()
+        val account = GoogleSignIn.getLastSignedInAccount(requireContext())
+        if (account != null) {
+            Log.d("oncrate", "check")
+            updateUI(account)
+        }
         mapView.onStart()
     }
 
@@ -412,5 +621,16 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         super.onSaveInstanceState(outState)
         mapView.onSaveInstanceState(outState)
     }
+
+    private fun httpLoggingInterceptor(): HttpLoggingInterceptor? {
+        val interceptor = HttpLoggingInterceptor { message ->
+            Log.e(
+                "MyGitHubData :",
+                message + ""
+            )
+        }
+        return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+    }
+
 }
 

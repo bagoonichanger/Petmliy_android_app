@@ -2,7 +2,13 @@ package com.bagooni.petmliy_android_app.home
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
+import android.media.MediaScannerConnection
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -58,8 +64,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             val personName = account.displayName
             val personEmail = account.email
             val personPhoto = account.photoUrl
-            // TODO: token값 전달ㄹ???
-            // TODO: 이름 값 전달
+            // TODO: token값 전달??
 
             binding.petName.text = personName
             binding.petBirth.text = personEmail
@@ -81,6 +86,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("oncrate", "homeFragment")
         initLauncher()
         googleSet()
     }
@@ -123,10 +129,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             activityResultLauncher.launch(intent)
         }
         binding.albumButton.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_albumFragment)
+            findNavController().navigate(R.id.albumFragment)
         }
         binding.bookmarkButton.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_bookMarkFragment)
+            findNavController().navigate(R.id.bookMarkFragment)
         }
         initWeatherView()
         observeData()
@@ -135,7 +141,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onStart() {
         super.onStart()
         val account = GoogleSignIn.getLastSignedInAccount(requireContext())
-        if (account != null && account.id != null) {
+        if (account != null) {
+            Log.d("oncrate", "check")
+            updateUI(account)
         }
     }
 
