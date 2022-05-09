@@ -9,6 +9,9 @@ import android.util.Log
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,6 +29,13 @@ import com.bagooni.petmliy_android_app.map.model.Api.KakaoApi
 import com.bagooni.petmliy_android_app.map.model.Dto.LikePlaceDto
 import com.bagooni.petmliy_android_app.map.model.Dto.PlaceDto
 import com.bagooni.petmliy_android_app.map.model.documents.PlaceModel
+import com.bumptech.glide.Glide
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
@@ -33,6 +43,7 @@ import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import com.naver.maps.map.widget.LocationButtonView
+import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -51,10 +62,37 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
 
     lateinit var mainActivity: MainActivity
 
+    private var googleEmail : String? = null
+
     private lateinit var mapView: MapView
     private lateinit var locationSource: FusedLocationSource
     private lateinit var naverMap: NaverMap
     private var markers: MutableList<Marker> = ArrayList() // 마커 리스트
+
+    private var mGoogleSignInClient: GoogleSignInClient? = null
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+
+    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+        try {
+            Log.d("Google", "3")
+            val account = completedTask.getResult(ApiException::class.java)
+//            val idToken = account.idToken
+
+            // TODO(developer): send ID Token to server and validate
+
+            updateUI(account)
+        } catch (e: ApiException) {
+            Log.w("Google", "signInResult:failed code=" + e.statusCode)
+            updateUI(null)
+        }
+    }
+
+    private fun updateUI(account: GoogleSignInAccount?) {
+        if (account != null) {
+            Log.d("map",account.email.toString())
+            googleEmail  = account.email
+        }
+    }
 
     private val currentLocationButton: LocationButtonView by lazy { // 현재 위치 버튼
         binding.currentLocationButton
@@ -114,8 +152,31 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         locationSource =
             FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
 
+        initLauncher()
+        googleSet()
+
     }
 
+    private fun initLauncher() {
+        activityResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode != AppCompatActivity.RESULT_OK) {
+                    Log.d("Google", "1")
+                    return@registerForActivityResult
+                }
+                val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+                handleSignInResult(task)
+            }
+    }
+
+    private fun googleSet() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//            .requestIdToken("888676227247-keki43t7at854brv89r5oh1lnsvu7ec1.apps.googleusercontent.com")
+            .requestEmail()
+            .build()
+
+        mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+    }
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
@@ -197,21 +258,26 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
+        MediaType
         val api = retrofit.create(CustomMapApi::class.java)
-        val responseLikeList = api.sendLikePlaces(data)
+        val responseLikeList = googleEmail?.let { email ->
+            api.sendLikePlaces(email, data)
+        }
 
-        responseLikeList.enqueue(object : Callback<LikePlaceDto> {
-            override fun onResponse(call: Call<LikePlaceDto>, response: Response<LikePlaceDto>) {
-                if (!response.isSuccessful) return
+        if (responseLikeList != null) {
+            responseLikeList.enqueue(object : Callback<LikePlaceDto> {
+                override fun onResponse(call: Call<LikePlaceDto>, response: Response<LikePlaceDto>) {
+                    if (!response.isSuccessful)
 
-                response.body()?.let { it.address?.let { it1 -> Log.d("chicken", it1) } }
-            }
+                    response.body()?.let { it.address?.let { it1 -> Log.d("chicken", it1) } }
+                }
 
-            override fun onFailure(call: Call<LikePlaceDto>, t: Throwable) {
-                Log.d("chicken", t.message.toString())
-            }
+                override fun onFailure(call: Call<LikePlaceDto>, t: Throwable) {
+                    Log.d("chicken", t.message.toString())
+                }
 
-        })
+            })
+        }
     }
 
     private fun searchPlace(keyword: String) {
@@ -270,6 +336,11 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
 
     override fun onStart() {
         super.onStart()
+        val account = GoogleSignIn.getLastSignedInAccount(requireContext())
+        if (account != null) {
+            Log.d("oncrate", "check")
+            updateUI(account)
+        }
         mapView.onStart()
     }
 

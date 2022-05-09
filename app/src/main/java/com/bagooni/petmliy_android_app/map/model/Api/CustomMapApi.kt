@@ -7,8 +7,9 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface CustomMapApi {
-    @POST("/places/save")
+    @POST("/api/place/save")
     fun sendLikePlaces(
+        @Header("email") email: String,
         @Body data : LikePlaceDto
     ): Call<LikePlaceDto>
 }
