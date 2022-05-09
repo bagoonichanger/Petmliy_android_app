@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,9 +19,13 @@ import com.bagooni.petmliy_android_app.MainActivity
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentPostUploadBinding
 import com.bumptech.glide.Glide
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.material.snackbar.Snackbar
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import okhttp3.OkHttpClient
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,13 +34,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 class PostUploadFragment : Fragment() {
+    var client: OkHttpClient? =
+        httpLoggingInterceptor()?.let { OkHttpClient.Builder().addInterceptor(it).build() }
+
     private var _binding: FragmentPostUploadBinding?=null
     private val binding get() = _binding!!
-
-    var imageUri : Uri? = null
-    var contentInput : String = ""
-    var imgInput : String = "123"
-    var emailInput : String = "yerin506"
+    private var imageUri : Uri? = null
+    private var contentInput : String = ""
+    private var personEmailInput : String = ""
 
 
     override fun onCreateView(
@@ -44,7 +50,8 @@ class PostUploadFragment : Fragment() {
     ): View? {
         _binding = FragmentPostUploadBinding.inflate(inflater,container,false)
         binding.closeButton.setOnClickListener {
-            findNavController().navigate(R.id.action_postUploadFragment_to_postFragment) }
+            findNavController().navigate(R.id.action_postUploadFragment_to_postFragment)
+        }
         binding.layout.setOnClickListener { hideKeyboard() }
         return binding.root
     }
@@ -52,9 +59,16 @@ class PostUploadFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val postImg = binding.postImg
-        val glide = Glide.with(this)
+        val glide = Glide.with(activity as MainActivity)
 
-        //앨범열기
+        val acct = GoogleSignIn.getLastSignedInAccount(activity as MainActivity)
+        if (acct != null) {
+            val personEmail = acct.email
+            personEmailInput = personEmail.toString()
+            Log.d("google",personEmailInput)
+        }
+
+        //앨범 열기
         val imagePickerLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
                 imageUri = it.data!!.data
@@ -71,6 +85,7 @@ class PostUploadFragment : Fragment() {
     private fun postUpload(){
         val retrofit = Retrofit.Builder()
             .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080/")
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val retrofitService = retrofit.create(RetrofitService::class.java)
@@ -83,38 +98,26 @@ class PostUploadFragment : Fragment() {
         //업로드버튼 클릭
         binding.uploadButton.setOnClickListener{
             val file = getRealFile(imageUri!!)
-            val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), file!!)
-
+            Log.d("log",file.toString())
+            val requestFile = file!!.toRequestBody("image/jpg".toMediaType())
+            Log.d("log",requestFile.toString())
             val body = MultipartBody.Part.createFormData("image", file!!, requestFile)
-            val postContent = RequestBody.create(MultipartBody.FORM, contentInput)
-            val header = HashMap<String, String>()
-            val sp = (activity as MainActivity).getSharedPreferences(
-                "user_info", Context.MODE_PRIVATE)
-            val token = sp.getString("token","")
-            header.put("Authorization",token!!)
+            Log.d("log", body.toString())
+            val postContent = contentInput.toRequestBody(MultipartBody.FORM)
 
-            retrofitService.uploadPost(header,body,postContent).enqueue(object : Callback<Any>{
+            retrofitService.postUpload(personEmailInput,body,postContent).enqueue(object : Callback<Any> {
                 override fun onResponse(call: Call<Any>, response: Response<Any>) {
-                    TODO("Not yet implemented")
+                    Log.d("log",response.toString())
+                    Log.d("log", response.body().toString())
                 }
 
                 override fun onFailure(call: Call<Any>, t: Throwable) {
-                    TODO("Not yet implemented")
+                    Log.d("log",t.message.toString())
+                    Log.d("log","fail")
                 }
             })
-            //val postImg = RequestBody.create(MultipartBody.FORM, imgInput)
-            //val data = PostContent(imgInput, contentInput)
-            //retrofitService.postUpload(data).enqueue(object : Callback<PostContent> {
-            //    override fun onResponse(call: Call<PostContent>, response: Response<PostContent>) {
-            //        Log.d("log",response.toString())
-            //        Log.d("log", response.body().toString())
-            //    }
-
-            //    override fun onFailure(call: Call<PostContent>, t: Throwable) {
-            //        Log.d("log",t.message.toString())
-            //        Log.d("log","fail")
-            //    }
-            //})
+            Snackbar.make(requireView(), "포스트 업로드", Snackbar.LENGTH_LONG).show()
+            findNavController().navigate(R.id.postFragment)
         }
     }
 
@@ -139,5 +142,14 @@ class PostUploadFragment : Fragment() {
         }
     }
 
+    private fun httpLoggingInterceptor(): HttpLoggingInterceptor? {
+        val interceptor = HttpLoggingInterceptor { message ->
+            Log.e(
+                "MyGitHubData :",
+                message + ""
+            )
+        }
+        return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+    }
 
 }
