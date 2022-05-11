@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bagooni.petmliy_android_app.databinding.WalkRecycleviewDetailBinding
-import com.bagooni.petmliy_android_app.map.model.documents.PlaceModel
 import com.bagooni.petmliy_android_app.walk.Db.Tracking
 import com.bagooni.petmliy_android_app.walk.Fragment.Service.TrackingUtility
 import com.bumptech.glide.Glide
@@ -15,7 +14,7 @@ class CalendarRecyclerAdapter(val detailRecyclerView: (Tracking) -> Unit) :
     ListAdapter<Tracking, CalendarRecyclerAdapter.ItemViewHolder>(CalendarRecyclerAdapter.differ) {
     inner class ItemViewHolder(private val binding: WalkRecycleviewDetailBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(tracking: Tracking){
+        fun bind(tracking: Tracking) {
             val trackingImageView = binding.trackingImage
             trackingImageView.clipToOutline = true
             val trackingDateTextView = binding.trackingDate
@@ -37,7 +36,8 @@ class CalendarRecyclerAdapter(val detailRecyclerView: (Tracking) -> Unit) :
             val distanceInKm = "${tracking.distanceInMeters / 1000f}km"
             trackingDistanceTextView.text = distanceInKm
 
-            trackingTimeTextView.text = TrackingUtility.getFormattedStopWatchTime(tracking.timeInMillis)
+            trackingTimeTextView.text =
+                TrackingUtility.getFormattedStopWatchTime(tracking.timeInMillis)
 
             val caloriesBurned = "${tracking.caloriesBurned}kcal"
             trackingCaloriesTextView.text = caloriesBurned
@@ -49,7 +49,13 @@ class CalendarRecyclerAdapter(val detailRecyclerView: (Tracking) -> Unit) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        return ItemViewHolder(WalkRecycleviewDetailBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ItemViewHolder(
+            WalkRecycleviewDetailBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {

@@ -2,13 +2,11 @@ package com.bagooni.petmliy_android_app
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavDestination
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigator
 import androidx.navigation.fragment.FragmentNavigator
-
 
 @Navigator.Name("keep_state_fragment")
 class KeepStateNavigator(

@@ -8,9 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bagooni.petmliy_android_app.databinding.MapRecycleviewDetailBinding
 import com.bagooni.petmliy_android_app.map.model.documents.PlaceModel
 
-class PlaceRecyclerAdapter(val shareButton: (PlaceModel) -> Unit, val likeButton: (PlaceModel) -> Unit): ListAdapter<PlaceModel, PlaceRecyclerAdapter.ItemViewHolder>(differ) {
-    inner class ItemViewHolder(private val binding: MapRecycleviewDetailBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(placeModel: PlaceModel){
+class PlaceRecyclerAdapter(
+    val shareButton: (PlaceModel) -> Unit,
+    val likeButton: (PlaceModel) -> Unit
+) : ListAdapter<PlaceModel, PlaceRecyclerAdapter.ItemViewHolder>(differ) {
+    inner class ItemViewHolder(private val binding: MapRecycleviewDetailBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(placeModel: PlaceModel) {
             val titleTextView = binding.titleTextView
             val addressTextView = binding.addressTextView
             val callNumberTextView = binding.callNumberTextView
@@ -31,15 +35,21 @@ class PlaceRecyclerAdapter(val shareButton: (PlaceModel) -> Unit, val likeButton
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        return ItemViewHolder(MapRecycleviewDetailBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ItemViewHolder(
+            MapRecycleviewDetailBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.bind(currentList[position])
     }
 
-    companion object{
-        val differ = object : DiffUtil.ItemCallback<PlaceModel>(){
+    companion object {
+        val differ = object : DiffUtil.ItemCallback<PlaceModel>() {
             override fun areItemsTheSame(oldItem: PlaceModel, newItem: PlaceModel): Boolean {
                 return oldItem.id == newItem.id
             }

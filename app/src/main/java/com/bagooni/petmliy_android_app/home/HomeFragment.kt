@@ -1,14 +1,7 @@
 package com.bagooni.petmliy_android_app.home
 
-import android.content.ContentResolver
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
-import android.media.MediaScannerConnection
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,25 +10,18 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.bagooni.petmliy_android_app.MainActivity
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentHomeBinding
-import com.bagooni.petmliy_android_app.databinding.FragmentMapBinding
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 
-
-//start
-class HomeFragment : Fragment(R.layout.fragment_home) {
+class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
@@ -44,12 +30,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
-            Log.d("Google", "3")
             val account = completedTask.getResult(ApiException::class.java)
 //            val idToken = account.idToken
-
-            // TODO(developer): send ID Token to server and validate
-
             updateUI(account)
         } catch (e: ApiException) {
             Log.w("Google", "signInResult:failed code=" + e.statusCode)
@@ -62,22 +44,21 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             val personName = account.displayName
             val personEmail = account.email
             val personPhoto = account.photoUrl
-            // TODO: token값 전달??
 
-            binding.petName.text = personName
-            binding.petBirth.text = personEmail
+            binding.personName.text = personName
+            binding.personEmail.text = personEmail
             if (personPhoto != null) {
                 Glide
-                    .with(binding.petImage.context)
+                    .with(binding.personImage.context)
                     .load(personPhoto.toString())
                     .circleCrop()
 
-                    .into(binding.petImage)
+                    .into(binding.personImage)
             }
 
             binding.signInButton.visibility = View.GONE
-            binding.petName.visibility = View.VISIBLE
-            binding.petBirth.visibility = View.VISIBLE
+            binding.personName.visibility = View.VISIBLE
+            binding.personEmail.visibility = View.VISIBLE
             binding.testText.text = "오늘 하루도 수고 했어요"
         }
     }

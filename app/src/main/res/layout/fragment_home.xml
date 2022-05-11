@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/petImage"
+            android:id="@+id/personImage"
             android:layout_width="100dp"
             android:layout_height="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -40,7 +40,7 @@
             app:layout_constraintStart_toEndOf="@id/testTitleImage"
             app:layout_constraintTop_toTopOf="@id/testTitleImage" />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/testTitleImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/testImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
             app:layout_constraintTop_toTopOf="@id/testImage" />
 
         <TextView
-            android:id="@+id/petName"
+            android:id="@+id/personName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -81,32 +81,23 @@
             android:textColor="@color/white"
             android:textSize="25sp"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="@id/petImage"
-            app:layout_constraintStart_toStartOf="@id/petImage"
-            app:layout_constraintTop_toBottomOf="@id/petImage"
+            app:layout_constraintEnd_toEndOf="@id/personImage"
+            app:layout_constraintStart_toStartOf="@id/personImage"
+            app:layout_constraintTop_toBottomOf="@id/personImage"
             tools:visibility="visible" />
 
         <TextView
-            android:id="@+id/petBirth"
+            android:id="@+id/personEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0000.00.00"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="@id/petName"
-            app:layout_constraintStart_toStartOf="@id/petName"
-            app:layout_constraintTop_toBottomOf="@id/petName"
+            app:layout_constraintEnd_toEndOf="@id/personName"
+            app:layout_constraintStart_toStartOf="@id/personName"
+            app:layout_constraintTop_toBottomOf="@id/personName"
             tools:visibility="visible" />
-
-        <ImageButton
-            android:id="@+id/mypageButton"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:background="@color/transparent"
-            android:src="@drawable/ic_free_icon_font_settings_3917058"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

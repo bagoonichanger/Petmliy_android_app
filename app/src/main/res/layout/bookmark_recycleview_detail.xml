@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    android:elevation="10dp"
-    android:background="@drawable/map_listadapter_background">
+    android:background="@drawable/bookmark_listadapter_background">
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/recyclerView_shareButton"
@@ -15,19 +14,9 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="30dp"
         android:background="?selectableItemBackground"
-        android:src="@drawable/ic_free_icon_font_share"
+        android:elevation="10dp"
+        android:src="@drawable/ic_free_icon_font_trash_3917772"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/recyclerView_LikeButton"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="15dp"
-        android:background="?selectableItemBackground"
-        android:src="@drawable/ic_free_icon_font_plus_"
-        app:layout_constraintEnd_toStartOf="@id/recyclerView_shareButton"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView

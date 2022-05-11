@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class LikePlaceDto(
     @SerializedName("id") var id: Int?,
-    @SerializedName("placeName") var placeeName: String?,
+    @SerializedName("placeName") var placeName: String?,
     @SerializedName("phone") var phone: String?,
     @SerializedName("address") var address: String?,
     @SerializedName("url") var url: String?,

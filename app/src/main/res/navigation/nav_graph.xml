@@ -16,7 +16,11 @@
     <keep_state_fragment
         android:id="@+id/mapFragment"
         android:name="com.bagooni.petmliy_android_app.map.MapFragment"
-        android:label="MapFragment" />
+        android:label="MapFragment" >
+        <action
+            android:id="@+id/action_mapFragment_to_bookMarkFragment"
+            app:destination="@id/bookMarkFragment" />
+    </keep_state_fragment>
     <keep_state_fragment
         android:id="@+id/postFragment"
         android:name="com.bagooni.petmliy_android_app.post.PostFragment"

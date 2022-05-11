@@ -1,8 +1,5 @@
 package com.bagooni.petmliy_android_app.walk.Db
 
-import androidx.lifecycle.LiveData
-
-
 class TrackingRepository(private val trackingDAO: TrackingDAO) {
     suspend fun insertTracking(tracking: Tracking) = trackingDAO.insertTracking(tracking)
 
@@ -12,11 +9,11 @@ class TrackingRepository(private val trackingDAO: TrackingDAO) {
 
     fun getAllTracking() = trackingDAO.getAllTracking()
 
-    fun getAllTrackingSortedByTimeInMillis() = trackingDAO.getAllTrackingSortedByTimeInMillis()
-
-    fun getAllTrackingSortedByCaloriesBurned() = trackingDAO.getAllTrackingSortedByCaloriesBurned()
-
-    fun getAllTrackingSortedByAvgSpeed() = trackingDAO.getAllTrackingSortedByAvgSpeed()
-
-    fun getAllTrackingSortedByDistance() = trackingDAO.getAllTrackingSortedByDistance()
+//    fun getAllTrackingSortedByTimeInMillis() = trackingDAO.getAllTrackingSortedByTimeInMillis()
+//
+//    fun getAllTrackingSortedByCaloriesBurned() = trackingDAO.getAllTrackingSortedByCaloriesBurned()
+//
+//    fun getAllTrackingSortedByAvgSpeed() = trackingDAO.getAllTrackingSortedByAvgSpeed()
+//
+//    fun getAllTrackingSortedByDistance() = trackingDAO.getAllTrackingSortedByDistance()
 }

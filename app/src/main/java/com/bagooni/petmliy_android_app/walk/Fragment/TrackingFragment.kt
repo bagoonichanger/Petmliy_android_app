@@ -8,10 +8,7 @@ import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.os.*
 import android.provider.MediaStore
 import android.util.Log
 import android.view.PixelCopy
@@ -69,7 +66,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.math.round
 
 
@@ -77,7 +73,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     var client: OkHttpClient? =
         httpLoggingInterceptor()?.let { OkHttpClient.Builder().addInterceptor(it).build() }
 
-    private var googleEmail : String? = null
+    private var googleEmail: String? = null
     private var mGoogleSignInClient: GoogleSignInClient? = null
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
@@ -126,12 +122,8 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
 
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
-            Log.d("Google", "3")
             val account = completedTask.getResult(ApiException::class.java)
 //            val idToken = account.idToken
-
-            // TODO(developer): send ID Token to server and validate
-
             updateUI(account)
         } catch (e: ApiException) {
             Log.w("Google", "signInResult:failed code=" + e.statusCode)
@@ -141,8 +133,8 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
 
     private fun updateUI(account: GoogleSignInAccount?) {
         if (account != null) {
-            Log.d("map",account.email.toString())
-            googleEmail  = account.email
+            Log.d("map", account.email.toString())
+            googleEmail = account.email
         }
     }
 
@@ -233,6 +225,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             val caloriesBurned = ((distanceInMeters / 1000f) * 70f).toInt()
 
             //////////////////////////////////////////////////////////////////////
+            //request body 형식으로 바꿈
             val post_year =
                 year.toString().toRequestBody("application/json;charset=utf-8".toMediaType())
             val post_month =
@@ -247,8 +240,13 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
                 avgSpeed.toString().toRequestBody("application/json;charset=utf-8".toMediaType())
             val post_calories = caloriesBurned.toString()
                 .toRequestBody("application/json;charset=utf-8".toMediaType())
+
+
+            val randomId = Random().nextInt()
+
             val textHashMap = hashMapOf<String, RequestBody>()
-            textHashMap["id"] = 1.toString().toRequestBody("application/json;charset=utf-8".toMediaType())
+            textHashMap["id"] =
+                randomId.toString().toRequestBody("application/json;charset=utf-8".toMediaType())
             textHashMap["year"] = post_year
             textHashMap["month"] = post_month
             textHashMap["day"] = post_day
@@ -262,10 +260,11 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             customAPi(post_img, textHashMap)
             //////////////////////////////////////////////////////////////////////
             val tracking = Tracking(
+                randomId,
                 year,
                 month,
                 day,
-                bitmap,
+                null, // 수정부분
                 avgSpeed,
                 distanceInMeters,
                 curTimeInMillis,
@@ -318,23 +317,27 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             }
         }
 
-        Log.d("filename",imageUri.toString()+"_"+imageUri?.encodedPath+"_"+fileName)
-//        val file = File(imageUri?.encodedPath+"/${fileName}")
         val path = imageUri?.let { getRealFile(it) }
         val file = File(path)
+        if (path != null) {
+            Log.d("filename1", imageUri.toString())
+            Log.d("filename2", path)
+        }
+
         val file_RequestBody = file.asRequestBody("image/png".toMediaTypeOrNull())
-        var uploadFile = MultipartBody.Part.createFormData ("img", fileName, file_RequestBody)
+        var uploadFile = MultipartBody.Part.createFormData("img", fileName, file_RequestBody)
 
         return uploadFile
     }
 
-    private fun getRealFile(uri: Uri): String?{
-        var project: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
-        var c: Cursor? = (activity as MainActivity).contentResolver.query(uri!!,project,null,null,null)
-        var index = c?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+    private fun getRealFile(uri: Uri): String? {
+        val project: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
+        val c: Cursor? =
+            (activity as MainActivity).contentResolver.query(uri!!, project, null, null, null)
+        val index = c?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
         c?.moveToFirst()
 
-        var result = c?.getString(index!!)
+        val result = c?.getString(index!!)
         return result
     }
 
@@ -345,15 +348,17 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        MediaType
         val api = retrofit.create(CustomWalkApi::class.java)
         val sendWalk = googleEmail?.let { email ->
-            api.sendTrackingData(email,postImg, data)
+            api.sendTrackingData(email, postImg, data)
         }
 
         if (sendWalk != null) {
             sendWalk.enqueue(object : Callback<sendTrackingDto> {
-                override fun onResponse(call: Call<sendTrackingDto>, response: Response<sendTrackingDto>) {
+                override fun onResponse(
+                    call: Call<sendTrackingDto>,
+                    response: Response<sendTrackingDto>
+                ) {
                     if (!response.isSuccessful) return
                 }
 
