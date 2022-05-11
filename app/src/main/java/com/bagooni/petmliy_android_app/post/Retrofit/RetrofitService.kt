@@ -5,9 +5,11 @@ import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
-
+class testPost(
+    val Img: Byte
+)
 class Post(
-    val postId: Int, val email: String, val postImg: String, val postContent: String
+    val userImg: String?, val email: String, val postImg: String, val postContent: String
 )
 
 data class PostContent(
@@ -22,9 +24,10 @@ interface RetrofitService {
     @POST("api/post/save")
     fun postUpload(
         @Header("email") email: String,
+        @Part userImg: MultipartBody.Part,
         @Part postImg: MultipartBody.Part,
         @Part postContent: MultipartBody.Part
-    ): Call<Any>
+    ): Call<Post>
 
     //ex.좋아요
     @POST("instagram/post/like/{post_id}/")
@@ -36,4 +39,8 @@ interface RetrofitService {
     @GET("api/post/findAll")
     fun getPost(
     ): Call<ArrayList<Post>>
+
+    @GET("api/post/getImg")
+    fun getTestPost(
+    ): Call<ByteArray>
 }

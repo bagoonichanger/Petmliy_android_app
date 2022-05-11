@@ -1,5 +1,8 @@
 package com.bagooni.petmliy_android_app.post
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +13,8 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -17,8 +22,11 @@ import com.bagooni.petmliy_android_app.MainActivity
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentPostBinding
 import com.bagooni.petmliy_android_app.post.Comment.CommentFragment
+import com.bagooni.petmliy_android_app.walk.WalkFragment
+import com.bagooni.petmliy_android_app.walk.WalkFragment.Companion.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION_AND_WRITE_EXTERNAL_STORAGE_PERMISSION
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -61,6 +69,7 @@ class PostFragment : Fragment(){
         val feedListView = view.findViewById<RecyclerView>(R.id.feedList)
 
         binding.uploadButton.setOnClickListener {
+            getPermissions()
             findNavController().navigate(R.id.action_postFragment_to_postUploadFragment)
         }
         var gson = GsonBuilder().setLenient().create()
@@ -79,15 +88,16 @@ class PostFragment : Fragment(){
             ) {
                 val postList = response.body()
                 val postRecyclerView = view.findViewById<RecyclerView>(R.id.feedList)
-                postRecyclerView.adapter = PostRecyclerViewAdapter(
-                    postList!!,
-                    LayoutInflater.from(activity),
-                    Glide.with(activity!!),
-                    this@PostFragment,
-                    activity as (MainActivity)
-                )
+                postRecyclerView.adapter = postList?.let {
+                    PostRecyclerViewAdapter(
+                        it,
+                        LayoutInflater.from(activity),
+                        Glide.with(activity!!),
+                        this@PostFragment,
+                        activity as (MainActivity)
+                    )
+                }
             }
-
             override fun onFailure(call: Call<ArrayList<Post>>, t: Throwable) {
                 Log.d("log",t.message.toString())
             }
@@ -122,12 +132,12 @@ class PostFragment : Fragment(){
                 Log.d("log",userName.text.toString())
                 Log.d("log",postContent.text.toString())
 
-                favoriteBtn.setOnClickListener {
-                    postFragment.postLike(postList.get(adapterPosition).postId)
-                    activity.runOnUiThread {
-                        favoriteColorBtn.visibility = VISIBLE
-                    }
-                }
+//                favoriteBtn.setOnClickListener {
+//                    postFragment.postLike(postList.get(adapterPosition).postId)
+//                    activity.runOnUiThread {
+//                        favoriteColorBtn.visibility = VISIBLE
+//                    }
+//                }
             }
         }
 
@@ -167,4 +177,20 @@ class PostFragment : Fragment(){
         }
         return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
     }
+
+    private fun getPermissions(){
+        if(ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ), PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION_AND_WRITE_EXTERNAL_STORAGE_PERMISSION
+            )
+        }
+    }
+
 }
