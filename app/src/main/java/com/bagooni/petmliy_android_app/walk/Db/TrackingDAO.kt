@@ -27,5 +27,5 @@ interface TrackingDAO {
     fun getAllTrackingSortedByDistance(): LiveData<List<Tracking>>
 
     @Query("SELECT * FROM tracking_table WHERE year = :year AND month = :month AND day = :day ORDER BY id DESC")
-    fun getAllTrackingSortedByCalendar(year : Int, month : Int, day : Int) : LiveData<List<Tracking>>
+    fun getAllTrackingSortedByCalendar(year: Int, month: Int, day: Int): LiveData<List<Tracking>>
 }

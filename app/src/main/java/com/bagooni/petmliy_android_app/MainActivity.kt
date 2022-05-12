@@ -3,21 +3,20 @@ package com.bagooni.petmliy_android_app
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.plusAssign
 import androidx.navigation.ui.setupWithNavController
 import com.bagooni.petmliy_android_app.Constants.ACTION_SHOW_TRACKING_FRAGMENT
 import com.bagooni.petmliy_android_app.walk.Db.TrackingDAO
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
+
 class MainActivity : AppCompatActivity() { // 수정 완료
     lateinit var trackingDAO: TrackingDAO
 
     private val bottomNavigationView: BottomNavigationView by lazy {
-        findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+//        findViewById(R.id.bottomNavigationView)
+        findViewById(R.id.bottomNavigationView)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

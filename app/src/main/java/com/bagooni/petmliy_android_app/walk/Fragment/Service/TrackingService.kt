@@ -280,7 +280,7 @@ class TrackingService : LifecycleService() {
             set(curNotificationBuilder, ArrayList<NotificationCompat.Action>())
         }
 
-        if(!serviceKilled){
+        if (!serviceKilled) {
             curNotificationBuilder = basenotificationBuilder
                 .addAction(R.drawable.ic_baseline_pause_24, notificationActionText, pendingIntent)
             notificationManager.notify(NOTIFICATION_ID, curNotificationBuilder.build())

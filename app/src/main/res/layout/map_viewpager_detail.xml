@@ -21,7 +21,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="15dp"
             android:background="?selectableItemBackground"
-            android:src="@drawable/ic_free_icon_font_plus_"
+            android:src="@drawable/ic_free_icon_font_share"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,7 +32,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:background="?selectableItemBackground"
-            android:src="@drawable/ic_free_icon_font_share"
+            android:src="@drawable/ic_free_icon_font_plus_"
             app:layout_constraintEnd_toStartOf="@id/viewpager_shareButton"
             app:layout_constraintTop_toTopOf="parent" />
 

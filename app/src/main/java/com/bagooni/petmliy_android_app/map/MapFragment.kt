@@ -20,8 +20,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bagooni.petmliy_android_app.MainActivity
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentMapBinding
-import com.bagooni.petmliy_android_app.map.Activity.IndustryActivity
-import com.bagooni.petmliy_android_app.map.Activity.RegionActivity
 import com.bagooni.petmliy_android_app.map.adapter.PlaceRecyclerAdapter
 import com.bagooni.petmliy_android_app.map.adapter.PlaceViewPagerAdapter
 import com.bagooni.petmliy_android_app.map.model.Api.CustomMapApi
@@ -29,7 +27,6 @@ import com.bagooni.petmliy_android_app.map.model.Api.KakaoApi
 import com.bagooni.petmliy_android_app.map.model.Dto.LikePlaceDto
 import com.bagooni.petmliy_android_app.map.model.Dto.PlaceDto
 import com.bagooni.petmliy_android_app.map.model.documents.PlaceModel
-import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -52,7 +49,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-// TODO: 지역별, 업종별 완성 + post 방식 바꾸기
 class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay.OnClickListener {
     var client: OkHttpClient? =
         httpLoggingInterceptor()?.let { OkHttpClient.Builder().addInterceptor(it).build() }
@@ -62,7 +58,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
 
     lateinit var mainActivity: MainActivity
 
-    private var googleEmail : String? = null
+    private var googleEmail: String? = null
 
     private lateinit var mapView: MapView
     private lateinit var locationSource: FusedLocationSource
@@ -74,12 +70,8 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
 
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
-            Log.d("Google", "3")
             val account = completedTask.getResult(ApiException::class.java)
 //            val idToken = account.idToken
-
-            // TODO(developer): send ID Token to server and validate
-
             updateUI(account)
         } catch (e: ApiException) {
             Log.w("Google", "signInResult:failed code=" + e.statusCode)
@@ -89,8 +81,8 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
 
     private fun updateUI(account: GoogleSignInAccount?) {
         if (account != null) {
-            Log.d("map",account.email.toString())
-            googleEmail  = account.email
+            Log.d("map", account.email.toString())
+            googleEmail = account.email
         }
     }
 
@@ -149,9 +141,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        locationSource =
-            FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
-
+        locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
         initLauncher()
         googleSet()
 
@@ -161,7 +151,6 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         activityResultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode != AppCompatActivity.RESULT_OK) {
-                    Log.d("Google", "1")
                     return@registerForActivityResult
                 }
                 val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
@@ -177,6 +166,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
 
         mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
     }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
@@ -198,9 +188,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
 
-        clickSearchButton() // 장소 검색
-        clickRegionalButton()
-        clickIndustrySpecificButton()
+        initButtons() // 장소 검색
         clickViewPager() // cardView 클릭시
 
         viewPager.adapter = viewPagerAdapter
@@ -208,7 +196,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         recyclerView.layoutManager = LinearLayoutManager(activity)
     }
 
-    private fun clickSearchButton() {
+    private fun initButtons() {
         binding.searchButton.setOnClickListener {
             val searchText = binding.searchBar.text.toString()
             if (searchText == "") {
@@ -218,17 +206,9 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
                 searchPlace(searchText)
             }
         }
-    }
 
-    private fun clickRegionalButton() {
-        binding.regionalButton.setOnClickListener {
-            startActivity(Intent(activity, RegionActivity::class.java))
-        }
-    }
-
-    private fun clickIndustrySpecificButton() {
-        binding.industrySpecificButton.setOnClickListener {
-            startActivity(Intent(activity, IndustryActivity::class.java))
+        binding.likeButton.setOnClickListener {
+            findNavController().navigate(R.id.action_mapFragment_to_bookMarkFragment)
         }
     }
 
@@ -245,7 +225,6 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
                     )
                 )
                     .animate(CameraAnimation.Easing)
-
                 naverMap.moveCamera(cameraUpdate)
             }
         })
@@ -258,7 +237,6 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        MediaType
         val api = retrofit.create(CustomMapApi::class.java)
         val responseLikeList = googleEmail?.let { email ->
             api.sendLikePlaces(email, data)
@@ -266,16 +244,16 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
 
         if (responseLikeList != null) {
             responseLikeList.enqueue(object : Callback<LikePlaceDto> {
-                override fun onResponse(call: Call<LikePlaceDto>, response: Response<LikePlaceDto>) {
+                override fun onResponse(
+                    call: Call<LikePlaceDto>,
+                    response: Response<LikePlaceDto>
+                ) {
                     if (!response.isSuccessful)
-
-                    response.body()?.let { it.address?.let { it1 -> Log.d("chicken", it1) } }
+                        response.body()?.let { it.address?.let { it1 -> Log.d("chicken", it1) } }
                 }
-
                 override fun onFailure(call: Call<LikePlaceDto>, t: Throwable) {
                     Log.d("chicken", t.message.toString())
                 }
-
             })
         }
     }
@@ -292,7 +270,6 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         responsePlace.enqueue(object : Callback<PlaceDto> {
             override fun onResponse(call: Call<PlaceDto>, response: Response<PlaceDto>) {
                 if (!response.isSuccessful) return
-
                 response.body()?.let { dto ->
                     updateMarker(dto.documents)
                     viewPagerAdapter.submitList(dto.documents)
@@ -300,14 +277,10 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
                     bottomSheetTitleTextView.text = "${dto.documents?.size}개의 장소"
                 }
             }
-
             override fun onFailure(call: Call<PlaceDto>, t: Throwable) {
                 Log.d("MapFragment", "통신 실패 : ${t.message}")
             }
-
         })
-
-
     }
 
     private fun updateMarker(documents: List<PlaceModel>?) {
@@ -401,11 +374,6 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         currentLocationButton.map = naverMap
     }
 
-    companion object {
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
-        private const val API_KEY = "KakaoAK 43d7c7d5953cc05cfe4479fb034163e0"
-    }
-
     override fun onClick(overlay: Overlay): Boolean { //마커 클릭시 이벤트
         val selectedModel = viewPagerAdapter.currentList.firstOrNull { document ->
             document.id == overlay.tag
@@ -427,4 +395,8 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
     }
 
+    companion object {
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
+        private const val API_KEY = "KakaoAK 43d7c7d5953cc05cfe4479fb034163e0"
+    }
 }
