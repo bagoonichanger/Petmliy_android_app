@@ -1,6 +1,6 @@
 package com.bagooni.petmliy_android_app.home
 
-
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -34,8 +34,6 @@ class HomeFragment : Fragment() {
     private var mGoogleSignInClient: GoogleSignInClient? = null
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
-    private var viewModel: WeatherViewModel = WeatherViewModel()
-
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult(ApiException::class.java)
@@ -47,34 +45,34 @@ class HomeFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateUI(account: GoogleSignInAccount?) {
         if (account != null) {
             val personName = account.displayName
             val personEmail = account.email
             val personPhoto = account.photoUrl
-            // TODO: token값 전달??
 
-            binding.personName.text = personName
-            binding.personEmail.text = personEmail
             if (personPhoto != null) {
                 Glide
                     .with(binding.personImage.context)
                     .load(personPhoto.toString())
                     .circleCrop()
-
                     .into(binding.personImage)
             }
 
             binding.signInButton.visibility = View.GONE
-            binding.personName.visibility = View.VISIBLE
-            binding.personEmail.visibility = View.VISIBLE
-            binding.testText.text = "오늘 하루도 수고 했어요"
+            binding.signInButton.isEnabled = false
+            binding.statusText.text = "Good Morning, ${personName}"
+            binding.statusSubText.text = "${personEmail}"
+            binding.noneImage.visibility = View.GONE
+            binding.logoutButton.visibility = View.VISIBLE
+            binding.logoutButton.isEnabled = true
+            binding.googleIcon.visibility = View.VISIBLE
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("oncrate", "homeFragment")
         initLauncher()
         googleSet()
     }
@@ -83,7 +81,6 @@ class HomeFragment : Fragment() {
         activityResultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode != AppCompatActivity.RESULT_OK) {
-                    Log.d("Google", "1")
                     return@registerForActivityResult
                 }
                 val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
@@ -93,7 +90,6 @@ class HomeFragment : Fragment() {
 
     private fun googleSet() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//            .requestIdToken("888676227247-keki43t7at854brv89r5oh1lnsvu7ec1.apps.googleusercontent.com")
             .requestEmail()
             .build()
 
@@ -113,13 +109,12 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.signInButton.setOnClickListener {
             val intent = mGoogleSignInClient?.signInIntent
-            Log.d("Google", intent.toString())
             activityResultLauncher.launch(intent)
         }
-        binding.albumButton.setOnClickListener {
+        binding.analysisButton.setOnClickListener {
             findNavController().navigate(R.id.albumFragment)
         }
-        binding.bookmarkButton.setOnClickListener {
+        binding.placeButton.setOnClickListener {
             findNavController().navigate(R.id.bookMarkFragment)
         }
         initWeatherView()
@@ -130,10 +125,9 @@ class HomeFragment : Fragment() {
         super.onStart()
         val account = GoogleSignIn.getLastSignedInAccount(requireContext())
         if (account != null) {
-            Log.d("oncrate", "check")
             updateUI(account)
         }
-
+        binding.logoutButton.isEnabled = false
     }
 
     override fun onDestroy() {

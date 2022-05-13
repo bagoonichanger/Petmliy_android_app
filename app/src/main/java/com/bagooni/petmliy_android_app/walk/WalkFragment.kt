@@ -82,7 +82,6 @@ class WalkFragment : Fragment(R.layout.fragment_walk) {
         activityResultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode != AppCompatActivity.RESULT_OK) {
-                    Log.d("Google", "1")
                     return@registerForActivityResult
                 }
                 val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
@@ -93,7 +92,6 @@ class WalkFragment : Fragment(R.layout.fragment_walk) {
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult(ApiException::class.java)
-//            val idToken = account.idToken
             updateUI(account)
         } catch (e: ApiException) {
             Log.w("Google", "signInResult:failed code=" + e.statusCode)
@@ -103,14 +101,12 @@ class WalkFragment : Fragment(R.layout.fragment_walk) {
 
     private fun updateUI(account: GoogleSignInAccount?) {
         if (account != null) {
-            Log.d("map", account.email.toString())
             googleEmail = account.email
         }
     }
 
     private fun googleSet() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//            .requestIdToken("888676227247-keki43t7at854brv89r5oh1lnsvu7ec1.apps.googleusercontent.com")
             .requestEmail()
             .build()
 
@@ -143,8 +139,6 @@ class WalkFragment : Fragment(R.layout.fragment_walk) {
                 "${date.year}/${date.month}/${date.day}"
             viewModel.trackingSortedByCalendar(date.year, date.month, date.day)
                 .observe(viewLifecycleOwner, Observer {
-                    Log.d("check", "${date.year}/${date.month}/${date.day}")
-//                    recyclerAdapter.submitList(it)
                     customAPi(date.year, date.month, date.day)
                 })
 
@@ -155,39 +149,12 @@ class WalkFragment : Fragment(R.layout.fragment_walk) {
             calendar.get(Calendar.MONTH) + 1,
             calendar.get(Calendar.DAY_OF_MONTH)
         ).observe(viewLifecycleOwner, Observer {
-//            recyclerAdapter.submitList(it)
-            Log.d("chicken","yes")
             allDataAPi(calendarView)
             customAPi(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH))
         })
-
-//        val r = Runnable {
-//            val iterator = viewModel.allTracking().iterator() //날짜 상관없이 모든 데이터 가져오기
-//            while (iterator.hasNext()) {
-//                var item = iterator.next()
-//                var year = item.year;
-//                var month = item.month;
-//                var day = item.day
-//
-//                setDate.add(CalendarDay.from(year, month, day))
-//            }
-//            activity?.runOnUiThread {
-//                calendarView.addDecorator(object : DayViewDecorator {
-//                    override fun shouldDecorate(day: CalendarDay?): Boolean {
-//                        return setDate.contains(day)
-//                    }
-//
-//                    override fun decorate(view: DayViewFacade?) {
-//                        view?.addSpan(DotSpan(5f, Color.RED))
-//                    }
-//                })
-//            }
-//        }
-//        val thread = Thread(r)
-//        thread.start()
     }
 
-    private fun customAPi(year:Int, month:Int, day:Int) {
+    private fun customAPi(year: Int, month: Int, day: Int) {
         val retrofit = Retrofit.Builder()
             .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080")
             .client(client)
@@ -195,28 +162,25 @@ class WalkFragment : Fragment(R.layout.fragment_walk) {
             .build()
 
         val api = retrofit.create(CustomWalkApi::class.java)
-        val searchWalk = googleEmail?.let { email ->
+
+        googleEmail?.let { email ->
             api.searchData(email, year, month, day)
-        }
-
-        if (searchWalk != null) {
-            searchWalk.enqueue(object : Callback<List<Tracking>> {
-                override fun onResponse(
-                    call: Call<List<Tracking>>,
-                    response: Response<List<Tracking>>
-                ) {
-                    response.body().let{ dto ->
-                        Log.d("Walk",  response.body().toString())
-                        recyclerAdapter.submitList(dto)
-                    }
+        }?.enqueue(object : Callback<List<Tracking>> {
+            override fun onResponse(
+                call: Call<List<Tracking>>,
+                response: Response<List<Tracking>>
+            ) {
+                response.body().let { dto ->
+                    Log.d("Walk", response.body().toString())
+                    recyclerAdapter.submitList(dto)
                 }
+            }
 
-                override fun onFailure(call: Call<List<Tracking>>, t: Throwable) {
-                    Log.d("walk Error", t.message.toString())
-                }
+            override fun onFailure(call: Call<List<Tracking>>, t: Throwable) {
+                Log.d("walk Error1", t.message.toString())
+            }
 
-            })
-        }
+        })
     }
 
     private fun allDataAPi(calendarView: MaterialCalendarView) {
@@ -227,55 +191,52 @@ class WalkFragment : Fragment(R.layout.fragment_walk) {
             .build()
 
         val api = retrofit.create(CustomWalkApi::class.java)
-        val searchAllWalk = googleEmail?.let { email ->
+
+        googleEmail?.let { email ->
             api.searchAllData(email)
-        }
+        }?.enqueue(object : Callback<List<Tracking>> {
+            override fun onResponse(
+                call: Call<List<Tracking>>,
+                response: Response<List<Tracking>>
+            ) {
+                response.body().let { dto ->
+                    Log.d("Walk", response.body().toString())
+                    val r = Runnable {
+                        val iterator = dto?.iterator() //날짜 상관없이 모든 데이터 가져오기
+                        if (iterator != null) {
+                            while (iterator.hasNext()) {
+                                var item = iterator.next()
+                                var year = item.year;
+                                var month = item.month;
+                                var day = item.day
 
-        if (searchAllWalk != null) {
-            searchAllWalk.enqueue(object : Callback<List<Tracking>> {
-                override fun onResponse(
-                    call: Call<List<Tracking>>,
-                    response: Response<List<Tracking>>
-                ) {
-                    response.body().let{ dto ->
-                        Log.d("Walk",  response.body().toString())
-                        val r = Runnable {
-                            val iterator = dto?.iterator() //날짜 상관없이 모든 데이터 가져오기
-                            if (iterator != null) {
-                                while (iterator.hasNext()) {
-                                    var item = iterator.next()
-                                    var year = item.year;
-                                    var month = item.month;
-                                    var day = item.day
-
-                                    setDate.add(CalendarDay.from(year, month, day))
-                                }
-                            }
-                            activity?.runOnUiThread {
-                                if (calendarView != null) {
-                                    calendarView.addDecorator(object : DayViewDecorator {
-                                        override fun shouldDecorate(day: CalendarDay?): Boolean {
-                                            return setDate.contains(day)
-                                        }
-
-                                        override fun decorate(view: DayViewFacade?) {
-                                            view?.addSpan(DotSpan(5f, Color.RED))
-                                        }
-                                    })
-                                }
+                                setDate.add(CalendarDay.from(year, month, day))
                             }
                         }
-                        val thread = Thread(r)
-                        thread.start()
+                        activity?.runOnUiThread {
+                            if (calendarView != null) {
+                                calendarView.addDecorator(object : DayViewDecorator {
+                                    override fun shouldDecorate(day: CalendarDay?): Boolean {
+                                        return setDate.contains(day)
+                                    }
+
+                                    override fun decorate(view: DayViewFacade?) {
+                                        view?.addSpan(DotSpan(5f, Color.RED))
+                                    }
+                                })
+                            }
+                        }
                     }
+                    val thread = Thread(r)
+                    thread.start()
                 }
+            }
 
-                override fun onFailure(call: Call<List<Tracking>>, t: Throwable) {
-                    Log.d("walk Error", t.message.toString())
-                }
+            override fun onFailure(call: Call<List<Tracking>>, t: Throwable) {
+                Log.d("walk Error2", t.message.toString())
+            }
 
-            })
-        }
+        })
     }
 
     private fun initButtons(view: View) {
@@ -318,7 +279,6 @@ class WalkFragment : Fragment(R.layout.fragment_walk) {
         super.onStart()
         val account = GoogleSignIn.getLastSignedInAccount(requireContext())
         if (account != null) {
-            Log.d("oncrate", "check")
             updateUI(account)
         }
     }

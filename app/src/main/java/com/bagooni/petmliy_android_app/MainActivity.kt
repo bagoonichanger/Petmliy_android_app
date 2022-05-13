@@ -7,15 +7,11 @@ import android.view.View
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.bagooni.petmliy_android_app.Constants.ACTION_SHOW_TRACKING_FRAGMENT
-import com.bagooni.petmliy_android_app.walk.Db.TrackingDAO
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
-class MainActivity : AppCompatActivity() { // 수정 완료
-    lateinit var trackingDAO: TrackingDAO
-
+class MainActivity : AppCompatActivity() {
     private val bottomNavigationView: BottomNavigationView by lazy {
-//        findViewById(R.id.bottomNavigationView)
         findViewById(R.id.bottomNavigationView)
     }
 
@@ -29,15 +25,10 @@ class MainActivity : AppCompatActivity() { // 수정 완료
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
-// KeepStateNavigator navController에 추가
         val navigator = KeepStateNavigator(this, navHostFragment.childFragmentManager, R.id.nav_host_fragment)
         navController.navigatorProvider.addNavigator(navigator)
 
         navController.setGraph(R.navigation.nav_graph)
-
-//        val navHostFragment =
-//            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-//        val navController = navHostFragment.navController
 
         bottomNavigationView.setupWithNavController(navController)
 

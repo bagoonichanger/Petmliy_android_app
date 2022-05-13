@@ -50,7 +50,6 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -74,6 +73,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         httpLoggingInterceptor()?.let { OkHttpClient.Builder().addInterceptor(it).build() }
 
     private var googleEmail: String? = null
+    private var googleImage: Uri? = null
     private var mGoogleSignInClient: GoogleSignInClient? = null
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
@@ -113,7 +113,6 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
 
     private fun googleSet() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//            .requestIdToken("888676227247-keki43t7at854brv89r5oh1lnsvu7ec1.apps.googleusercontent.com")
             .requestEmail()
             .build()
 
@@ -123,7 +122,6 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult(ApiException::class.java)
-//            val idToken = account.idToken
             updateUI(account)
         } catch (e: ApiException) {
             Log.w("Google", "signInResult:failed code=" + e.statusCode)
@@ -133,8 +131,8 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
 
     private fun updateUI(account: GoogleSignInAccount?) {
         if (account != null) {
-            Log.d("map", account.email.toString())
             googleEmail = account.email
+            googleImage = account.photoUrl
         }
     }
 
@@ -240,7 +238,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
                 avgSpeed.toString().toRequestBody("application/json;charset=utf-8".toMediaType())
             val post_calories = caloriesBurned.toString()
                 .toRequestBody("application/json;charset=utf-8".toMediaType())
-
+            val post_googleImage = googleImage.toString().toRequestBody("application/json;charset=utf-8".toMediaType())
 
             val randomId = Random().nextInt()
 
@@ -254,24 +252,26 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             textHashMap["distanceInMeters"] = post_distance
             textHashMap["avgSpeedInKMH"] = post_speed
             textHashMap["caloriesBurned"] = post_calories
+            textHashMap["userImg"] = post_googleImage
 
             val post_img = bitmapToRequestBody(bitmap)
 
             customAPi(post_img, textHashMap)
             //////////////////////////////////////////////////////////////////////
-            val tracking = Tracking(
-                randomId,
-                year,
-                month,
-                day,
-                null, // 수정부분
-                avgSpeed,
-                distanceInMeters,
-                curTimeInMillis,
-                caloriesBurned
-            )
 
-            viewModel.insertTracking(tracking)
+//            val tracking = Tracking(
+//                randomId,
+//                year,
+//                month,
+//                day,
+//                bitmap, // TODO: 수정부분
+//                avgSpeed,
+//                distanceInMeters,
+//                curTimeInMillis,
+//                caloriesBurned
+//            )
+
+//            viewModel.insertTracking(tracking)
             view?.let {
                 Snackbar.make(it, "산책이 저장되었습니다.", Snackbar.LENGTH_LONG).show()
             }
@@ -320,8 +320,8 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         val path = imageUri?.let { getRealFile(it) }
         val file = File(path)
         if (path != null) {
-            Log.d("filename1", imageUri.toString())
-            Log.d("filename2", path)
+            Log.d("상대경로", imageUri.toString())
+            Log.d("절대경로", path)
         }
 
         val file_RequestBody = file.asRequestBody("image/png".toMediaTypeOrNull())
@@ -349,25 +349,22 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             .build()
 
         val api = retrofit.create(CustomWalkApi::class.java)
-        val sendWalk = googleEmail?.let { email ->
+
+        googleEmail?.let { email ->
             api.sendTrackingData(email, postImg, data)
-        }
+        }?.enqueue(object : Callback<sendTrackingDto> {
+            override fun onResponse(
+                call: Call<sendTrackingDto>,
+                response: Response<sendTrackingDto>
+            ) {
+                if (!response.isSuccessful) return
+            }
 
-        if (sendWalk != null) {
-            sendWalk.enqueue(object : Callback<sendTrackingDto> {
-                override fun onResponse(
-                    call: Call<sendTrackingDto>,
-                    response: Response<sendTrackingDto>
-                ) {
-                    if (!response.isSuccessful) return
-                }
+            override fun onFailure(call: Call<sendTrackingDto>, t: Throwable) {
+                Log.d("walk Error", t.message.toString())
+            }
 
-                override fun onFailure(call: Call<sendTrackingDto>, t: Throwable) {
-                    Log.d("walk Error", t.message.toString())
-                }
-
-            })
-        }
+        })
     }
 
     private fun addAllPolylines() {
@@ -411,7 +408,6 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
                 view.findViewById<AppCompatImageButton>(R.id.disabledCaptureButton).visibility =
                     View.VISIBLE
             }
-//            isTracking = true
         }
 
         view.findViewById<AppCompatImageButton>(R.id.pauseButton).setOnClickListener {
@@ -424,7 +420,6 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
                 view.findViewById<AppCompatImageButton>(R.id.disabledCaptureButton).visibility =
                     View.GONE
             }
-//            isTracking = false
         }
 
         view.findViewById<AppCompatImageButton>(R.id.stopButton).setOnClickListener {
@@ -530,15 +525,12 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         view?.let {
             Snackbar.make(it, "저장된 사진을 확인하시겠습니까?", Snackbar.LENGTH_SHORT).apply {
 
-                setAction("확인하기", object : View.OnClickListener {
-                    override fun onClick(v: View?) {
-                        val loadIntent = Intent(Intent.ACTION_GET_CONTENT).apply {
-                            type = "image/*"
-                        }
-                        startActivity(Intent.createChooser(loadIntent, "공유하기"))
+                setAction("확인하기") {
+                    val loadIntent = Intent(Intent.ACTION_GET_CONTENT).apply {
+                        type = "image/*"
                     }
-
-                })
+                    startActivity(Intent.createChooser(loadIntent, "공유하기"))
+                }
                     .show()
             }
 
@@ -596,7 +588,6 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         super.onStart()
         val account = GoogleSignIn.getLastSignedInAccount(requireContext())
         if (account != null) {
-            Log.d("oncrate", "check")
             updateUI(account)
         }
         mapView.onStart()

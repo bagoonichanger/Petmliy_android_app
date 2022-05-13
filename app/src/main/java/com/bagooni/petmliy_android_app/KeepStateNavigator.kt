@@ -11,7 +11,7 @@ import androidx.navigation.fragment.FragmentNavigator
 @Navigator.Name("keep_state_fragment")
 class KeepStateNavigator(
     private val context: Context,
-    private val manager: FragmentManager, // Should pass childFragmentManager.
+    private val manager: FragmentManager,
     private val containerId: Int
 ) : FragmentNavigator(context, manager, containerId) {
 

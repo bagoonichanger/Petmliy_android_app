@@ -5,7 +5,7 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
 
-interface BookmarkApi {
+interface LikePlaceApi {
     @GET("/api/place/findByEmail")
     fun searchAllData(
         @Header("email") email: String,

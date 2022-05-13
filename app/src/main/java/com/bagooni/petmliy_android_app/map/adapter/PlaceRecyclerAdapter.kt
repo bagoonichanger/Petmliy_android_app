@@ -53,11 +53,9 @@ class PlaceRecyclerAdapter(
             override fun areItemsTheSame(oldItem: PlaceModel, newItem: PlaceModel): Boolean {
                 return oldItem.id == newItem.id
             }
-
             override fun areContentsTheSame(oldItem: PlaceModel, newItem: PlaceModel): Boolean {
                 return oldItem == newItem
             }
-
         }
     }
 }
