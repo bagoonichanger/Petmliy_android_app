@@ -16,9 +16,12 @@
         <entry key="app/src/main/res/drawable/button_ripple_custom.xml" value="0.149" />
         <entry key="app/src/main/res/drawable/delete_rectangle_button_background.xml" value="0.189" />
         <entry key="app/src/main/res/drawable/free-icon-font-share-3917574_24.xml" value="0.3475" />
+        <entry key="app/src/main/res/drawable/home_album_button_background.xml" value="0.19" />
+        <entry key="app/src/main/res/drawable/home_background_view.xml" value="0.1825" />
         <entry key="app/src/main/res/drawable/home_book_button_background.xml" value="0.189" />
         <entry key="app/src/main/res/drawable/home_button_background.xml" value="0.189" />
         <entry key="app/src/main/res/drawable/home_icon_button_background.xml" value="0.189" />
+        <entry key="app/src/main/res/drawable/home_icon_button_color_background.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/home_image_background.xml" value="0.189" />
         <entry key="app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.189" />
         <entry key="app/src/main/res/drawable/ic_baseline_arrow_back_ios_new_24.xml" value="0.2255" />
@@ -26,7 +29,10 @@
         <entry key="app/src/main/res/drawable/ic_baseline_pause_24.xml" value="0.133" />
         <entry key="app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.2595" />
         <entry key="app/src/main/res/drawable/ic_free_icon_font_arrow_small_left_3916837.xml" value="0.1765" />
+        <entry key="app/src/main/res/drawable/ic_free_icon_font_comment_heart_5068763.xml" value="0.19" />
         <entry key="app/src/main/res/drawable/ic_free_icon_font_cross_small_3917195.xml" value="0.189" />
+        <entry key="app/src/main/res/drawable/ic_free_icon_font_eye_crossed_3917116.xml" value="0.19" />
+        <entry key="app/src/main/res/drawable/ic_free_icon_font_head_side_thinking_5069179.xml" value="0.19" />
         <entry key="app/src/main/res/drawable/ic_free_icon_font_plus_.xml" value="0.189" />
         <entry key="app/src/main/res/drawable/ic_free_icon_font_settings_3917058.xml" value="0.189" />
         <entry key="app/src/main/res/drawable/ic_free_icon_font_share.xml" value="0.189" />
@@ -40,6 +46,7 @@
         <entry key="app/src/main/res/drawable/ic_free_icon_share_12.xml" value="0.171" />
         <entry key="app/src/main/res/drawable/ic_free_icon_share_24.xml" value="0.3475" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1945" />
+        <entry key="app/src/main/res/drawable/ic_logo.xml" value="0.19" />
         <entry key="app/src/main/res/drawable/ic_premium_icon_paw.xml" value="0.189" />
         <entry key="app/src/main/res/drawable/ic_premium_icon_paw_5068845.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/map_ListAdapter_background.xml" value="0.303" />
@@ -80,15 +87,18 @@
         <entry key="app/src/main/res/layout/activity_walk_detail.xml" value="0.25" />
         <entry key="app/src/main/res/layout/blank_fragment.xml" value="0.271483539974348" />
         <entry key="app/src/main/res/layout/bookmark_recycleview_detail.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_album.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_analysis.xml" value="0.29628046173578454" />
         <entry key="app/src/main/res/layout/fragment_book_mark.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/fragment_detail_tracking.xml" value="0.2466866182129115" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.3209169054441261" />
+        <entry key="app/src/main/res/layout/fragment_detail_tracking.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.337037037037037" />
+        <entry key="app/src/main/res/layout/fragment_likeplace.xml" value="0.27105600684053016" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.144797325532804" />
-        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.2904191616766467" />
         <entry key="app/src/main/res/layout/fragment_post.xml" value="0.2825994014536127" />
         <entry key="app/src/main/res/layout/fragment_post_upload.xml" value="0.28388200085506626" />
         <entry key="app/src/main/res/layout/fragment_tracking.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_walk.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/fragment_walk.xml" value="0.26869806094182824" />
         <entry key="app/src/main/res/layout/layout_viewpager.xml" value="0.15106560802340158" />
         <entry key="app/src/main/res/layout/map_bottom_sheet.xml" value="0.36544494628906254" />
         <entry key="app/src/main/res/layout/map_recycleview_detail.xml" value="0.335" />

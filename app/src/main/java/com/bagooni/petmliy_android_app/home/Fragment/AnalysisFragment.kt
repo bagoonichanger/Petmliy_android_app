@@ -10,17 +10,17 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.fragment.findNavController
 import com.bagooni.petmliy_android_app.R
-import com.bagooni.petmliy_android_app.databinding.FragmentAlbumBinding
+import com.bagooni.petmliy_android_app.databinding.FragmentAnalysisBinding
 
-class AlbumFragment : Fragment() {
-    private var _binding: FragmentAlbumBinding?=null
+class AnalysisFragment : Fragment() {
+    private var _binding: FragmentAnalysisBinding?=null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentAlbumBinding.inflate(inflater,container,false)
+        _binding = FragmentAnalysisBinding.inflate(inflater,container,false)
         binding.closeButton.setOnClickListener {
             findNavController().navigate(R.id.homeFragment)
         }

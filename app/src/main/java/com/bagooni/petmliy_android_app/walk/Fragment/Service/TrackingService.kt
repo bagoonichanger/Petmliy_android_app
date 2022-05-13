@@ -99,10 +99,8 @@ class TrackingService : LifecycleService() {
             val pos = LatLng(it.latitude, it.longitude)
             pathPoints.value?.apply {
                 if (lastOrNull() == null) {
-                    Log.d("d", mutableListOf(pos).toString())
                     add(mutableListOf(pos))
                 } else {
-                    Log.d("d", this.toString())
                     last().add(pos)
                 }
                 pathPoints.postValue(this)
@@ -114,7 +112,6 @@ class TrackingService : LifecycleService() {
         override fun onLocationResult(locationResult: LocationResult) {
             super.onLocationResult(locationResult)
             for (location in locationResult.locations) {
-                Log.d("Location", "Location : ${location.latitude}, ${location.longitude}")
                 addPathPoint(location)
             }
         }

@@ -5,45 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@color/transparent"
-        android:elevation="20dp"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="15dp"
-            android:background="@drawable/toolbar_background">
-
-            <TextView
-                android:id="@+id/toolBarTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="casual"
-                android:text="장소 찾기"
-                android:gravity="center"
-                android:padding="10dp"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.appcompat.widget.Toolbar>
-
     <com.naver.maps.map.MapView
         android:id="@+id/map_view"
         android:layout_width="match_parent"
@@ -57,10 +18,9 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="130dp"
         android:background="@drawable/map_search_bar_background"
-        android:elevation="10dp"
         android:hint="@string/map_search_hint"
         android:paddingStart="20dp"
         android:singleLine="true"
@@ -80,10 +40,9 @@
         android:id="@+id/searchButton"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="70dp"
         android:background="@drawable/button_ripple_custom"
-        android:elevation="10dp"
         android:src="@drawable/ic_baseline_search_24"
         app:layout_anchor="@+id/map_view"
         app:layout_anchorGravity="end|top"
@@ -93,10 +52,9 @@
         android:id="@+id/likeButton"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="15dp"
         android:background="@drawable/home_book_button_background"
-        android:elevation="10dp"
         android:src="@drawable/ic_heart_free_icon_font__1_"
         app:layout_anchor="@+id/map_view"
         app:layout_anchorGravity="end|top"
@@ -110,6 +68,7 @@
         android:layout_margin="12dp"
         android:layout_marginTop="50dp" />
 
-    <include layout="@layout/map_bottom_sheet"
-        android:elevation="30dp"/>
+    <include
+        layout="@layout/map_bottom_sheet"
+        android:elevation="30dp" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

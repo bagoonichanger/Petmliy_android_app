@@ -8,12 +8,4 @@ class TrackingRepository(private val trackingDAO: TrackingDAO) {
     fun getAllTrackingSortedByCalendar(year:Int, month:Int, day:Int) = trackingDAO.getAllTrackingSortedByCalendar(year,month,day)
 
     fun getAllTracking() = trackingDAO.getAllTracking()
-
-//    fun getAllTrackingSortedByTimeInMillis() = trackingDAO.getAllTrackingSortedByTimeInMillis()
-//
-//    fun getAllTrackingSortedByCaloriesBurned() = trackingDAO.getAllTrackingSortedByCaloriesBurned()
-//
-//    fun getAllTrackingSortedByAvgSpeed() = trackingDAO.getAllTrackingSortedByAvgSpeed()
-//
-//    fun getAllTrackingSortedByDistance() = trackingDAO.getAllTrackingSortedByDistance()
 }

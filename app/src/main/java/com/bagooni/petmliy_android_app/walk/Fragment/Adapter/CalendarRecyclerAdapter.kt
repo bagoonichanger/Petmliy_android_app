@@ -1,5 +1,8 @@
 package com.bagooni.petmliy_android_app.walk.Fragment.Adapter
 
+import android.graphics.BitmapFactory
+import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -9,6 +12,7 @@ import com.bagooni.petmliy_android_app.databinding.WalkRecycleviewDetailBinding
 import com.bagooni.petmliy_android_app.walk.Db.Tracking
 import com.bagooni.petmliy_android_app.walk.Fragment.Service.TrackingUtility
 import com.bumptech.glide.Glide
+import okio.ByteString.Companion.decodeBase64
 
 class CalendarRecyclerAdapter(val detailRecyclerView: (Tracking) -> Unit) :
     ListAdapter<Tracking, CalendarRecyclerAdapter.ItemViewHolder>(CalendarRecyclerAdapter.differ) {
@@ -23,10 +27,16 @@ class CalendarRecyclerAdapter(val detailRecyclerView: (Tracking) -> Unit) :
             val trackingTimeTextView = binding.trackingTime
             val trackingCaloriesTextView = binding.trackingCalories
 
+            ///////////////////////
+            val bytes = Base64.decode(tracking.img, Base64.DEFAULT)
+            val changeImg = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+
             Glide
                 .with(trackingImageView.context)
-                .load(tracking.img)
+                .load(changeImg)
                 .into(trackingImageView)
+
+            ///////////////////////
 
             trackingDateTextView.text = "${tracking.year}/${tracking.month}/${tracking.day}"
 
@@ -71,11 +81,9 @@ class CalendarRecyclerAdapter(val detailRecyclerView: (Tracking) -> Unit) :
             override fun areItemsTheSame(oldItem: Tracking, newItem: Tracking): Boolean {
                 return oldItem.id == newItem.id
             }
-
             override fun areContentsTheSame(oldItem: Tracking, newItem: Tracking): Boolean {
                 return oldItem.hashCode() == newItem.hashCode()
             }
-
         }
     }
 }

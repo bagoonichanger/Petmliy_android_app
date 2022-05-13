@@ -61,7 +61,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:background="@drawable/delete_rectangle_button_background"
-            android:elevation="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -69,8 +68,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:elevation="10dp"
-            android:text="삭제하기"
+            android:text="DELETE"
             android:textColor="#F37EB0"
             android:textSize="20sp"
             android:textStyle="bold"

@@ -4,10 +4,12 @@
         android:bottom="1dp"
         android:left="1dp"
         android:right="1dp"
-        android:top="-2dp">
+        android:top="1dp">
         <shape android:shape="rectangle">
             <corners android:radius="50dp"/>
-            <solid android:color="@color/pastelYellow" />
+            <solid android:color="@color/white" />
+            <stroke android:color="@color/Extra_Light_Gray"
+                android:width="1dp"/>
         </shape>
     </item>
 

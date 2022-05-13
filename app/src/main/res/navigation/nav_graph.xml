@@ -61,14 +61,14 @@
     </keep_state_fragment>
     <keep_state_fragment
         android:id="@+id/albumFragment"
-        android:name="com.bagooni.petmliy_android_app.home.Fragment.AlbumFragment"
+        android:name="com.bagooni.petmliy_android_app.home.Fragment.AnalysisFragment"
         android:label="fragment_album"
-        tools:layout="@layout/fragment_album" />
+        tools:layout="@layout/fragment_analysis" />
     <keep_state_fragment
         android:id="@+id/bookMarkFragment"
-        android:name="com.bagooni.petmliy_android_app.home.Fragment.BookMarkFragment"
+        android:name="com.bagooni.petmliy_android_app.home.Fragment.LikePlaceFragment"
         android:label="fragment_book_mark"
-        tools:layout="@layout/fragment_book_mark" />
+        tools:layout="@layout/fragment_likeplace" />
     <keep_state_fragment
         android:id="@+id/postUploadFragment"
         android:name="com.bagooni.petmliy_android_app.post.PostUploadFragment"

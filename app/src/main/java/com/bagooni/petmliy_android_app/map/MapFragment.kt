@@ -40,7 +40,6 @@ import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import com.naver.maps.map.widget.LocationButtonView
-import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -81,12 +80,11 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
 
     private fun updateUI(account: GoogleSignInAccount?) {
         if (account != null) {
-            Log.d("map", account.email.toString())
             googleEmail = account.email
         }
     }
 
-    private val currentLocationButton: LocationButtonView by lazy { // 현재 위치 버튼
+    private val currentLocationButton: LocationButtonView by lazy {
         binding.currentLocationButton
     }
 
@@ -114,6 +112,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
 
         val data = LikePlaceDto(null, name, phone, address, url, categories)
         customAPi(data)
+        Toast.makeText(requireContext(), "장소가 저장되었습니다.", Toast.LENGTH_SHORT).show()
     })
 
     private val recyclerView: RecyclerView by lazy {
@@ -137,6 +136,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         val categories = it.category_name
         val data = LikePlaceDto(null, name, phone, address, url, categories)
         customAPi(data)
+        Toast.makeText(requireContext(), "장소가 저장되었습니다.", Toast.LENGTH_SHORT).show()
     })
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -160,7 +160,6 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
 
     private fun googleSet() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//            .requestIdToken("888676227247-keki43t7at854brv89r5oh1lnsvu7ec1.apps.googleusercontent.com")
             .requestEmail()
             .build()
 
@@ -188,8 +187,8 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
 
-        initButtons() // 장소 검색
-        clickViewPager() // cardView 클릭시
+        initButtons()
+        clickViewPager()
 
         viewPager.adapter = viewPagerAdapter
         recyclerView.adapter = recyclerAdapter
@@ -200,7 +199,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         binding.searchButton.setOnClickListener {
             val searchText = binding.searchBar.text.toString()
             if (searchText == "") {
-                Toast.makeText(activity, "검색어를 입력해주세요.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "장소를 입력해주세요.", Toast.LENGTH_SHORT).show()
             } else {
                 deleteMarkers(markers)
                 searchPlace(searchText)
@@ -251,6 +250,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
                     if (!response.isSuccessful)
                         response.body()?.let { it.address?.let { it1 -> Log.d("chicken", it1) } }
                 }
+
                 override fun onFailure(call: Call<LikePlaceDto>, t: Throwable) {
                     Log.d("chicken", t.message.toString())
                 }
@@ -277,6 +277,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
                     bottomSheetTitleTextView.text = "${dto.documents?.size}개의 장소"
                 }
             }
+
             override fun onFailure(call: Call<PlaceDto>, t: Throwable) {
                 Log.d("MapFragment", "통신 실패 : ${t.message}")
             }
@@ -292,8 +293,8 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
             marker.position = LatLng(lat, lng)
             marker.icon = MarkerIcons.BLACK
             marker.iconTintColor = Color.rgb(245, 189, 213)
-            marker.onClickListener = this // marker 클릭시
-            marker.tag = document.id // marker 구분을 위한 태그
+            marker.onClickListener = this
+            marker.tag = document.id
             markers.add(marker)
             marker.map = naverMap
         }
@@ -311,7 +312,6 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         super.onStart()
         val account = GoogleSignIn.getLastSignedInAccount(requireContext())
         if (account != null) {
-            Log.d("oncrate", "check")
             updateUI(account)
         }
         mapView.onStart()
@@ -354,7 +354,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         grantResults: IntArray
     ) {
         if (locationSource.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
-            if (!locationSource.isActivated) { // 권한 거부됨
+            if (!locationSource.isActivated) {
                 naverMap.locationTrackingMode = LocationTrackingMode.None
             }
             return
@@ -374,7 +374,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         currentLocationButton.map = naverMap
     }
 
-    override fun onClick(overlay: Overlay): Boolean { //마커 클릭시 이벤트
+    override fun onClick(overlay: Overlay): Boolean {
         val selectedModel = viewPagerAdapter.currentList.firstOrNull { document ->
             document.id == overlay.tag
         }

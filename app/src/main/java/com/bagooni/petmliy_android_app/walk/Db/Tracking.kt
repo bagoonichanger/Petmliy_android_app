@@ -1,13 +1,13 @@
 package com.bagooni.petmliy_android_app.walk.Db
 
-import android.graphics.Bitmap
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.bagooni.petmliy_android_app.Constants.TRACKING_DATABASE_NAME
 import kotlinx.parcelize.Parcelize
 
 
-@Entity(tableName = "tracking_table")
+@Entity(tableName = TRACKING_DATABASE_NAME)
 @Parcelize
 data class Tracking(
     @PrimaryKey
@@ -21,7 +21,3 @@ data class Tracking(
     var timeInMillis: Long = 0L,
     var caloriesBurned: Int = 0
 ) : Parcelable
-// {
-//    @PrimaryKey(autoGenerate = true)
-//    var id: Int = 0
-//}
