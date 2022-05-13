@@ -1,14 +1,8 @@
 package com.bagooni.petmliy_android_app.home
 
-import android.content.ContentResolver
+
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
-import android.media.MediaScannerConnection
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,19 +11,18 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.NavHostFragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.bagooni.petmliy_android_app.MainActivity
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentHomeBinding
-import com.bagooni.petmliy_android_app.databinding.FragmentMapBinding
+import com.bagooni.petmliy_android_app.home.Weather.WeatherModel
+import com.bagooni.petmliy_android_app.home.Weather.WeatherViewModel
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import org.json.JSONObject
@@ -129,6 +122,8 @@ class HomeFragment : Fragment() {
         binding.bookmarkButton.setOnClickListener {
             findNavController().navigate(R.id.bookMarkFragment)
         }
+        initWeatherView()
+        observeData()
     }
 
     override fun onStart() {
@@ -176,5 +171,37 @@ class HomeFragment : Fragment() {
         binding.wind.text = StringBuilder().append(model.wind.speed).append(" m/s").toString()
         binding.cloud.text = StringBuilder().append(model.clouds.all).append(" %").toString()
         binding.humidity.text = StringBuilder().append(model.main.humidity).append(" %").toString()
+    }
+
+    private fun updateWeatherIcon(condition: Int): String {
+        if (condition in 200..299) {
+            return "thunderstorm"
+        } else if (condition in 300..499) {
+            return "lightrain"
+        } else if (condition in 500..599) {
+            return "rain"
+        } else if (condition in 600..700) {
+            return "snow"
+        } else if (condition in 701..771) {
+            return "fog"
+        } else if (condition in 772..799) {
+            return "overcast"
+        } else if (condition == 800) {
+            return "clear"
+        } else if (condition in 801..804) {
+            return "cloudy"
+        } else if (condition in 900..902) {
+            return "thunderstorm"
+        }
+        if (condition == 903) {
+            return "snow"
+        }
+        if (condition == 904) {
+            return "clear"
+        }
+        return if (condition in 905..1000) {
+            "thunderstorm"
+        } else "dunno"
+
     }
 }

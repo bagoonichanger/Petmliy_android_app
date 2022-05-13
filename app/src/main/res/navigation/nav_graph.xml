@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_postFragment_to_postUploadFragment"
             app:destination="@id/postUploadFragment" />
+        <action
+            android:id="@+id/action_postFragment_to_commentFragment"
+            app:destination="@id/commentFragment" />
     </keep_state_fragment>
     <keep_state_fragment
         android:id="@+id/walkFragment"
@@ -78,4 +81,13 @@
             android:id="@+id/action_postUploadFragment_to_postFragment"
             app:destination="@id/postFragment" />
     </keep_state_fragment>
+    <fragment
+        android:id="@+id/commentFragment"
+        android:name="com.bagooni.petmliy_android_app.post.Comment.CommentFragment"
+        android:label="fragment_comment"
+        tools:layout="@layout/fragment_comment" >
+        <action
+            android:id="@+id/action_commentFragment_to_postFragment"
+            app:destination="@id/postFragment" />
+    </fragment>
 </navigation>

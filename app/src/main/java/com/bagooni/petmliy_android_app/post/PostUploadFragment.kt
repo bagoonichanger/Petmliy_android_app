@@ -52,7 +52,7 @@ class PostUploadFragment : Fragment() {
     private var postImageUri : Uri? = null
     private var contentInput : String = ""
     private var personEmailInput : String = ""
-    private var userImgUri : Uri? = null
+    private var userImgUri : String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,7 +74,7 @@ class PostUploadFragment : Fragment() {
             val personEmail = acct.email
             val userImg = acct.photoUrl
             personEmailInput = personEmail.toString()
-            userImgUri = userImg
+            userImgUri = userImg.toString()
             Log.d("google",personEmailInput)
             Log.d("google",userImg.toString())
         }
@@ -116,12 +116,13 @@ class PostUploadFragment : Fragment() {
         //업로드버튼 클릭
         binding.uploadButton.setOnClickListener{
             val postContent = MultipartBody.Part.createFormData("postContent", contentInput)
+            val userUploadFile = MultipartBody.Part.createFormData("userImg",userImgUri)
 
             val bitmap = postImageUri?.let { it1 -> loadBitmapFromMediaStoreBy(it1) }
             val uploadFile = bitmapToRequestBody("postImg",bitmap)
 
-            val userbitmap = userImgUri?.let { it1 -> loadBitmapFromMediaStoreBy(it1) }
-            val userUploadFile = bitmapToRequestBody("userImg",userbitmap)
+//            val userbitmap = userImgUri?.let { it1 -> loadBitmapFromMediaStoreBy(it1) }
+//            val userUploadFile = bitmapToRequestBody("userImg",userbitmap)
 
             if (uploadFile != null) {
                 retrofitService.postUpload(personEmailInput,uploadFile,postContent,userUploadFile).enqueue(object : Callback<Post> {

@@ -2,14 +2,15 @@ package com.bagooni.petmliy_android_app.post
 
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 
 class testPost(
-    val Img: Byte
+    val Img: ByteArray
 )
 class Post(
-    val userImg: String?, val email: String, val postImg: String, val postContent: String
+    val postId: Long, val userImg: String, val email: String, val postImg: String, val postContent: String
 )
 
 data class PostContent(
@@ -40,7 +41,7 @@ interface RetrofitService {
     fun getPost(
     ): Call<ArrayList<Post>>
 
-    @GET("api/post/getImg")
+    @GET("api/post/getImg/42")
     fun getTestPost(
-    ): Call<ByteArray>
+    ): Call<ResponseBody>
 }

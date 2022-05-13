@@ -47,7 +47,7 @@
         app:layout_constraintTop_toBottomOf="@+id/postUserLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="@drawable/home_icon_button_background"/>
+        android:scaleType="centerCrop"/>
 
     <FrameLayout
         android:id="@+id/favoriteView"
@@ -102,7 +102,7 @@
         android:textSize="20dp"
         android:textColor="@color/black"
         tools:text = "안녕하세요~~~"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_marginStart="20dp"/>
 
 

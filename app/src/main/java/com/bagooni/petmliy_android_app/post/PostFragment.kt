@@ -3,7 +3,9 @@ package com.bagooni.petmliy_android_app.post
 import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +17,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.drawToBitmap
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -29,18 +32,22 @@ import com.bumptech.glide.RequestManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.ByteArrayOutputStream
+import java.nio.ByteBuffer
 
 class PostFragment : Fragment(){
     var client: OkHttpClient? =
         httpLoggingInterceptor()?.let { OkHttpClient.Builder().addInterceptor(it).build() }
     private var _binding: FragmentPostBinding?=null
     private val binding get() = _binding!!
+    var bitmap: Bitmap? = null
     lateinit var retrofitService: RetrofitService
 
     override fun onCreateView(
@@ -81,6 +88,18 @@ class PostFragment : Fragment(){
 
         retrofitService = retrofit.create(RetrofitService::class.java)
 
+//        retrofitService.getTestPost().enqueue(object: Callback<ResponseBody>{
+//            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+//                val body = response.body()?.byteStream()
+//                bitmap = BitmapFactory.decodeStream(body)
+//                binding.testImage.setImageBitmap(bitmap)
+//            }
+//
+//            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+//                Log.d("log",t.message.toString())
+//            }
+//        })
+
         retrofitService.getPost().enqueue(object : Callback<ArrayList<Post>>{
             override fun onResponse(
                 call: Call<ArrayList<Post>>,
@@ -113,7 +132,7 @@ class PostFragment : Fragment(){
     ): RecyclerView.Adapter<PostRecyclerViewAdapter.ViewHolder>(){
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-//            val userImg : ImageView
+            val userImg : ImageView
             val userName : TextView
             val postImg : ImageView
             val postContent : TextView
@@ -122,7 +141,7 @@ class PostFragment : Fragment(){
             val commentBtn : ImageButton
 
             init{
-//                userImg = itemView.findViewById(R.id.userImg)
+                userImg = itemView.findViewById(R.id.userImg)
                 userName = itemView.findViewById(R.id.userName)
                 postImg = itemView.findViewById(R.id.postImg)
                 postContent = itemView.findViewById(R.id.postContent)
@@ -148,16 +167,20 @@ class PostFragment : Fragment(){
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val post = postList.get(position)
 
-//            post.userImg?.let{
-//                glide.load(it).centerCrop().circleCrop().into(holder.petImg)
-//            }
-            post.postImg.let{
-                glide.load(it).centerCrop().into(holder.postImg)
+            post.userImg?.let{
+                glide.load(it).centerCrop().circleCrop().into(holder.userImg)
+            }
+            Log.d("log",post.postImg)
+
+            if (!post.postImg.isNullOrEmpty() ){
+                val byte = Base64.decode(post.postImg, Base64.DEFAULT)
+                val img:Bitmap = BitmapFactory.decodeByteArray(byte, 0, byte.size)
+                holder.postImg.setImageBitmap(img)
             }
             holder.userName.text = post.email.split("@")[0]
             holder.postContent.text = post.postContent
             holder.commentBtn.setOnClickListener {
-
+                postFragment.postToComment()
             }
         }
         override fun getItemCount(): Int {
@@ -165,7 +188,8 @@ class PostFragment : Fragment(){
         }
     }
     fun postToComment(){
-        findNavController().navigate(R.id.action_postFragment_to_postUploadFragment)
+        findNavController().navigate(R.id.action_postFragment_to_commentFragment)
+
     }
 
     private fun httpLoggingInterceptor(): HttpLoggingInterceptor? {
@@ -178,12 +202,13 @@ class PostFragment : Fragment(){
         return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
     }
 
-    private fun getPermissions(){
-        if(ContextCompat.checkSelfPermission(
+    private fun getPermissions() {
+        if (ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             )
-            != PackageManager.PERMISSION_GRANTED){
+            != PackageManager.PERMISSION_GRANTED
+        ) {
             ActivityCompat.requestPermissions(
                 requireActivity(),
                 arrayOf(
@@ -192,5 +217,4 @@ class PostFragment : Fragment(){
             )
         }
     }
-
 }

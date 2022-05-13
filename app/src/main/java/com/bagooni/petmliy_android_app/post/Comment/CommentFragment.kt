@@ -14,15 +14,18 @@ import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentCommentBinding
 import com.bagooni.petmliy_android_app.post.Retrofit.Comment
 import com.bagooni.petmliy_android_app.post.Retrofit.CommentRetrofitService
+import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.System.load
 
-class CommentFragment : Fragment(), OnItemClick {
+class CommentFragment : Fragment(){
     private var _binding: FragmentCommentBinding?=null
     private val binding get() = _binding!!
     private var personEmailInput : String = ""
+    private var userImgUri : String = ""
     lateinit var retrofitService: CommentRetrofitService
 
     override fun onCreateView(
@@ -40,7 +43,9 @@ class CommentFragment : Fragment(), OnItemClick {
         val acct = GoogleSignIn.getLastSignedInAccount(activity as MainActivity)
         if (acct != null) {
             val personEmail = acct.email
+            val usrImg = acct.photoUrl
             personEmailInput = personEmail.toString()
+            userImgUri = usrImg.toString()
             Log.d("google",personEmailInput)
         }
 
@@ -51,6 +56,9 @@ class CommentFragment : Fragment(), OnItemClick {
             .build()
         retrofitService = retrofit.create(CommentRetrofitService::class.java)
 
+//        userImgUri?.let {
+//            Glide.load(it).centerCrop().circleCrop().into(binding.userImg)
+//        }
     }
 
     class CommentRecyclerViewAdapter(
@@ -89,9 +97,5 @@ class CommentFragment : Fragment(), OnItemClick {
         override fun getItemCount(): Int {
             return commentList.size
         }
-    }
-
-    override fun onClick(value: String?) {
-        TODO("Not yet implemented")
     }
 }
