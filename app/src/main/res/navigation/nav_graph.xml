@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_postFragment_to_commentFragment"
             app:destination="@id/commentFragment" />
+        <argument
+            android:name="postIdString"
+            app:argType="long"/>
     </keep_state_fragment>
     <keep_state_fragment
         android:id="@+id/walkFragment"
@@ -89,5 +92,8 @@
         <action
             android:id="@+id/action_commentFragment_to_postFragment"
             app:destination="@id/postFragment" />
+        <argument
+            android:name="postId"
+            app:argType="long"/>
     </fragment>
 </navigation>

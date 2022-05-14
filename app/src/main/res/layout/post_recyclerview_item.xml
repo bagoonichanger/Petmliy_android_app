@@ -27,7 +27,7 @@
         android:src="@drawable/post_user_image_null"
         android:background="@drawable/mypage_image_background"/>
     <TextView
-        android:id="@+id/userName"
+        android:id="@+id/userEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@+id/userImg"

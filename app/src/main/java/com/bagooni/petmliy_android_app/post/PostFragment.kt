@@ -9,38 +9,29 @@ import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.VISIBLE
-import android.view.View.inflate
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.drawToBitmap
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bagooni.petmliy_android_app.MainActivity
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentPostBinding
-import com.bagooni.petmliy_android_app.post.Comment.CommentFragment
-import com.bagooni.petmliy_android_app.walk.WalkFragment
 import com.bagooni.petmliy_android_app.walk.WalkFragment.Companion.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION_AND_WRITE_EXTERNAL_STORAGE_PERMISSION
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
-import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
-import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.ByteArrayOutputStream
-import java.nio.ByteBuffer
 
 class PostFragment : Fragment(){
     var client: OkHttpClient? =
@@ -63,10 +54,8 @@ class PostFragment : Fragment(){
     fun postLike(post_id: Int){
         retrofitService.postLike(post_id).enqueue(object:Callback<Any>{
             override fun onResponse(call: Call<Any>, response: Response<Any>) {
-
             }
             override fun onFailure(call: Call<Any>, t: Throwable) {
-
             }
         })
     }
@@ -87,18 +76,6 @@ class PostFragment : Fragment(){
             .build()
 
         retrofitService = retrofit.create(RetrofitService::class.java)
-
-//        retrofitService.getTestPost().enqueue(object: Callback<ResponseBody>{
-//            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-//                val body = response.body()?.byteStream()
-//                bitmap = BitmapFactory.decodeStream(body)
-//                binding.testImage.setImageBitmap(bitmap)
-//            }
-//
-//            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-//                Log.d("log",t.message.toString())
-//            }
-//        })
 
         retrofitService.getPost().enqueue(object : Callback<ArrayList<Post>>{
             override fun onResponse(
@@ -142,7 +119,7 @@ class PostFragment : Fragment(){
 
             init{
                 userImg = itemView.findViewById(R.id.userImg)
-                userName = itemView.findViewById(R.id.userName)
+                userName = itemView.findViewById(R.id.userEmail)
                 postImg = itemView.findViewById(R.id.postImg)
                 postContent = itemView.findViewById(R.id.postContent)
                 favoriteBtn = itemView.findViewById(R.id.favoriteBtn) //좋아요 버튼
@@ -170,7 +147,6 @@ class PostFragment : Fragment(){
             post.userImg?.let{
                 glide.load(it).centerCrop().circleCrop().into(holder.userImg)
             }
-            Log.d("log",post.postImg)
 
             if (!post.postImg.isNullOrEmpty() ){
                 val byte = Base64.decode(post.postImg, Base64.DEFAULT)
@@ -179,17 +155,19 @@ class PostFragment : Fragment(){
             }
             holder.userName.text = post.email.split("@")[0]
             holder.postContent.text = post.postContent
+            Log.d("postId",post.postId.toString())
             holder.commentBtn.setOnClickListener {
-                postFragment.postToComment()
+                postFragment.postToComment(post.postId)
             }
         }
         override fun getItemCount(): Int {
             return postList.size
         }
     }
-    fun postToComment(){
-        findNavController().navigate(R.id.action_postFragment_to_commentFragment)
-
+    fun postToComment(postId : Long){
+        var action = PostFragmentDirections.actionPostFragmentToCommentFragment(postId)
+        Log.d("postToComment",postId.toString())
+        findNavController().navigate(action)
     }
 
     private fun httpLoggingInterceptor(): HttpLoggingInterceptor? {

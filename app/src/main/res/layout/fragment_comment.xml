@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".post.Comment.CommentFragment">
+    tools:context=".post.Comment.CommentFragment"
+    android:id="@+id/commentlayout">
 
     <ImageButton
         android:id="@+id/closeButton"
@@ -30,46 +31,11 @@
         android:textStyle="bold"
         android:textColor="@color/black"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/postUserLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/closeButton"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="10dp">
-        <ImageView
-            android:id="@+id/postUserImg"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="10dp"/>
-        <TextView
-            android:id="@+id/postUserName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="petmily"
-            android:textSize="20dp"
-            app:layout_constraintStart_toEndOf="@+id/postUserImg"
-            app:layout_constraintTop_toTopOf="@id/postUserImg"
-            android:layout_marginTop="15dp"
-            android:layout_marginStart="10dp"/>
-
-        <TextView
-            android:id="@+id/postContent"
-            android:layout_width="260dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@+id/postUserName"
-            app:layout_constraintTop_toTopOf="@id/postUserName"
-            android:layout_marginStart="10dp"
-            android:textSize="20dp"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/commentList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/postUserLayout"
+        app:layout_constraintTop_toBottomOf="@+id/closeButton"
         android:layout_marginTop="10dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 

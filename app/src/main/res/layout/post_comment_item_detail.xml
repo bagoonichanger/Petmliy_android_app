@@ -23,7 +23,7 @@
         android:layout_marginBottom="5dp"/>
 
     <TextView
-        android:id="@+id/petName"
+        android:id="@+id/userEmail"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
@@ -39,8 +39,8 @@
         android:layout_height="wrap_content"
         android:textSize="15dp"
         tools:text="안녕하세요~~"
-        app:layout_constraintStart_toEndOf="@+id/petName"
-        app:layout_constraintTop_toTopOf="@+id/petName"
+        app:layout_constraintStart_toEndOf="@+id/userEmail"
+        app:layout_constraintTop_toTopOf="@+id/userEmail"
         android:layout_marginStart="10dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

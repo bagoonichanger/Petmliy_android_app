@@ -56,6 +56,7 @@
         <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/activity_weather.xml" value="0.1716485507246377" />
         <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/activity_write.xml" value="0.1716485507246377" />
         <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_album.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_analysis.xml" value="0.1716485507246377" />
         <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_blank.xml" value="0.1716485507246377" />
         <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_book_mark.xml" value="0.1716485507246377" />
         <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_comment.xml" value="0.16458333333333333" />
@@ -161,17 +162,13 @@
         <entry key="app/src/main/res/layout/fragment_analysis.xml" value="0.29628046173578454" />
         <entry key="app/src/main/res/layout/fragment_book_mark.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_detail_tracking.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.337037037037037" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_likeplace.xml" value="0.27105600684053016" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.144797325532804" />
-        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.2904191616766467" />
-        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_map.xml" value="0.2825994014536127" />
         <entry key="app/src/main/res/layout/fragment_post.xml" value="0.2825994014536127" />
         <entry key="app/src/main/res/layout/fragment_post_upload.xml" value="0.28388200085506626" />
         <entry key="app/src/main/res/layout/fragment_tracking.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_walk.xml" value="0.26869806094182824" />
         <entry key="app/src/main/res/layout/fragment_walk.xml" value="0.2825994014536127" />
         <entry key="app/src/main/res/layout/layout_viewpager.xml" value="0.15106560802340158" />
         <entry key="app/src/main/res/layout/map_bottom_sheet.xml" value="0.25" />
@@ -179,9 +176,8 @@
         <entry key="app/src/main/res/layout/map_viewpager_detail.xml" value="0.375" />
         <entry key="app/src/main/res/layout/new_map_recycleview_detail.xml" value="0.27105600684053016" />
         <entry key="app/src/main/res/layout/null_text.xml" value="0.29628046173578454" />
-        <entry key="app/src/main/res/layout/post_comment_item_detail.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/post_recyclerview_item.xml" value="0.27105600684053016" />
         <entry key="app/src/main/res/layout/post_comment_item_detail.xml" value="0.17089755213055305" />
+        <entry key="app/src/main/res/layout/post_recyclerview_item.xml" value="0.27105600684053016" />
         <entry key="app/src/main/res/layout/walk_detailActivity.xml" value="0.2466866182129115" />
         <entry key="app/src/main/res/layout/walk_recycleview_detail.xml" value="0.2466866182129115" />
         <entry key="app/src/main/res/menu/bottom_menu_item.xml" value="0.2697734074390765" />

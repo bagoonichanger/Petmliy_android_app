@@ -6,17 +6,9 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 
-class testPost(
-    val Img: ByteArray
-)
 class Post(
     val postId: Long, val userImg: String, val email: String, val postImg: String, val postContent: String
 )
-
-data class PostContent(
-    val postImg: String, val postContent: String
-)
-
 
 interface RetrofitService {
 
@@ -41,7 +33,4 @@ interface RetrofitService {
     fun getPost(
     ): Call<ArrayList<Post>>
 
-    @GET("api/post/getImg/42")
-    fun getTestPost(
-    ): Call<ResponseBody>
 }
