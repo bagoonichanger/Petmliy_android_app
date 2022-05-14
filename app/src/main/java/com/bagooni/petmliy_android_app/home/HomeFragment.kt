@@ -163,15 +163,11 @@ class HomeFragment : Fragment() {
         val temp = model.main.temp!!.toDouble() - 273.15
         binding.currentTemp.text = StringBuilder().append(String.format("%.2f", temp)).append(" 'C").toString()
         binding.currentMain.text = model.weather[0].main
-        Log.d("weather",model.weather[0].main.toString())
-        Log.d("weather",model.weather[0].icon.toString())
-        Log.d("weather",model.weather[0].description.toString())
         binding.wind.text = StringBuilder().append(model.wind.speed).append(" m/s").toString()
         binding.cloud.text = StringBuilder().append(model.clouds.all).append(" %").toString()
         binding.humidity.text = StringBuilder().append(model.main.humidity).append(" %").toString()
         val description = model.weather[0].description.toString().replace(" ","")
         val resourceID = resources.getIdentifier("weather_ic_$description", "drawable",context?.packageName)
-        Log.d("resourceID",resourceID.toString())
         binding.weatherImg.setImageResource(resourceID)
     }
 
