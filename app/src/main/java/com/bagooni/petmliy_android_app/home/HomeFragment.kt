@@ -158,6 +158,7 @@ class HomeFragment : Fragment() {
             }
         )
     }
+
     private fun setWeatherData(model: WeatherModel){
         val temp = model.main.temp!!.toDouble() - 273.15
         binding.currentTemp.text = StringBuilder().append(String.format("%.2f", temp)).append(" 'C").toString()
