@@ -70,6 +70,7 @@ class HomeFragment : Fragment() {
             binding.logoutButton.visibility = View.VISIBLE
             binding.logoutButton.isEnabled = true
             binding.googleIcon.visibility = View.VISIBLE
+            binding.logoutText.visibility = View.VISIBLE
         }
     }
 
@@ -163,8 +164,8 @@ class HomeFragment : Fragment() {
         val temp = model.main.temp!!.toDouble() - 273.15
         binding.currentTemp.text = StringBuilder().append(String.format("%.2f", temp)).append(" 'C").toString()
         binding.currentMain.text = model.weather[0].main
-        binding.wind.text = StringBuilder().append(model.wind.speed).append(" m/s").toString()
-        binding.cloud.text = StringBuilder().append(model.clouds.all).append(" %").toString()
+        binding.windSpeed.text = StringBuilder().append(model.wind.speed).append(" m/s").toString()
+        binding.cloudCover.text = StringBuilder().append(model.clouds.all).append(" %").toString()
         binding.humidity.text = StringBuilder().append(model.main.humidity).append(" %").toString()
         val description = model.weather[0].description.toString().replace(" ","")
         val resourceID = resources.getIdentifier("weather_ic_$description", "drawable",context?.packageName)
