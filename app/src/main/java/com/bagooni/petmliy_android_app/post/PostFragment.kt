@@ -1,24 +1,32 @@
 package com.bagooni.petmliy_android_app.post
 
-import android.content.Context
-import android.content.Intent
+import android.Manifest
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.view.ActionProvider
+import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bagooni.petmliy_android_app.MainActivity
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentPostBinding
+import com.bagooni.petmliy_android_app.walk.WalkFragment.Companion.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION_AND_WRITE_EXTERNAL_STORAGE_PERMISSION
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
+import com.google.gson.GsonBuilder
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,8 +34,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class PostFragment : Fragment(){
+    var client: OkHttpClient? =
+        httpLoggingInterceptor()?.let { OkHttpClient.Builder().addInterceptor(it).build() }
     private var _binding: FragmentPostBinding?=null
     private val binding get() = _binding!!
+    var bitmap: Bitmap? = null
     lateinit var retrofitService: RetrofitService
 
     override fun onCreateView(
@@ -36,7 +47,6 @@ class PostFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPostBinding.inflate(inflater,container,false)
-        binding.uploadButton.setOnClickListener { ButtonListener() }
         return binding.root
     }
 
@@ -44,57 +54,54 @@ class PostFragment : Fragment(){
     fun postLike(post_id: Int){
         retrofitService.postLike(post_id).enqueue(object:Callback<Any>{
             override fun onResponse(call: Call<Any>, response: Response<Any>) {
-
             }
             override fun onFailure(call: Call<Any>, t: Throwable) {
-
             }
         })
     }
 
-    inner class ButtonListener: View.OnClickListener{
-        override fun onClick(p0: View?){
-            when (p0?.id) {
-                R.id.uploadButton -> {
-                    findNavController().navigate(R.id.action_postFragment_to_postUploadFragment)
-                }
-            }
-        }
-    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val feedListView = view.findViewById<RecyclerView>(R.id.feedList)
+
+        binding.uploadButton.setOnClickListener {
+            getPermissions()
+            findNavController().navigate(R.id.action_postFragment_to_postUploadFragment)
+        }
+        var gson = GsonBuilder().setLenient().create()
+
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://mellowcode.org/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080/")
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
 
         retrofitService = retrofit.create(RetrofitService::class.java)
 
-        retrofitService.getInstaPosts().enqueue(object : Callback<ArrayList<InstaPost>>{
+        retrofitService.getPost().enqueue(object : Callback<ArrayList<Post>>{
             override fun onResponse(
-                call: Call<ArrayList<InstaPost>>,
-                response: Response<ArrayList<InstaPost>>
+                call: Call<ArrayList<Post>>,
+                response: Response<ArrayList<Post>>
             ) {
                 val postList = response.body()
                 val postRecyclerView = view.findViewById<RecyclerView>(R.id.feedList)
-                postRecyclerView.adapter = PostRecyclerViewAdapter(
-                    postList!!,
-                    LayoutInflater.from(activity),
-                    Glide.with(activity!!),
-                    this@PostFragment,
-                    activity as (MainActivity)
-                )
+                postRecyclerView.adapter = postList?.let {
+                    PostRecyclerViewAdapter(
+                        it,
+                        LayoutInflater.from(activity),
+                        Glide.with(activity!!),
+                        this@PostFragment,
+                        activity as (MainActivity)
+                    )
+                }
             }
-
-            override fun onFailure(call: Call<ArrayList<InstaPost>>, t: Throwable) {
+            override fun onFailure(call: Call<ArrayList<Post>>, t: Throwable) {
+                Log.d("log",t.message.toString())
             }
         })
     }
 
     class PostRecyclerViewAdapter(
-        val postList : ArrayList<InstaPost>,
+        val postList: ArrayList<Post>,
         val inflater: LayoutInflater,
         val glide: RequestManager,
         val postFragment: PostFragment,
@@ -102,31 +109,32 @@ class PostFragment : Fragment(){
     ): RecyclerView.Adapter<PostRecyclerViewAdapter.ViewHolder>(){
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-            val petImg : ImageView
-            val petName : TextView
-            val postUserName : TextView
+            val userImg : ImageView
+            val userName : TextView
             val postImg : ImageView
             val postContent : TextView
             val favoriteBtn : ImageButton
             val favoriteColorBtn : ImageButton
+            val commentBtn : ImageButton
 
             init{
-                petImg = itemView.findViewById(R.id.petImg)
-                petName = itemView.findViewById(R.id.userName)
-                postUserName = itemView.findViewById(R.id.postUserName)
+                userImg = itemView.findViewById(R.id.userImg)
+                userName = itemView.findViewById(R.id.userEmail)
                 postImg = itemView.findViewById(R.id.postImg)
                 postContent = itemView.findViewById(R.id.postContent)
                 favoriteBtn = itemView.findViewById(R.id.favoriteBtn) //좋아요 버튼
-                favoriteColorBtn = itemView.findViewById(R.id.favoriteColorBtn)
+                favoriteColorBtn = itemView.findViewById(R.id.favoriteColorBtn) //좋아요 색 버튼
+                commentBtn = itemView.findViewById(R.id.commentBtn)
+                Log.d("log",userName.text.toString())
+                Log.d("log",postContent.text.toString())
 
-                favoriteBtn.setOnClickListener {
-                    postFragment.postLike(postList.get(adapterPosition).id)
-                    activity.runOnUiThread {
-                        favoriteColorBtn.visibility = VISIBLE
-                    }
-                }
+//                favoriteBtn.setOnClickListener {
+//                    postFragment.postLike(postList.get(adapterPosition).postId)
+//                    activity.runOnUiThread {
+//                        favoriteColorBtn.visibility = VISIBLE
+//                    }
+//                }
             }
-
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -136,18 +144,55 @@ class PostFragment : Fragment(){
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val post = postList.get(position)
 
-            post.owner_profile.image?.let{
-                glide.load(it).centerCrop().circleCrop().into(holder.petImg)
+            post.userImg?.let{
+                glide.load(it).centerCrop().circleCrop().into(holder.userImg)
             }
-            post.image.let{
-                glide.load(it).centerCrop().into(holder.postImg)
-            }
-            holder.postUserName.text = post.owner_profile.username
-            holder.postContent.text = post.content
-        }
 
+            if (!post.postImg.isNullOrEmpty() ){
+                val byte = Base64.decode(post.postImg, Base64.DEFAULT)
+                val img:Bitmap = BitmapFactory.decodeByteArray(byte, 0, byte.size)
+                holder.postImg.setImageBitmap(img)
+            }
+            holder.userName.text = post.email.split("@")[0]
+            holder.postContent.text = post.postContent
+            Log.d("postId",post.postId.toString())
+            holder.commentBtn.setOnClickListener {
+                postFragment.postToComment(post.postId)
+            }
+        }
         override fun getItemCount(): Int {
             return postList.size
+        }
+    }
+    fun postToComment(postId : Long){
+        var action = PostFragmentDirections.actionPostFragmentToCommentFragment(postId)
+        Log.d("postToComment",postId.toString())
+        findNavController().navigate(action)
+    }
+
+    private fun httpLoggingInterceptor(): HttpLoggingInterceptor? {
+        val interceptor = HttpLoggingInterceptor { message ->
+            Log.e(
+                "MyGitHubData :",
+                message + ""
+            )
+        }
+        return interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+    }
+
+    private fun getPermissions() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ), PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION_AND_WRITE_EXTERNAL_STORAGE_PERMISSION
+            )
         }
     }
 }
