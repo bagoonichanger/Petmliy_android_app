@@ -162,14 +162,13 @@ class HomeFragment : Fragment() {
 
     private fun setWeatherData(model: WeatherModel){
         val temp = model.main.temp!!.toDouble() - 273.15
+        val weatherImgUrl = "http://openweathermap.org/img/wn/10d@2x.png"
         binding.currentTemp.text = StringBuilder().append(String.format("%.2f", temp)).append(" 'C").toString()
         binding.currentMain.text = model.weather[0].main
         binding.windSpeed.text = StringBuilder().append(model.wind.speed).append(" m/s").toString()
         binding.cloudCover.text = StringBuilder().append(model.clouds.all).append(" %").toString()
         binding.humidity.text = StringBuilder().append(model.main.humidity).append(" %").toString()
-        val description = model.weather[0].description.toString().replace(" ","")
-        val resourceID = resources.getIdentifier("weather_ic_$description", "drawable",context?.packageName)
-        binding.weatherImg.setImageResource(resourceID)
+        Glide.with(this).load(weatherImgUrl).into(binding.weatherImg)
     }
 
 }
