@@ -69,6 +69,14 @@ class PostUploadFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        checkSign()
+
+        //앨범 열기
+        openGallery()
+        postUpload()
+    }
+
+    private fun checkSign(){
         val acct = GoogleSignIn.getLastSignedInAccount(activity as MainActivity)
         if (acct != null) {
             val personEmail = acct.email
@@ -78,10 +86,6 @@ class PostUploadFragment : Fragment() {
             Log.d("google",personEmailInput)
             Log.d("google",userImg.toString())
         }
-
-        //앨범 열기
-        openGallery()
-        postUpload()
     }
 
     private fun openGallery(){
@@ -89,7 +93,10 @@ class PostUploadFragment : Fragment() {
         val glide = Glide.with(activity as MainActivity)
         val imagePickerLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-                postImageUri = it.data!!.data
+                postImageUri = it.data?.data
+                if(it.data == null){
+                    findNavController().navigate(R.id.action_postUploadFragment_to_postFragment)
+                }
                 Log.d("imageUri",postImageUri.toString())
                 glide.load(postImageUri).centerCrop().into(postImg)
             }
@@ -120,9 +127,6 @@ class PostUploadFragment : Fragment() {
 
             val bitmap = postImageUri?.let { it1 -> loadBitmapFromMediaStoreBy(it1) }
             val uploadFile = bitmapToRequestBody("postImg",bitmap)
-
-//            val userbitmap = userImgUri?.let { it1 -> loadBitmapFromMediaStoreBy(it1) }
-//            val userUploadFile = bitmapToRequestBody("userImg",userbitmap)
 
             if (uploadFile != null) {
                 retrofitService.postUpload(personEmailInput,uploadFile,postContent,userUploadFile).enqueue(object : Callback<Post> {
