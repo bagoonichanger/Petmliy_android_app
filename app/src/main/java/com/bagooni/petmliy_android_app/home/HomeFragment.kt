@@ -162,7 +162,7 @@ class HomeFragment : Fragment() {
 
     private fun setWeatherData(model: WeatherModel){
         val temp = model.main.temp!!.toDouble() - 273.15
-        val weatherImgUrl = "http://openweathermap.org/img/wn/10d@2x.png"
+        val weatherImgUrl = "http://openweathermap.org/img/w/"+model.weather[0].icon+".png"
         binding.currentTemp.text = StringBuilder().append(String.format("%.2f", temp)).append(" 'C").toString()
         binding.currentMain.text = model.weather[0].main
         binding.windSpeed.text = StringBuilder().append(model.wind.speed).append(" m/s").toString()
