@@ -67,13 +67,13 @@ import java.io.File
 import java.util.*
 import kotlin.math.round
 
-
 class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     var client: OkHttpClient? =
         httpLoggingInterceptor()?.let { OkHttpClient.Builder().addInterceptor(it).build() }
-
+//
     private var googleEmail: String? = null
     private var googleImage: Uri? = null
+
     private var mGoogleSignInClient: GoogleSignInClient? = null
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
@@ -103,7 +103,6 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         activityResultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode != AppCompatActivity.RESULT_OK) {
-                    Log.d("Google", "1")
                     return@registerForActivityResult
                 }
                 val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)

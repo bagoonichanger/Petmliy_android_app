@@ -70,8 +70,8 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginStart="10dp"
-            app:layout_constraintBottom_toBottomOf="@id/backgroundView"
             android:background="@drawable/home_icon_button_background"
+            app:layout_constraintBottom_toBottomOf="@id/backgroundView"
             app:layout_constraintStart_toStartOf="@id/backgroundView"
             app:layout_constraintTop_toTopOf="@id/backgroundView" />
 
@@ -143,6 +143,7 @@
             app:layout_constraintTop_toTopOf="@id/logoutButton" />
 
         <TextView
+            android:id="@+id/logoutText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="33dp"
@@ -150,6 +151,7 @@
             android:text="log out"
             android:textColor="@color/Dark_Gray"
             android:textStyle="bold"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@id/logoutButton"
             app:layout_constraintEnd_toEndOf="@id/logoutButton"
             app:layout_constraintTop_toTopOf="@id/logoutButton" />
@@ -157,11 +159,10 @@
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/analysisButton"
             android:layout_width="170dp"
-            android:layout_height="240dp"
+            android:layout_height="200dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/home_album_button_background"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/backgroundView"
             app:layout_constraintTop_toBottomOf="@id/backgroundView" />
 
@@ -206,20 +207,20 @@
             android:id="@+id/personEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:elevation="10dp"
             android:layout_marginBottom="20dp"
+            android:elevation="10dp"
             android:text="저장한 장소를 확인해 보세요!"
             android:textColor="@color/white"
             android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/placeButton"
             app:layout_constraintEnd_toEndOf="@id/placeButton"
-            app:layout_constraintStart_toStartOf="@id/placeButton"/>
+            app:layout_constraintStart_toStartOf="@id/placeButton" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/placeButton"
             android:layout_width="170dp"
-            android:layout_height="240dp"
+            android:layout_height="200dp"
             android:background="@drawable/home_book_button_background"
             android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="@id/analysisButton"
@@ -250,163 +251,7 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/analysisButton"
             app:layout_constraintTop_toTopOf="@id/analysisButton" />
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/weather"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/placeButton">
 
-        <ImageView
-            android:id="@+id/weatherImg"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/currentTemp"
-            app:layout_constraintTop_toTopOf="parent"/>
-        <TextView
-            android:id="@+id/currentTemp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/weatherImg"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/weatherImg"
-            android:layout_marginTop="20dp"
-            android:text="00.00 'C"
-            android:textSize="40sp"
-            android:textColor="@color/black"/>
-
-        <TextView
-            android:id="@+id/currentMain"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/currentTemp"
-            app:layout_constraintStart_toStartOf="@id/currentTemp"
-            android:text="Cloudy"
-            android:textSize="30sp"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <View
-        android:id="@+id/viewDivider"
-        android:layout_width="350dp"
-        android:layout_height="1dp"
-        app:layout_constraintTop_toBottomOf="@id/weather"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="15dp"
-        android:background="@color/Extra_Extra_Light_Gray"/>
-
-    <LinearLayout
-        android:id="@+id/detail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="30dp"
-        android:layout_marginHorizontal="20dp"
-        app:layout_constraintTop_toBottomOf="@id/viewDivider"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="150dp"
-            android:layout_weight="33"
-            android:orientation="vertical"
-            android:weightSum="100">
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="45"
-                android:paddingTop="5dp"
-                android:src="@drawable/weather_wind_ic_foreground"
-                android:padding="20dp"
-                android:scaleType="centerCrop"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="15"
-                android:gravity="center"
-                android:text="바람"
-                android:textColor="@color/black"
-                android:textSize="15sp"/>
-            <TextView
-                android:id="@+id/wind"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="40"
-                android:gravity="center_horizontal"
-                android:text="0.0 m/s"
-                android:textColor="@color/black"
-                android:textSize="20sp"/>
-        </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="150dp"
-                android:layout_weight="33"
-                android:orientation="vertical"
-                android:weightSum="100">
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="45"
-                    android:paddingTop="5dp"
-                    android:src="@drawable/weather_cloud_ic_foreground"
-                    android:padding="10dp"
-                    android:scaleType="centerCrop"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="15"
-                    android:gravity="center"
-                    android:text="구름"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"/>
-                <TextView
-                    android:id="@+id/cloud"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="40"
-                    android:gravity="center_horizontal"
-                    android:text="00%"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="150dp"
-            android:layout_weight="33"
-            android:orientation="vertical"
-            android:weightSum="100">
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="45"
-                android:paddingTop="5dp"
-                android:src="@drawable/weather_drop_ic_foreground"
-                android:padding="20dp"
-                android:scaleType="centerCrop"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="15"
-                android:gravity="center"
-                android:text="습도"
-                android:textColor="@color/black"
-                android:textSize="15sp"/>
-            <TextView
-                android:id="@+id/humidity"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="40"
-                android:gravity="center_horizontal"
-                android:text="00%"
-                android:textColor="@color/black"
-                android:textSize="20sp"/>
-        </LinearLayout>
-
-    </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -423,15 +268,198 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:elevation="10dp"
             android:layout_marginBottom="20dp"
+            android:elevation="10dp"
             android:text="현재 감정을 확인해 보세요!"
             android:textColor="@color/white"
             android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/analysisButton"
             app:layout_constraintEnd_toEndOf="@id/analysisButton"
-            app:layout_constraintStart_toStartOf="@id/analysisButton"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintStart_toStartOf="@id/analysisButton" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/weatherBanner"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/home_background_weather_title_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/analysisButton">
+
+            <ImageView
+                android:id="@+id/weatherImg"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="6dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/weatherBanner"
+                app:layout_constraintStart_toStartOf="@id/weatherBanner"
+                app:layout_constraintTop_toTopOf="@id/weatherBanner" />
+
+            <TextView
+                android:id="@+id/currentTemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="00.00 'C"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/currentMain"
+                app:layout_constraintTop_toTopOf="@id/currentMain" />
+
+            <TextView
+                android:id="@+id/currentMain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Status"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/weatherImg"
+                app:layout_constraintStart_toEndOf="@id/weatherImg"
+                app:layout_constraintTop_toTopOf="@id/weatherImg" />
+
+            <TextView
+                android:id="@+id/currentPosition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="5dp"
+                android:text="Seoul, Gangnam-gu"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/weatherBanner2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/home_background_weather_view"
+            android:padding="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/weatherBanner">
+
+            <LinearLayout
+                android:id="@+id/weatherImg2"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/windImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_storm" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_sun_partially_covered_by_a_cloud" />
+
+                <ImageView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_humidity" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/weatherTitle"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/weatherImg2">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Wind Speed"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Cloud Cover"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Humidity"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/weatherTitle">
+
+                <TextView
+                    android:id="@+id/windSpeed"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/cloudCover"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="2"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/humidity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="3"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
