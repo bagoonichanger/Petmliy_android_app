@@ -11,9 +11,9 @@ class Comment(
     val postId: Long, val email: String, val commentContent: String, val userImg: String?
 )
 
-data class postComment(
-    val userImg: String?, val postId: Long, val commentContent: String
-)
+//data class postComment(
+//    val userImg: String?, val postId: Long, val commentContent: String
+//)
 
 interface CommentRetrofitService {
     @GET("api/comment/findByPostId/{postId}")
@@ -24,6 +24,8 @@ interface CommentRetrofitService {
     @POST("api/comment/save")
     fun postComment(
         @Header("email") email: String,
-        @Body data: postComment
-    ): Call<postComment>
+        @Query("userImg") userImg: String?,
+        @Query("postId") postId: Long,
+        @Query("commentContent") commentContent: String,
+    ): Call<Comment>
 }
