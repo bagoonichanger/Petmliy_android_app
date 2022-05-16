@@ -19,6 +19,7 @@
         <entry key="app/src/main/res/drawable/home_album_button_background.xml" value="0.19" />
         <entry key="app/src/main/res/drawable/home_background_view.xml" value="0.1825" />
         <entry key="app/src/main/res/drawable/home_background_weatherTitle_view.xml" value="0.2255" />
+        <entry key="app/src/main/res/drawable/home_background_weather_title_view.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/home_background_weather_view.xml" value="0.127" />
         <entry key="app/src/main/res/drawable/home_background_weather_view1.xml" value="0.2255" />
         <entry key="app/src/main/res/drawable/home_book_button_background.xml" value="0.189" />
@@ -76,6 +77,8 @@
         <entry key="app/src/main/res/drawable/save_rectangle_button_background.xml" value="0.2255" />
         <entry key="app/src/main/res/drawable/selector_menu_color.xml" value="0.187" />
         <entry key="app/src/main/res/drawable/spinner_background.xml" value="0.1295" />
+        <entry key="app/src/main/res/drawable/splash_background.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/splash_image.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/style.xml" value="0.1385" />
         <entry key="app/src/main/res/drawable/toolbar_background.xml" value="0.119" />
         <entry key="app/src/main/res/drawable/top_radius_white_background.xml" value="0.1765" />
@@ -99,6 +102,7 @@
         <entry key="app/src/main/res/layout/activity_my_page.xml" value="0.27105600684053016" />
         <entry key="app/src/main/res/layout/activity_post_upload.xml" value="0.27105600684053016" />
         <entry key="app/src/main/res/layout/activity_region.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_splash.xml" value="0.1573321932449765" />
         <entry key="app/src/main/res/layout/activity_tracking.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_walk_detail.xml" value="0.25" />
         <entry key="app/src/main/res/layout/blank_fragment.xml" value="0.271483539974348" />
