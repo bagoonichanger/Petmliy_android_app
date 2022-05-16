@@ -27,6 +27,7 @@ class PostLikeFragment : Fragment() {
 
     lateinit var retrofitService: RetrofitService
 
+    //
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
