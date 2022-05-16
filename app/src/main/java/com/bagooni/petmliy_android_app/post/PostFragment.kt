@@ -149,7 +149,7 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val post = postList.get(position)
 
-            post.userImg?.let{
+            post.userImg.let{
                 glide.load(it).centerCrop().circleCrop().into(holder.userImg)
             }
 
