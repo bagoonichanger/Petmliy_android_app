@@ -11,8 +11,7 @@ class Post(
 )
 
 interface RetrofitService {
-
-    //petmily 포스트 업로드
+    //포스트 업로드
     @Multipart
     @POST("api/post/save")
     fun postUpload(
@@ -22,13 +21,7 @@ interface RetrofitService {
         @Part postContent: MultipartBody.Part
     ): Call<Post>
 
-    //ex.좋아요
-    @POST("instagram/post/like/{post_id}/")
-    fun postLike(
-        @Path("post_id") post_id: Int
-    ): Call<Any>
-
-    //petmily 포스트 가져오기
+    //포스트 가져오기
     @GET("api/post/findAll")
     fun getPost(
     ): Call<ArrayList<Post>>

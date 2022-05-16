@@ -8,13 +8,12 @@ import retrofit2.http.*
 
 
 class Comment(
-    val postId: Long, val email: String, val commentContent: String
+    val postId: Long, val email: String, val commentContent: String, val userImg: String?
 )
 
-class postComment(
-    @SerializedName("postId") val postId: Long,
-    @SerializedName("commentContent") val commentContent: String
-)
+//data class postComment(
+//    val userImg: String?, val postId: Long, val commentContent: String
+//)
 
 interface CommentRetrofitService {
     @GET("api/comment/findByPostId/{postId}")
@@ -25,6 +24,8 @@ interface CommentRetrofitService {
     @POST("api/comment/save")
     fun postComment(
         @Header("email") email: String,
-        @Body postComment: postComment
-    ): Call<ArrayList<postComment>>
+        @Query("userImg") userImg: String?,
+        @Query("postId") postId: Long,
+        @Query("commentContent") commentContent: String,
+    ): Call<Comment>
 }
