@@ -8,7 +8,7 @@
     android:background="@drawable/bookmark_listadapter_background">
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/recyclerView_shareButton"
+        android:id="@+id/recyclerViewDeleteButton"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginTop="10dp"

@@ -117,6 +117,7 @@
         <entry key="app/src/main/res/layout/fragment_tracking.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_walk.xml" value="0.26869806094182824" />
         <entry key="app/src/main/res/layout/layout_viewpager.xml" value="0.15106560802340158" />
+        <entry key="app/src/main/res/layout/likeplace_recycleview_detail.xml" value="0.25" />
         <entry key="app/src/main/res/layout/map_bottom_sheet.xml" value="0.36544494628906254" />
         <entry key="app/src/main/res/layout/map_recycleview_detail.xml" value="0.335" />
         <entry key="app/src/main/res/layout/map_viewpager_detail.xml" value="0.375" />
