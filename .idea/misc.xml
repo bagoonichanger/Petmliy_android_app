@@ -3,9 +3,86 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="../../../../layout/custom_preview.xml" value="0.35625" />
-        <entry key="../../.gradle/caches/transforms-3/344c6c0b2579439321baaa83e7e7b620/transformed/core-1.7.0/res/menu/example_menu.xml" value="0.29628046173578454" />
-        <entry key="app/src/main/res/drawable-v24/free-icon-font-star-3916582_24.xml" value="0.265" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/bottom_icon_color.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/bottom_indicator.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/button_ripple_custom.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/delete_rectangle_button_background.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/home_icon_button_background.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/home_icon_button_color_background.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/ic_baseline_arrow_back_ios_new_24.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/ic_baseline_bookmark_border_24.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/ic_baseline_check_24.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/ic_baseline_filter_drama.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/ic_baseline_filter_drama_24.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/ic_baseline_person_outline.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/ic_baseline_person_outline_24.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/ic_free_icon_camera.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/ic_free_icon_font_plus_.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/ic_free_icon_home.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/ic_free_icon_marker.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/ic_free_icon_share_12.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/ic_free_icon_share_24.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/ic_premium_icon_paw.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/map_listadapter_background.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/map_search_bar_background.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/map_search_button_background.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/mypage_image_background.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/post_comment_icon_24.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/post_favorite_border_ic.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/post_favorite_color_24.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/post_favorite_white_24.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/post_send_button_24.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/post_user_image_null.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/walk_background_gradient.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/walk_button_background.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/walk_ic_free_icon_font_camera.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/walk_ic_free_icon_font_pause.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/walk_ic_free_icon_font_stop.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/walk_icon_content_plus.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/weather_cloud_ic_background.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/weather_drop_ic_background.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/drawable/weather_image_icon_background.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/activity_album.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/activity_book_mark.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/activity_comment.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/activity_industry.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/activity_my_page.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/activity_post_upload.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/activity_region.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/activity_tracking.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/activity_weather.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/activity_write.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_album.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_analysis.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_blank.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_book_mark.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_comment.xml" value="0.16458333333333333" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_home.xml" value="0.14666666666666667" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_map.xml" value="0.14666666666666667" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_my_page.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_mypage.xml" value="0.17844202898550723" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_post.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_post_upload.xml" value="0.16354166666666667" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_tracking.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/fragment_walk.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/map_bottom_sheet.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/map_recycleview_detail.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/map_viewpager_detail.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/new_map_recycleview_detail.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/null_text.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/post_comment_item_detail.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/post_comment_recyclerview.xml" value="0.1716485507246377" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/layout/post_recyclerview_item.xml" value="0.13333333333333333" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/menu/bottom_menu_item.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/mipmap-anydpi-v26/main_round.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/mipmap-anydpi-v26/weather_cloud_ic.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/mipmap-anydpi-v26/weather_drop_ic.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/mipmap-anydpi-v26/weather_wind_ic.xml" value="0.1" />
+        <entry key="..\:/Users/eerini/AndroidstudioProject/Petmliy_android_app/app/src/main/res/mipmap-anydpi-v26/weather_wind_ic_round.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-v24/free-icon-paw-5527846_24.xml" value="0.1945" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1945" />
         <entry key="app/src/main/res/drawable/bg_white_ripple.xml" value="0.234" />
@@ -16,11 +93,6 @@
         <entry key="app/src/main/res/drawable/button_ripple_custom.xml" value="0.149" />
         <entry key="app/src/main/res/drawable/delete_rectangle_button_background.xml" value="0.189" />
         <entry key="app/src/main/res/drawable/free-icon-font-share-3917574_24.xml" value="0.3475" />
-        <entry key="app/src/main/res/drawable/home_album_button_background.xml" value="0.19" />
-        <entry key="app/src/main/res/drawable/home_background_view.xml" value="0.1825" />
-        <entry key="app/src/main/res/drawable/home_background_weatherTitle_view.xml" value="0.2255" />
-        <entry key="app/src/main/res/drawable/home_background_weather_view.xml" value="0.127" />
-        <entry key="app/src/main/res/drawable/home_background_weather_view1.xml" value="0.2255" />
         <entry key="app/src/main/res/drawable/home_book_button_background.xml" value="0.189" />
         <entry key="app/src/main/res/drawable/home_button_background.xml" value="0.189" />
         <entry key="app/src/main/res/drawable/home_icon_button_background.xml" value="0.189" />
@@ -31,14 +103,11 @@
         <entry key="app/src/main/res/drawable/ic_baseline_filter_drama_24.xml" value="0.1765" />
         <entry key="app/src/main/res/drawable/ic_baseline_pause_24.xml" value="0.133" />
         <entry key="app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.2595" />
-        <entry key="app/src/main/res/drawable/ic_bubble_chat.xml" value="0.127" />
         <entry key="app/src/main/res/drawable/ic_free_icon_font_arrow_small_left_3916837.xml" value="0.1765" />
-        <entry key="app/src/main/res/drawable/ic_free_icon_font_comment_alt_3916599.xml" value="0.2255" />
         <entry key="app/src/main/res/drawable/ic_free_icon_font_comment_heart_5068763.xml" value="0.19" />
         <entry key="app/src/main/res/drawable/ic_free_icon_font_cross_small_3917195.xml" value="0.189" />
         <entry key="app/src/main/res/drawable/ic_free_icon_font_eye_crossed_3917116.xml" value="0.19" />
         <entry key="app/src/main/res/drawable/ic_free_icon_font_head_side_thinking_5069179.xml" value="0.19" />
-        <entry key="app/src/main/res/drawable/ic_free_icon_font_heart_3916579.xml" value="0.2255" />
         <entry key="app/src/main/res/drawable/ic_free_icon_font_plus_.xml" value="0.189" />
         <entry key="app/src/main/res/drawable/ic_free_icon_font_settings_3917058.xml" value="0.189" />
         <entry key="app/src/main/res/drawable/ic_free_icon_font_share.xml" value="0.189" />
@@ -51,29 +120,19 @@
         <entry key="app/src/main/res/drawable/ic_free_icon_paw_5527846_24.xml" value="0.1945" />
         <entry key="app/src/main/res/drawable/ic_free_icon_share_12.xml" value="0.171" />
         <entry key="app/src/main/res/drawable/ic_free_icon_share_24.xml" value="0.3475" />
-        <entry key="app/src/main/res/drawable/ic_heart_free_icon_font.xml" value="0.2255" />
-        <entry key="app/src/main/res/drawable/ic_humidity.xml" value="0.2255" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1945" />
         <entry key="app/src/main/res/drawable/ic_logo.xml" value="0.19" />
-        <entry key="app/src/main/res/drawable/ic_paper_plane.xml" value="0.2255" />
         <entry key="app/src/main/res/drawable/ic_premium_icon_paw.xml" value="0.189" />
         <entry key="app/src/main/res/drawable/ic_premium_icon_paw_5068845.xml" value="0.1" />
-        <entry key="app/src/main/res/drawable/ic_send__1_.xml" value="0.2255" />
-        <entry key="app/src/main/res/drawable/ic_storm.xml" value="0.2255" />
-        <entry key="app/src/main/res/drawable/ic_sun_partially_covered_by_a_cloud.xml" value="0.2255" />
         <entry key="app/src/main/res/drawable/map_ListAdapter_background.xml" value="0.303" />
         <entry key="app/src/main/res/drawable/map_listaadapter_background.xml" value="0.1775" />
-        <entry key="app/src/main/res/drawable/map_listadapter_background.xml" value="0.2596221923828125" />
+        <entry key="app/src/main/res/drawable/map_listadapter_background.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/map_search_Button_background.xml" value="0.259" />
         <entry key="app/src/main/res/drawable/map_search_bar_background.xml" value="0.1485" />
         <entry key="app/src/main/res/drawable/map_search_button_background.xml" value="0.2595" />
         <entry key="app/src/main/res/drawable/map_top_radius_white_background.xml" value="0.189" />
         <entry key="app/src/main/res/drawable/map_viewdapter_background.xml" value="0.1765" />
-        <entry key="app/src/main/res/drawable/mypage_image_background.xml" value="0.127" />
-        <entry key="app/src/main/res/drawable/post_image_background.xml" value="0.2255" />
-        <entry key="app/src/main/res/drawable/post_user_image_null.xml" value="0.127" />
         <entry key="app/src/main/res/drawable/rectangle_button_background.xml" value="0.281" />
-        <entry key="app/src/main/res/drawable/save_rectangle_button_background.xml" value="0.2255" />
         <entry key="app/src/main/res/drawable/selector_menu_color.xml" value="0.187" />
         <entry key="app/src/main/res/drawable/spinner_background.xml" value="0.1295" />
         <entry key="app/src/main/res/drawable/style.xml" value="0.1385" />
@@ -94,10 +153,7 @@
         <entry key="app/src/main/res/layout/activity_book_mark.xml" value="0.27105600684053016" />
         <entry key="app/src/main/res/layout/activity_comment.xml" value="0.27105600684053016" />
         <entry key="app/src/main/res/layout/activity_industry.xml" value="0.2806869506835938" />
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.144797325532804" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.165" />
-        <entry key="app/src/main/res/layout/activity_my_page.xml" value="0.27105600684053016" />
-        <entry key="app/src/main/res/layout/activity_post_upload.xml" value="0.27105600684053016" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_region.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_tracking.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_walk_detail.xml" value="0.25" />
@@ -106,30 +162,28 @@
         <entry key="app/src/main/res/layout/fragment_album.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_analysis.xml" value="0.29628046173578454" />
         <entry key="app/src/main/res/layout/fragment_book_mark.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/fragment_comment.xml" value="0.28388200085506626" />
         <entry key="app/src/main/res/layout/fragment_detail_tracking.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.337037037037037" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_likeplace.xml" value="0.27105600684053016" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.144797325532804" />
-        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.2904191616766467" />
+        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.2825994014536127" />
         <entry key="app/src/main/res/layout/fragment_post.xml" value="0.2825994014536127" />
         <entry key="app/src/main/res/layout/fragment_post_upload.xml" value="0.28388200085506626" />
         <entry key="app/src/main/res/layout/fragment_tracking.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_walk.xml" value="0.26869806094182824" />
+        <entry key="app/src/main/res/layout/fragment_walk.xml" value="0.2825994014536127" />
         <entry key="app/src/main/res/layout/layout_viewpager.xml" value="0.15106560802340158" />
-        <entry key="app/src/main/res/layout/map_bottom_sheet.xml" value="0.36544494628906254" />
+        <entry key="app/src/main/res/layout/map_bottom_sheet.xml" value="0.25" />
         <entry key="app/src/main/res/layout/map_recycleview_detail.xml" value="0.335" />
         <entry key="app/src/main/res/layout/map_viewpager_detail.xml" value="0.375" />
         <entry key="app/src/main/res/layout/new_map_recycleview_detail.xml" value="0.27105600684053016" />
         <entry key="app/src/main/res/layout/null_text.xml" value="0.29628046173578454" />
-        <entry key="app/src/main/res/layout/post_comment_item_detail.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/post_recyclerview_item.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/post_comment_item_detail.xml" value="0.17089755213055305" />
+        <entry key="app/src/main/res/layout/post_recyclerview_item.xml" value="0.27105600684053016" />
         <entry key="app/src/main/res/layout/walk_detailActivity.xml" value="0.2466866182129115" />
         <entry key="app/src/main/res/layout/walk_recycleview_detail.xml" value="0.2466866182129115" />
         <entry key="app/src/main/res/menu/bottom_menu_item.xml" value="0.2697734074390765" />
         <entry key="app/src/main/res/menu/bottom_navigation_view.xml" value="0.34427083333333336" />
         <entry key="app/src/main/res/menu/industry_menu.xml" value="0.28388200085506626" />
-        <entry key="app/src/main/res/menu/map_menu_item.xml" value="0.29628046173578454" />
         <entry key="app/src/main/res/menu/region_menu.xml" value="0.28388200085506626" />
       </map>
     </option>

@@ -10,7 +10,8 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
@@ -19,9 +20,10 @@ import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentCommentBinding
 import com.bagooni.petmliy_android_app.post.Retrofit.Comment
 import com.bagooni.petmliy_android_app.post.Retrofit.CommentRetrofitService
-import com.bagooni.petmliy_android_app.post.Retrofit.postComment
-import com.bagooni.petmliy_android_app.post.RetrofitService
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.material.snackbar.Snackbar
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -39,7 +41,7 @@ class CommentFragment : Fragment(){
     private var personEmailInput : String = ""
     private var userImgUri : String = ""
     private var commentContent : String = ""
-    lateinit var commentRetrofitService: CommentRetrofitService
+    private lateinit var commentRetrofitService: CommentRetrofitService
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,8 +59,20 @@ class CommentFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val commentArgs by navArgs<CommentFragmentArgs>()
-        val postId: Long = commentArgs.postId
-        Log.d("postId",postId.toString())
+        val inputPostId: Long = commentArgs.postId
+        checkSign()
+        val CommentListView = view.findViewById<RecyclerView>(R.id.commentList)
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080/")
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        commentRetrofitService = retrofit.create(CommentRetrofitService::class.java)
+        commentGet(inputPostId)
+        binding.uploadButton.setOnClickListener { commentUpload(inputPostId)}
+    }
+
+    private fun checkSign(){
         val acct = GoogleSignIn.getLastSignedInAccount(activity as MainActivity)
         if (acct != null) {
             val personEmail = acct.email
@@ -67,26 +81,25 @@ class CommentFragment : Fragment(){
             userImgUri = usrImg.toString()
             Log.d("google",personEmailInput)
         }
+        userImgUri?.let {
+            Glide.with(this).load(it).centerCrop().circleCrop().into(binding.userImg)
+        }
+    }
 
-        val CommentListView = view.findViewById<RecyclerView>(R.id.commentList)
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        commentRetrofitService = retrofit.create(CommentRetrofitService::class.java)
-
+    private fun commentGet(postId: Long){
         commentRetrofitService.getComment(postId).enqueue(object : Callback<ArrayList<Comment>>{
             override fun onResponse(
                 call: Call<ArrayList<Comment>>,
                 response: Response<ArrayList<Comment>>
             ) {
                 val commentList = response.body()
-                val commentRecyclerView = view.findViewById<RecyclerView>(R.id.commentList)
-                commentRecyclerView.adapter = commentList?.let{
+                val commentRecyclerView = view?.findViewById<RecyclerView>(R.id.commentList)
+                commentRecyclerView?.adapter = commentList?.let{
                     CommentRecyclerViewAdapter(
                         it,
                         LayoutInflater.from(activity),
-                        activity as (MainActivity)
+                        activity as (MainActivity),
+                        Glide.with(activity!!)
                     )
                 }
             }
@@ -94,44 +107,42 @@ class CommentFragment : Fragment(){
                 Log.d("log",t.message.toString())
             }
         })
-        binding.commentEdit.doAfterTextChanged {
-            commentContent = it.toString()
-        }
-        val postComment = postComment(postId,commentContent)
-        binding.uploadButton.setOnClickListener {
-            commentRetrofitService.postComment(personEmailInput,postComment).enqueue(object : Callback<ArrayList<postComment>>{
-                override fun onResponse(
-                    call: Call<ArrayList<postComment>>,
-                    response: Response<ArrayList<postComment>>
-                ) {
-                    Log.d("log", response.body().toString())
-                }
+    }
 
-                override fun onFailure(call: Call<ArrayList<postComment>>, t: Throwable) {
-                    Log.d("log",t.message.toString())
-                }
-            })
-        }
-
-//        userImgUri?.let {
-//            Glide.load(it).centerCrop().circleCrop().into(binding.userImg)
-//        }
+    private fun commentUpload(postId : Long){
+        commentContent = binding.commentEdit.text.toString()
+        commentRetrofitService.postComment(personEmailInput,userImgUri,postId,commentContent)
+            .enqueue(object : Callback<Comment>{
+            override fun onResponse(
+                call: Call<Comment>,
+                response: Response<Comment>
+            ) {
+                Log.d("log", response.body().toString())
+            }
+            override fun onFailure(call: Call<Comment>, t: Throwable) {
+                Log.d("log",t.message.toString())
+            }
+        })
+        binding.commentEdit.text = null
+        hideKeyboard()
+        commentUpload(postId)
     }
 
     class CommentRecyclerViewAdapter(
         val commentList: ArrayList<Comment>,
         val inflater: LayoutInflater,
-        val activity: MainActivity
+        val activity: MainActivity,
+        val glide: RequestManager
     ): RecyclerView.Adapter<CommentRecyclerViewAdapter.ViewHolder>(){
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
             val userEmail : TextView
-            val petImg : ImageView
+            val userImg : ImageView
             val commentText : TextView
 
             init {
                 userEmail = itemView.findViewById(R.id.userEmail)
-                petImg = itemView.findViewById(R.id.userImg)
+                userImg = itemView.findViewById(R.id.userImg)
                 commentText = itemView.findViewById(R.id.commentText)
             }
         }
@@ -142,9 +153,9 @@ class CommentFragment : Fragment(){
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val comment = commentList.get(position)
-//            comment.userImg?.let {
-//                glide.load(it).centerCrop().circleCrop().into(holder.petImg)
-//            }
+            comment.userImg?.let {
+                glide.load(it).centerCrop().circleCrop().into(holder.userImg)
+            }
             holder.userEmail.text = comment.email.split("@")[0]
             holder.commentText.text = comment.commentContent
         }

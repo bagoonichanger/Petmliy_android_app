@@ -22,8 +22,8 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:elevation="5dp"
             android:background="@drawable/mypage_image_background"
+            android:elevation="5dp"
             android:src="@drawable/post_user_image_null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,9 +34,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
-            android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/userImg"
             app:layout_constraintStart_toEndOf="@id/userImg"
             app:layout_constraintTop_toTopOf="@id/userImg"
@@ -44,16 +44,46 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-        android:id="@+id/postImg"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/postImgLayout"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:background="@color/pastelBlue"
-        android:scaleType="centerCrop"
-        android:elevation="5dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/postUserLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/postUserLayout">
+
+        <ImageView
+            android:id="@+id/postImg"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:background="@color/pastelBlue"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/postLayer"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:alpha="0.3"
+            android:background="@color/white"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/postHeart"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:background="@drawable/post_favorite_white_24"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonContainer"
@@ -61,14 +91,14 @@
         android:layout_height="80dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/postImg">
+        app:layout_constraintTop_toBottomOf="@id/postImgLayout">
+
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/favoriteBtn"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
             android:background="@color/transparent"
             android:src="@drawable/ic_free_icon_font_heart_3916579"
             app:layout_constraintStart_toStartOf="parent"
@@ -79,7 +109,6 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
             android:background="@color/transparent"
             android:src="@drawable/ic_heart_free_icon_font"
             android:visibility="invisible"
@@ -126,13 +155,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
+            android:layout_marginEnd="20dp"
             android:textColor="@color/black"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@id/postUserName"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/postUserName"
             app:layout_constraintTop_toTopOf="@id/postUserName"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="20dp"
             tools:text="내용" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
