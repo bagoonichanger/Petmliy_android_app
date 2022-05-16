@@ -19,7 +19,10 @@ class AnalysisFragment : Fragment() {
     private var _binding: FragmentAnalysisBinding?=null
     private val binding get() = _binding!!
     private var petImageUri : Uri? = null
-
+    private val imagePickerLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+            petImageUri = it.data?.data
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,14 +39,6 @@ class AnalysisFragment : Fragment() {
     }
 
     private fun openGallery(){
-        val glide = Glide.with(activity as MainActivity)
-        val imagePickerLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-                petImageUri = it.data?.data
-//                if(it.data == null){
-//                    findNavController().navigate(R.id.action_an)
-//                }
-            }
         imagePickerLauncher.launch(
             Intent(Intent.ACTION_PICK).apply {
                 this.type = MediaStore.Images.Media.CONTENT_TYPE

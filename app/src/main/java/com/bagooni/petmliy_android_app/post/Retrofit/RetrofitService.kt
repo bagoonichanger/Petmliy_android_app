@@ -31,4 +31,9 @@ interface RetrofitService {
         @Query("img") img: String
     )
 
+    //좋아요 누른 게시물
+    @GET("api/post/findAllLike")
+    fun getLikePost(
+        @Header("email") email:String,
+    ): Call<ArrayList<Post>>
 }
