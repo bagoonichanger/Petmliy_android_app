@@ -100,9 +100,9 @@ class PostUploadFragment : Fragment() {
 
     private fun openGallery(){
         imagePickerLauncher.launch(
-            Intent(Intent.ACTION_PICK).apply {
-                this.type = MediaStore.Images.Media.CONTENT_TYPE
-            }
+            Intent.createChooser(Intent(Intent.ACTION_GET_CONTENT).apply {
+                type = "image/*"
+            },"사진 선택하기")
         )
     }
 

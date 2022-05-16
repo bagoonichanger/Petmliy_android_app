@@ -71,9 +71,10 @@
 
         <ImageView
             android:id="@+id/userImg"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_marginStart="10dp"
+            android:elevation="2dp"
             android:background="@drawable/map_search_bar_background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -94,17 +95,17 @@
             app:layout_constraintStart_toEndOf="@id/userImg"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/uploadButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:backgroundTint="@color/transparent"
+            android:background="@color/transparent"
             android:src="@drawable/ic_send__1_"
+            android:elevation="10dp"
             app:layout_constraintBottom_toBottomOf="@id/userImg"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/commentEdit"
             app:layout_constraintTop_toTopOf="@id/userImg" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

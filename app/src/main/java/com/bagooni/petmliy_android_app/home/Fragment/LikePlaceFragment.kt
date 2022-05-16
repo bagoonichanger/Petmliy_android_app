@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +18,9 @@ import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentLikeplaceBinding
 import com.bagooni.petmliy_android_app.home.Fragment.Api.LikePlaceApi
 import com.bagooni.petmliy_android_app.home.Fragment.adapter.LikePlaceRecyclerAdapter
+import com.bagooni.petmliy_android_app.map.model.Api.CustomMapApi
 import com.bagooni.petmliy_android_app.map.model.Dto.LikePlaceDto
+import com.bagooni.petmliy_android_app.walk.Fragment.Api.CustomWalkApi
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -47,9 +50,40 @@ class LikePlaceFragment : Fragment() {
         binding.recyclerView
     }
 
-    private val recyclerAdapter = LikePlaceRecyclerAdapter(deleteButton = {
-        // TODO: 삭제기능 추가
+    private val recyclerAdapter = LikePlaceRecyclerAdapter(deleteButton = { place ->
+        Log.d("map",place.placeId.toString())
+        place.placeId?.let { customAPi(it) }
     })
+
+    private fun customAPi(placeId: Int) {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080")
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val api = retrofit.create(CustomMapApi::class.java)
+
+        googleEmail?.let { email ->
+            api.deletePlace(email, placeId)
+        }?.enqueue(object : Callback<Void> {
+
+            override fun onResponse(
+                call: Call<Void>,
+                response: Response<Void>
+            ) {Log.d("map", "2")
+                if (!response.isSuccessful) {
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.d("map Error", t.message.toString())
+            }
+
+        })
+        Toast.makeText(context,"장소가 삭제되었습니다.",Toast.LENGTH_SHORT).show()
+        findNavController().navigate(R.id.bookMarkFragment)
+    }
 
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {

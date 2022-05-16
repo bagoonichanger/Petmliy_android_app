@@ -76,6 +76,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="@null" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/likeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/ic_heart_free_icon_font__1_"
+        app:backgroundTint="@color/pastelPink"
+        app:layout_constraintEnd_toEndOf="@id/uploadButton"
+        app:layout_constraintBottom_toTopOf="@id/uploadButton"
+        app:tint="@null" />
+
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeLayout"

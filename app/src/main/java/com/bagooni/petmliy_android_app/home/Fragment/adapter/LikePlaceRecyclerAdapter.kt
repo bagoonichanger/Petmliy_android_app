@@ -1,5 +1,6 @@
 package com.bagooni.petmliy_android_app.home.Fragment.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -29,7 +30,7 @@ class LikePlaceRecyclerAdapter(
             }
             categoryTextView.text = placeModel.categories
 
-            binding.recyclerViewShareButton.setOnClickListener {
+            binding.recyclerViewDeleteButton.setOnClickListener {
                 deleteButton(placeModel)
             }
         }
@@ -52,7 +53,7 @@ class LikePlaceRecyclerAdapter(
     companion object {
         val differ = object : DiffUtil.ItemCallback<LikePlaceDto>() {
             override fun areItemsTheSame(oldItem: LikePlaceDto, newItem: LikePlaceDto): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem.placeId == newItem.placeId
             }
 
             override fun areContentsTheSame(oldItem: LikePlaceDto, newItem: LikePlaceDto): Boolean {
