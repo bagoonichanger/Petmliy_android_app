@@ -69,7 +69,9 @@ class CommentFragment : Fragment(){
             .build()
         commentRetrofitService = retrofit.create(CommentRetrofitService::class.java)
         commentGet(inputPostId)
-        binding.uploadButton.setOnClickListener { commentUpload(inputPostId)}
+        binding.uploadButton.setOnClickListener {
+            commentUpload(inputPostId)
+        }
     }
 
     private fun checkSign(){
@@ -125,7 +127,7 @@ class CommentFragment : Fragment(){
         })
         binding.commentEdit.text = null
         hideKeyboard()
-        commentUpload(postId)
+        commentGet(postId)
     }
 
     class CommentRecyclerViewAdapter(
@@ -152,7 +154,7 @@ class CommentFragment : Fragment(){
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val comment = commentList.get(position)
+            val comment = commentList[position]
             comment.userImg?.let {
                 glide.load(it).centerCrop().circleCrop().into(holder.userImg)
             }

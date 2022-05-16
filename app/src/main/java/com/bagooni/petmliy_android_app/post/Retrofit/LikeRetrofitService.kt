@@ -27,4 +27,9 @@ interface LikeRetrofitService {
         @Path("postId") postId: Long
     ): Call<Int>
 
+    @GET("api/like/count/{postId}")
+    fun countLike(
+        @Path("postId") postId: Long
+    ): Call<Int>
+
 }

@@ -14,6 +14,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.contract.ActivityResultContracts
@@ -66,13 +67,22 @@ class PostUploadFragment : Fragment() {
         return binding.root
     }
 
+    private val imagePickerLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+            postImageUri = it.data?.data
+            if(it.data == null){
+                findNavController().navigate(R.id.action_postUploadFragment_to_postFragment)
+            }
+            binding.noneImage.visibility = INVISIBLE
+            Glide.with(activity as MainActivity).load(postImageUri).centerCrop().into(binding.postImg)
+        }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         checkSign()
+        binding.noneImage.setOnClickListener { openGallery() }
 
-        //앨범 열기
-        openGallery()
         postUpload()
     }
 
@@ -89,17 +99,6 @@ class PostUploadFragment : Fragment() {
     }
 
     private fun openGallery(){
-        val postImg = binding.postImg
-        val glide = Glide.with(activity as MainActivity)
-        val imagePickerLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-                postImageUri = it.data?.data
-                if(it.data == null){
-                    findNavController().navigate(R.id.action_postUploadFragment_to_postFragment)
-                }
-                Log.d("imageUri",postImageUri.toString())
-                glide.load(postImageUri).centerCrop().into(postImg)
-            }
         imagePickerLauncher.launch(
             Intent(Intent.ACTION_PICK).apply {
                 this.type = MediaStore.Images.Media.CONTENT_TYPE

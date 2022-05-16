@@ -103,6 +103,7 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             val postLayer : ImageView
             val postHeart : ImageView
             val commentBtn : ImageButton
+            val countLike : TextView
 
             init{
                 userImg = itemView.findViewById(R.id.userImg)
@@ -115,6 +116,7 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 postLayer = itemView.findViewById(R.id.postLayer)
                 postHeart = itemView.findViewById(R.id.postHeart)
                 commentBtn = itemView.findViewById(R.id.commentBtn)
+                countLike = itemView.findViewById(R.id.likeCount)
 
                 favoriteBtn.setOnClickListener {
                     postFragment.postLike(postList[adapterPosition].postId)
@@ -161,6 +163,7 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             holder.postUserName.text = post.email.split("@")[0]
             holder.userName.text = post.email.split("@")[0]
             holder.postContent.text = post.postContent
+            Log.d("postId",post.postId.toString())
 
             postFragment.likeRetrofitService.aboutLike(postFragment.personEmailInput,post.postId)
                 .enqueue(object : Callback<Int>{
@@ -182,6 +185,19 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 }
                 override fun onFailure(call: Call<Int>, t: Throwable) {
                 }
+            })
+
+            postFragment.likeRetrofitService.countLike(post.postId).enqueue(object : Callback<Int>{
+                override fun onResponse(call: Call<Int>, response: Response<Int>) {
+                    if(response.body() != 0){
+                        holder.countLike.text = "좋아요 "+response.body().toString()+"개"
+                    }else{
+                        holder.countLike.text = ""
+                    }
+                }
+                override fun onFailure(call: Call<Int>, t: Throwable) {
+                }
+
             })
 
             holder.commentBtn.setOnClickListener {
@@ -246,8 +262,6 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             val userImg = acct.photoUrl
             personEmailInput = personEmail.toString()
             userImgUri = userImg.toString()
-            Log.d("google",personEmailInput)
-            Log.d("google",userImg.toString())
         }
     }
 

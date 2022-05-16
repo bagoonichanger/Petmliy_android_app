@@ -26,4 +26,9 @@ interface RetrofitService {
     fun getPost(
     ): Call<ArrayList<Post>>
 
+    @GET("api/analysis/breed/dog")
+    fun getDog(
+        @Query("img") img: String
+    )
+
 }
