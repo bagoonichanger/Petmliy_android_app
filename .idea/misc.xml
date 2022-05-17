@@ -156,6 +156,7 @@
         <entry key="app/src/main/res/layout/activity_industry.xml" value="0.2806869506835938" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_region.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_splash.xml" value="0.20489573889392565" />
         <entry key="app/src/main/res/layout/activity_tracking.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_walk_detail.xml" value="0.25" />
         <entry key="app/src/main/res/layout/blank_fragment.xml" value="0.271483539974348" />
@@ -163,12 +164,14 @@
         <entry key="app/src/main/res/layout/fragment_album.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_analysis.xml" value="0.29628046173578454" />
         <entry key="app/src/main/res/layout/fragment_book_mark.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_comment.xml" value="0.20489573889392565" />
         <entry key="app/src/main/res/layout/fragment_detail_tracking.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_likeplace.xml" value="0.27105600684053016" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.144797325532804" />
         <entry key="app/src/main/res/layout/fragment_map.xml" value="0.2825994014536127" />
         <entry key="app/src/main/res/layout/fragment_post.xml" value="0.2825994014536127" />
+        <entry key="app/src/main/res/layout/fragment_post_like.xml" value="0.2834544677212484" />
         <entry key="app/src/main/res/layout/fragment_post_upload.xml" value="0.28388200085506626" />
         <entry key="app/src/main/res/layout/fragment_tracking.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_walk.xml" value="0.2825994014536127" />

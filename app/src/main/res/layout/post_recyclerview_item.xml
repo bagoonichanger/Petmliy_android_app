@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -41,7 +42,6 @@
             app:layout_constraintStart_toEndOf="@id/userImg"
             app:layout_constraintTop_toTopOf="@id/userImg"
             tools:text="petmily" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/postUserLayout">
+        app:layout_constraintTop_toBottomOf="@id/postUserLayout">
 
         <ImageView
             android:id="@+id/postImg"
@@ -58,9 +58,10 @@
             android:layout_height="400dp"
             android:background="@color/pastelBlue"
             android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@id/postImgLayout"
+            app:layout_constraintEnd_toEndOf="@id/postImgLayout"
+            app:layout_constraintTop_toTopOf="@id/postImgLayout"
+            app:layout_constraintStart_toStartOf="@id/postImgLayout" />
 
         <ImageView
             android:id="@+id/postLayer"
@@ -69,8 +70,10 @@
             android:alpha="0.3"
             android:background="@color/white"
             android:visibility="invisible"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="@id/postImgLayout"
+            app:layout_constraintEnd_toEndOf="@id/postImgLayout"
+            app:layout_constraintBottom_toBottomOf="@id/postImgLayout"
+            app:layout_constraintTop_toTopOf="@id/postImgLayout" />
 
         <ImageView
             android:id="@+id/postHeart"
@@ -78,19 +81,19 @@
             android:layout_height="200dp"
             android:background="@drawable/post_favorite_white_24"
             android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintBottom_toBottomOf="@id/postImgLayout"
+            app:layout_constraintEnd_toEndOf="@id/postImgLayout"
+            app:layout_constraintStart_toStartOf="@id/postImgLayout"
+            app:layout_constraintTop_toTopOf="@id/postImgLayout" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonContainer"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/postImgLayout">
 
 
@@ -99,21 +102,23 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
             android:background="@color/transparent"
             android:src="@drawable/ic_free_icon_font_heart_3916579"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="@id/buttonContainer"
+            app:layout_constraintTop_toTopOf="@id/buttonContainer" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/favoriteColorBtn"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
             android:background="@color/transparent"
             android:src="@drawable/ic_heart_free_icon_font"
             android:visibility="invisible"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="@id/buttonContainer"
+            app:layout_constraintTop_toTopOf="@id/buttonContainer" />
 
         <ImageButton
             android:id="@+id/commentBtn"
@@ -143,8 +148,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             tools:text="좋아요 0개"
+            android:layout_marginTop="3dp"
             android:textColor="@color/black"
+            android:layout_marginBottom="3dp"
             app:layout_constraintStart_toStartOf="@id/favoriteBtn"
+            app:layout_constraintBottom_toTopOf="@id/postUserName"
             app:layout_constraintTop_toBottomOf="@id/favoriteBtn"/>
         <TextView
             android:id="@+id/postUserName"
@@ -155,8 +163,10 @@
             android:textColor="@color/black"
             android:textSize="15sp"
             android:textStyle="bold"
+            android:layout_marginBottom="10dp"
             app:layout_constraintStart_toStartOf="@id/likeCount"
-            app:layout_constraintTop_toBottomOf="@id/likeCount" />
+            app:layout_constraintTop_toBottomOf="@id/likeCount"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
             android:id="@+id/postContent"

@@ -62,7 +62,7 @@ class HomeFragment : Fragment() {
                     .into(binding.personImage)
             }
 
-            binding.signInButton.visibility = View.GONE
+//            binding.signInButton.visibility = View.GONE
             binding.signInButton.isEnabled = false
             binding.statusText.text = "Good Morning, ${personName}"
             binding.statusSubText.text = "${personEmail}"
