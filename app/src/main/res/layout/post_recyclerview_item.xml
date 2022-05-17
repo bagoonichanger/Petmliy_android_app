@@ -91,10 +91,12 @@
         android:id="@+id/buttonContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/postImgLayout">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/postImgLayout"
+        app:layout_constraintVertical_bias="1.0">
 
 
         <androidx.appcompat.widget.AppCompatImageButton
@@ -147,26 +149,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            tools:text="좋아요 0개"
             android:layout_marginTop="3dp"
-            android:textColor="@color/black"
             android:layout_marginBottom="3dp"
-            app:layout_constraintStart_toStartOf="@id/favoriteBtn"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toTopOf="@id/postUserName"
-            app:layout_constraintTop_toBottomOf="@id/favoriteBtn"/>
+            app:layout_constraintStart_toStartOf="@id/favoriteBtn"
+            app:layout_constraintTop_toBottomOf="@id/favoriteBtn"
+            tools:text="좋아요 0개" />
+
         <TextView
             android:id="@+id/postUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
             android:text="petmily"
             android:textColor="@color/black"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/likeCount"
-            app:layout_constraintTop_toBottomOf="@id/likeCount"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/likeCount" />
 
         <TextView
             android:id="@+id/postContent"
@@ -181,6 +184,17 @@
             app:layout_constraintStart_toEndOf="@id/postUserName"
             app:layout_constraintTop_toTopOf="@id/postUserName"
             tools:text="내용" />
+
+        <TextView
+            android:id="@+id/postTags"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="146dp"
+            android:layout_marginEnd="87dp"
+            android:text="태그"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/shareBtn"
+            app:layout_constraintTop_toTopOf="@+id/shareBtn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
