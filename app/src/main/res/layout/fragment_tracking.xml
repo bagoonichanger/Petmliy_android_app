@@ -144,7 +144,7 @@
             android:id="@+id/velocityTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="속도(분/Km)"
+            android:text="속도(h/Km)"
             android:textColor="@color/Dark_Gray"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/timeButtonContainer"
