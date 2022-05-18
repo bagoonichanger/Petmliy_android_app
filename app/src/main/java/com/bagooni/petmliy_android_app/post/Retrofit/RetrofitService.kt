@@ -7,7 +7,8 @@ import retrofit2.Call
 import retrofit2.http.*
 
 class Post(
-    val postId: Long, val userImg: String, val email: String, val postImg: String, val postContent: String
+    val postId: Long, val userImg: String, val email: String, val postImg: String,
+    val postContent: String, val tags: String
 )
 
 interface RetrofitService {
@@ -26,14 +27,14 @@ interface RetrofitService {
     fun getPost(
     ): Call<ArrayList<Post>>
 
-    @GET("api/analysis/breed/dog")
-    fun getDog(
-        @Query("img") img: String
-    )
-
     //좋아요 누른 게시물
     @GET("api/post/findAllLike")
     fun getLikePost(
         @Header("email") email:String,
     ): Call<ArrayList<Post>>
+
+    @DELETE("api/post/delete/{postId}")
+    fun deletePost(
+        @Path("postId") postId: Long
+    ): Call<Void>
 }
