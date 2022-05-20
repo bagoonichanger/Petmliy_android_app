@@ -35,6 +35,7 @@ interface RetrofitService {
 
     @DELETE("api/post/delete/{postId}")
     fun deletePost(
+        @Header("email") email: String,
         @Path("postId") postId: Long
     ): Call<Void>
 }

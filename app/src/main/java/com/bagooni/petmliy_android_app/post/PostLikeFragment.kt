@@ -16,6 +16,7 @@ import android.widget.TextView
 import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.bagooni.petmliy_android_app.LoadingDialog
 import com.bagooni.petmliy_android_app.MainActivity
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentPostLikeBinding
@@ -131,6 +132,7 @@ class PostLikeFragment : Fragment() {
                         Thread.sleep(1000)
                         activity.runOnUiThread {
                             postLikeFragment.getCountLike(postList[adapterPosition].postId, countLike)
+                            postLikeFragment.getLikePost()
                         }
                     }.start()
                 }
@@ -191,6 +193,8 @@ class PostLikeFragment : Fragment() {
     }
 
     private fun getLikePost(){
+        val loading = LoadingDialog(activity as MainActivity)
+        loading.show()
         retrofitService.getLikePost(personEmailInput).enqueue(object : Callback<ArrayList<Post>>{
             override fun onResponse(call: Call<ArrayList<Post>>, response: Response<ArrayList<Post>>) {
                 val postList = response.body()
@@ -204,6 +208,7 @@ class PostLikeFragment : Fragment() {
                         activity as (MainActivity)
                     )
                 }
+                loading.dismiss()
             }
 
             override fun onFailure(call: Call<ArrayList<Post>>, t: Throwable) {
