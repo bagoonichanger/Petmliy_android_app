@@ -169,6 +169,8 @@ class ResultFragment : Fragment() {
             }
             override fun onFailure(call: Call<AnalysisResult>, t: Throwable) {
                 Log.d("onFailure",t.message.toString())
+                Toast.makeText(activity as MainActivity,"응답 요청에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                loading.dismiss()
             }
         })
     }

@@ -147,7 +147,7 @@ class PostUploadFragment : Fragment() {
                         }
                     }
                     override fun onFailure(call: Call<Post>, t: Throwable) {
-                        Snackbar.make(requireView(), "포스트 업로드", Snackbar.LENGTH_LONG).show()
+                        Toast.makeText(activity as MainActivity,"포스트 업로드했습니다.", Toast.LENGTH_SHORT).show()
                         findNavController().navigate(R.id.postFragment)
                         loading.dismiss()
                     }
