@@ -16,6 +16,7 @@ import android.widget.TextView
 import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bagooni.petmliy_android_app.LoadingDialog
 import com.bagooni.petmliy_android_app.MainActivity
 import com.bagooni.petmliy_android_app.R
@@ -45,8 +46,8 @@ class PostLikeFragment : Fragment() {
 
     lateinit var retrofitService: RetrofitService
     lateinit var likeRetrofitService: LikeRetrofitService
+    lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
-    //
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,6 +58,11 @@ class PostLikeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        swipeRefreshLayout = view.findViewById(R.id.swipeLayout)
+        swipeRefreshLayout.setOnRefreshListener {
+            getLikePost()
+            swipeRefreshLayout.isRefreshing = false
+        }
         checkSign()
         val likeListView = binding.likeList
         var gson = GsonBuilder().setLenient().create()
@@ -276,3 +282,4 @@ class PostLikeFragment : Fragment() {
     }
 
 }
+

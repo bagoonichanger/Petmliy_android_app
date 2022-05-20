@@ -19,6 +19,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -210,10 +211,12 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             postFragment.getCountLike(post.postId, holder.countLike)
             holder.deleteBtn.setOnClickListener {
                 Thread{
-                    postFragment.deletePost(post.postId)
-                    Thread.sleep(1000)
-                    Snackbar.make(it, "삭제되었습니다", Snackbar.LENGTH_SHORT).show()
-                    postFragment.getPost()
+                    activity.runOnUiThread {
+                        postFragment.deletePost(post.postId)
+                        Thread.sleep(1000)
+                        Toast.makeText(activity as MainActivity,"게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                        postFragment.getPost()
+                    }
                 }.start()
             }
             holder.commentBtn.setOnClickListener {
@@ -335,6 +338,7 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     override fun onRefresh() {
+        getPost()
         swipeRefreshLayout.isRefreshing = false
     }
 }
