@@ -1,9 +1,13 @@
 package com.bagooni.petmliy_android_app.post
 
 import android.Manifest
+import android.app.Dialog
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
@@ -21,6 +25,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.bagooni.petmliy_android_app.LoadingDialog
 import com.bagooni.petmliy_android_app.MainActivity
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentPostBinding
@@ -168,7 +173,7 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 glide.load(it).centerCrop().circleCrop().into(holder.userImg)
             }
 
-            if (!post.postImg.isNullOrEmpty() ){
+            if (post.postImg.isNotEmpty()){
                 val byte = Base64.decode(post.postImg, Base64.DEFAULT)
                 val img:Bitmap = BitmapFactory.decodeByteArray(byte, 0, byte.size)
                 holder.postImg.setImageBitmap(img)
@@ -176,9 +181,11 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             holder.postUserName.text = post.email.split("@")[0]
             holder.userName.text = post.email.split("@")[0]
             holder.postContent.text = post.postContent
-            holder.tagText.text = "#"+post.tags.replace(", "," #")
-            Log.d("postId",post.postId.toString())
+            ("#"+post.tags.replace(", "," #")).also { holder.tagText.text = it }
 
+            if(post.email == postFragment.personEmailInput){
+                holder.deleteBtn.visibility = VISIBLE
+            }
             postFragment.likeRetrofitService.aboutLike(postFragment.personEmailInput,post.postId)
                 .enqueue(object : Callback<Int>{
                 override fun onResponse(call: Call<Int>, response: Response<Int>) {
@@ -202,9 +209,12 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             })
             postFragment.getCountLike(post.postId, holder.countLike)
             holder.deleteBtn.setOnClickListener {
-                postFragment.deletePost(post.postId)
-                Snackbar.make(it, "삭제되었습니다", Snackbar.LENGTH_SHORT).show()
-                postFragment.getPost()
+                Thread{
+                    postFragment.deletePost(post.postId)
+                    Thread.sleep(1000)
+                    Snackbar.make(it, "삭제되었습니다", Snackbar.LENGTH_SHORT).show()
+                    postFragment.getPost()
+                }.start()
             }
             holder.commentBtn.setOnClickListener {
                 postFragment.postToComment(post.postId)
@@ -218,7 +228,7 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun getCountLike(postId: Long, textView: TextView) {
         likeRetrofitService.countLike(postId).enqueue(object : Callback<Int>{
             override fun onResponse(call: Call<Int>, response: Response<Int>) {
-                textView.text = "좋아요 "+response.body().toString()+"개"
+                ("좋아요 "+response.body().toString()+"개").also { textView.text = it }
             }
             override fun onFailure(call: Call<Int>, t: Throwable) {
             }
@@ -226,6 +236,8 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun getPost(){
+        val loading = LoadingDialog(activity as MainActivity)
+        loading.show()
         retrofitService.getPost().enqueue(object : Callback<ArrayList<Post>>{
             override fun onResponse(
                 call: Call<ArrayList<Post>>,
@@ -242,6 +254,7 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         activity as (MainActivity)
                     )
                 }
+                loading.dismiss()
             }
             override fun onFailure(call: Call<ArrayList<Post>>, t: Throwable) {
                 Log.d("log",t.message.toString())
@@ -271,7 +284,7 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun deletePost(postId: Long){
-        retrofitService.deletePost(postId).enqueue(object : Callback<Void>{
+        retrofitService.deletePost(personEmailInput, postId).enqueue(object : Callback<Void>{
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
             }
             override fun onFailure(call: Call<Void>, t: Throwable) {

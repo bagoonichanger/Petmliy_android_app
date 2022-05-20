@@ -49,6 +49,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="10dp"
+            android:visibility="invisible"
             android:src="@drawable/post_delete_btn_ic"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
