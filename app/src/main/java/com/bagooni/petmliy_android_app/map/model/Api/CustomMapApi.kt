@@ -10,5 +10,11 @@ interface CustomMapApi {
         @Header("email") email: String,
         @Body data: LikePlaceDto
     ): Call<LikePlaceDto>
+
+    @DELETE("/api/place/delete/{placeId}")
+    fun deletePlace(
+        @Header("email") email: String,
+        @Path("placeId") placeId: Int
+    ):Call<Void>
 }
 

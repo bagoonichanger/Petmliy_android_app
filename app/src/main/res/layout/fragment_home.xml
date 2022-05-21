@@ -52,10 +52,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <View
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/backgroundView"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="90dp"
             android:layout_marginEnd="20dp"
@@ -63,216 +63,434 @@
             app:layout_constraintBottom_toTopOf="@id/backgroundView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/personImage"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginStart="10dp"
-            app:layout_constraintBottom_toBottomOf="@id/backgroundView"
-            android:background="@drawable/home_icon_button_background"
-            app:layout_constraintStart_toStartOf="@id/backgroundView"
-            app:layout_constraintTop_toTopOf="@id/backgroundView" />
+            <ImageView
+                android:id="@+id/personImage"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/home_icon_button_background"
+                app:layout_constraintBottom_toBottomOf="@id/backgroundView"
+                app:layout_constraintStart_toStartOf="@id/backgroundView"
+                app:layout_constraintTop_toTopOf="@id/backgroundView" />
 
-        <ImageView
-            android:id="@+id/noneImage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/ic_free_icon_font_eye_crossed_3917116"
-            app:layout_constraintBottom_toBottomOf="@id/personImage"
-            app:layout_constraintEnd_toEndOf="@id/personImage"
-            app:layout_constraintStart_toStartOf="@id/personImage"
-            app:layout_constraintTop_toTopOf="@id/personImage"
-            app:layout_constraintVertical_bias="0.45" />
+            <ImageView
+                android:id="@+id/noneImage"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_free_icon_font_eye_crossed_3917116"
+                app:layout_constraintBottom_toBottomOf="@id/personImage"
+                app:layout_constraintEnd_toEndOf="@id/personImage"
+                app:layout_constraintStart_toStartOf="@id/personImage"
+                app:layout_constraintTop_toTopOf="@id/personImage"
+                app:layout_constraintVertical_bias="0.45" />
 
-        <TextView
-            android:id="@+id/statusText"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/statusText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="PLEASE LOGIN!"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/personImage"
+                app:layout_constraintTop_toTopOf="@id/personImage" />
+
+            <TextView
+                android:id="@+id/statusSubText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="You can use it after logging in."
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="@id/statusText"
+                app:layout_constraintTop_toBottomOf="@id/statusText" />
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/sign_in_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/statusSubText" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:elevation="20dp"
+                app:layout_constraintBottom_toBottomOf="@id/sign_in_button"
+                app:layout_constraintEnd_toEndOf="@id/sign_in_button"
+                app:layout_constraintStart_toStartOf="@id/sign_in_button"
+                app:layout_constraintTop_toTopOf="@id/sign_in_button">
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/logoutButton"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@color/white"
+                    android:elevation="20dp"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/googleIcon"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:elevation="20dp"
+                    android:src="@drawable/google"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/logoutText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:elevation="20dp"
+                    android:text="log out"
+                    android:textColor="@color/Dark_Gray"
+                    android:textStyle="bold"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/googleIcon"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/buttonContainer"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="PLEASE LOGIN!"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@id/personImage"
-            app:layout_constraintTop_toTopOf="@id/personImage" />
-
-        <TextView
-            android:id="@+id/statusSubText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="You can use it after logging in."
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="@id/statusText"
-            app:layout_constraintTop_toBottomOf="@id/statusText" />
-
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/sign_in_button"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="180dp"
-            android:layout_marginEnd="30dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/logoutButton"
-            android:layout_width="145dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="180dp"
-            android:layout_marginEnd="30dp"
-            android:background="@color/white"
-            android:elevation="10dp"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="invisible" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/googleIcon"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_marginStart="20dp"
-            android:elevation="20dp"
-            android:src="@drawable/google"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@id/logoutButton"
-            app:layout_constraintStart_toStartOf="@id/logoutButton"
-            app:layout_constraintTop_toTopOf="@id/logoutButton" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="33dp"
-            android:elevation="10dp"
-            android:text="log out"
-            android:textColor="@color/Dark_Gray"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/logoutButton"
-            app:layout_constraintEnd_toEndOf="@id/logoutButton"
-            app:layout_constraintTop_toTopOf="@id/logoutButton" />
-
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/analysisButton"
-            android:layout_width="170dp"
-            android:layout_height="240dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/home_album_button_background"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/transparent"
             app:layout_constraintEnd_toEndOf="@id/backgroundView"
-            app:layout_constraintTop_toBottomOf="@id/backgroundView" />
-
-        <ImageView
-            android:id="@+id/analysisImage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:src="@drawable/ic_free_icon_font_head_side_thinking_5069179"
-            app:layout_constraintEnd_toEndOf="@id/analysisButton"
-            app:layout_constraintTop_toTopOf="@id/analysisButton" />
-
-
-        <TextView
-            android:id="@+id/listText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="60dp"
-            android:elevation="10dp"
-            android:text="A place"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/placeButton"
-            app:layout_constraintTop_toTopOf="@id/placeButton" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:elevation="10dp"
-            android:text="of liked places"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/placeButton"
-            app:layout_constraintTop_toBottomOf="@id/listText" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:elevation="10dp"
-            android:layout_marginBottom="20dp"
-            android:text="저장한 장소를 확인해 보세요!"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/placeButton"
-            app:layout_constraintEnd_toEndOf="@id/placeButton"
-            app:layout_constraintStart_toStartOf="@id/placeButton"/>
-
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/placeButton"
-            android:layout_width="170dp"
-            android:layout_height="240dp"
-            android:background="@drawable/home_book_button_background"
-            android:scaleType="fitCenter"
-            app:layout_constraintBottom_toBottomOf="@id/analysisButton"
             app:layout_constraintStart_toStartOf="@id/backgroundView"
-            app:layout_constraintTop_toTopOf="@id/analysisButton" />
+            app:layout_constraintTop_toBottomOf="@id/backgroundView">
 
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/analysisButton"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:background="@drawable/home_album_button_background"
+                app:layout_constraintStart_toEndOf="@id/placeButton"
+                android:layout_marginStart="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/placeImage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
+            <ImageView
+                android:id="@+id/analysisImage"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/ic_free_icon_font_head_side_thinking_5069179"
+                app:layout_constraintEnd_toEndOf="@id/buttonContainer"
+                app:layout_constraintTop_toTopOf="@id/buttonContainer" />
+
+            <TextView
+                android:id="@+id/analysisText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:elevation="10dp"
+                android:text="Analysis"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/analysisButton"
+                app:layout_constraintTop_toBottomOf="@id/analysisImage" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="10dp"
+                android:text="of Pet Emotions"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/analysisText"
+                app:layout_constraintTop_toBottomOf="@id/analysisText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:elevation="10dp"
+                android:text="현재 감정을 확인해 보세요!"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/buttonContainer"
+                app:layout_constraintStart_toStartOf="@id/analysisText" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/placeButton"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:background="@drawable/home_book_button_background"
+                app:layout_constraintEnd_toStartOf="@id/analysisButton"
+                app:layout_constraintBottom_toBottomOf="@id/buttonContainer"
+                app:layout_constraintStart_toStartOf="@id/buttonContainer"
+                app:layout_constraintTop_toTopOf="@id/buttonContainer" />
+
+            <TextView
+                android:id="@+id/listText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:elevation="10dp"
+                android:text="A place"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/buttonContainer"
+                app:layout_constraintTop_toBottomOf="@id/placeImage" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="10dp"
+                android:text="of liked places"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/listText"
+                app:layout_constraintTop_toBottomOf="@id/listText" />
+
+            <TextView
+                android:id="@+id/personEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:elevation="10dp"
+                android:text="저장한 장소를 확인해 보세요!"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/buttonContainer"
+                app:layout_constraintStart_toStartOf="@id/listText" />
+
+            <ImageView
+                android:id="@+id/placeImage"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/ic_free_icon_font_comment_heart_5068763"
+                app:layout_constraintEnd_toEndOf="@id/placeButton"
+                app:layout_constraintTop_toTopOf="@id/placeButton" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/weatherBanner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/home_background_weather_title_view"
+            app:layout_constraintEnd_toEndOf="@id/buttonContainer"
+            app:layout_constraintStart_toStartOf="@id/buttonContainer"
+            app:layout_constraintTop_toBottomOf="@id/buttonContainer">
+
+            <ImageView
+                android:id="@+id/weatherImg"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="6dp"
+                app:layout_constraintBottom_toBottomOf="@id/weatherBanner"
+                app:layout_constraintStart_toStartOf="@id/weatherBanner"
+                app:layout_constraintTop_toTopOf="@id/weatherBanner" />
+
+            <TextView
+                android:id="@+id/currentTemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="00.00 'C"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/currentMain"
+                app:layout_constraintTop_toTopOf="@id/currentMain" />
+
+            <TextView
+                android:id="@+id/currentMain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="Status"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/weatherImg"
+                app:layout_constraintStart_toEndOf="@id/weatherImg"
+                app:layout_constraintTop_toTopOf="@id/weatherImg" />
+
+            <TextView
+                android:id="@+id/currentPosition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="5dp"
+                android:text="Seoul, Gangnam-gu"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="@id/weatherBanner"
+                app:layout_constraintEnd_toEndOf="@id/weatherBanner" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/weatherBanner2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
-            android:src="@drawable/ic_free_icon_font_comment_heart_5068763"
-            app:layout_constraintEnd_toEndOf="@id/placeButton"
-            app:layout_constraintTop_toTopOf="@id/placeButton" />
+            android:background="@drawable/home_background_weather_view"
+            android:padding="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/weatherBanner">
 
-        <TextView
-            android:id="@+id/analysisText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="60dp"
-            android:elevation="10dp"
-            android:text="Analysis"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/analysisButton"
-            app:layout_constraintTop_toTopOf="@id/analysisButton" />
+            <LinearLayout
+                android:id="@+id/weatherImg2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:elevation="10dp"
-            android:text="of Pet Emotions"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/analysisButton"
-            app:layout_constraintTop_toBottomOf="@id/analysisText" />
+                <ImageView
+                    android:id="@+id/windImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_storm" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:elevation="10dp"
-            android:layout_marginBottom="20dp"
-            android:text="현재 감정을 확인해 보세요!"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/analysisButton"
-            app:layout_constraintEnd_toEndOf="@id/analysisButton"
-            app:layout_constraintStart_toStartOf="@id/analysisButton"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_sun_partially_covered_by_a_cloud" />
+
+                <ImageView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_humidity" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/weatherTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/weatherImg2">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Wind Speed"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Cloud Cover"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Humidity"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/weatherTitle">
+
+                <TextView
+                    android:id="@+id/windSpeed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/cloudCover"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="2"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/humidity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="3"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

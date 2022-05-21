@@ -1,5 +1,6 @@
 package com.bagooni.petmliy_android_app.home.Fragment.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -7,10 +8,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bagooni.petmliy_android_app.databinding.LikeplaceRecycleviewDetailBinding
 import com.bagooni.petmliy_android_app.map.model.Dto.LikePlaceDto
+import com.bagooni.petmliy_android_app.map.model.documents.PlaceModel
 
 
 class LikePlaceRecyclerAdapter(
-    val deleteButton: (LikePlaceDto) -> Unit,
+    val shareButton: (LikePlaceDto) -> Unit,
+    val linkButton: (LikePlaceDto) -> Unit,
+    val deleteButton: (LikePlaceDto) -> Unit
 ) : ListAdapter<LikePlaceDto, LikePlaceRecyclerAdapter.ItemViewHolder>(differ) {
     inner class ItemViewHolder(private val binding: LikeplaceRecycleviewDetailBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -29,8 +33,14 @@ class LikePlaceRecyclerAdapter(
             }
             categoryTextView.text = placeModel.categories
 
-            binding.recyclerViewShareButton.setOnClickListener {
+            binding.recyclerViewDeleteButton.setOnClickListener {
                 deleteButton(placeModel)
+            }
+            binding.recyclerViewShareButton.setOnClickListener {
+                shareButton(placeModel)
+            }
+            binding.root.setOnClickListener {
+                linkButton(placeModel)
             }
         }
     }
@@ -52,7 +62,7 @@ class LikePlaceRecyclerAdapter(
     companion object {
         val differ = object : DiffUtil.ItemCallback<LikePlaceDto>() {
             override fun areItemsTheSame(oldItem: LikePlaceDto, newItem: LikePlaceDto): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem.placeId == newItem.placeId
             }
 
             override fun areContentsTheSame(oldItem: LikePlaceDto, newItem: LikePlaceDto): Boolean {

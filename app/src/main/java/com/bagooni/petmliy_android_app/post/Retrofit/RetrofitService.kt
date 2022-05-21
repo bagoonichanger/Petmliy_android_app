@@ -1,56 +1,39 @@
 package com.bagooni.petmliy_android_app.post
 
-import com.google.gson.annotations.SerializedName
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 
-class InstaPost(
-    val id: Int, val content: String, val image: String, val owner_profile: OwnerProfile
-)
-
-class OwnerProfile(
-    val username: String, val image: String?
-)
-
-class UserInfo(
-    val id: Int, val username: String, val profile: OwnerProfile
-)
-
-data class PostContent(
-    val postImg: String, val postContent: String
+class Post(
+    val postId: Long, val userImg: String, val email: String, val postImg: String, val postContent: String, val tags: String
 )
 
 interface RetrofitService {
-
-    //ex.업로드
+    //포스트 업로드
     @Multipart
-    @POST("instagram/post/")
-    fun uploadPost(
-        @HeaderMap headers: Map<String, String>,  //토큰 헤더값으로 전달
-        @Part image: MultipartBody.Part,
-        @Part("content") content: RequestBody
-    ): Call<Any>
-
-    //petmily 포스트 업로드
     @POST("api/post/save")
     fun postUpload(
-        @Body data : PostContent
-    ): Call<PostContent>
+        @Header("email") email: String,
+        @Part userImg: MultipartBody.Part,
+        @Part postImg: MultipartBody.Part,
+        @Part postContent: MultipartBody.Part
+    ): Call<Post>
 
-    //ex.좋아요
-    @POST("instagram/post/like/{post_id}/")
-    fun postLike(
-        @Path("post_id") post_id: Int
-    ): Call<Any>
-
-    //ex.포스트 가져오기
-    @GET("instagram/post/list/all")
-    fun getInstaPosts(
-    ): Call<ArrayList<InstaPost>>
-
-    @GET("posts/findAll")
+    //포스트 가져오기
+    @GET("api/post/findAll")
     fun getPost(
-    ): Call<ArrayList<InstaPost>>
+    ): Call<ArrayList<Post>>
+
+    @GET("api/analysis/breed/dog")
+    fun getDog(
+        @Query("img") img: String
+    )
+
+    //좋아요 누른 게시물
+    @GET("api/post/findAllLike")
+    fun getLikePost(
+        @Header("email") email:String,
+    ): Call<ArrayList<Post>>
 }

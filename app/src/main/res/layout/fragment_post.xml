@@ -4,37 +4,105 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/postTitle"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/transparent"
+        android:elevation="50dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/toolbar_background">
+
+            <TextView
+                android:id="@+id/textTitle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="PET"
+                android:textColor="#474B4F"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/TitleImage"
+                app:layout_constraintEnd_toStartOf="@id/TitleImage"
+                app:layout_constraintTop_toTopOf="@id/TitleImage" />
+
+            <TextView
+                android:id="@+id/textTitle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="MILY"
+                android:textColor="#474B4F"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/TitleImage"
+                app:layout_constraintStart_toEndOf="@id/TitleImage"
+                app:layout_constraintTop_toTopOf="@id/TitleImage" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/TitleImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_logo"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/uploadButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Post"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="35dp"
+        android:src="@drawable/ic_baseline_add_24"
+        app:backgroundTint="@color/pastelYellow"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:tint="@null" />
 
-    <ImageButton
-        android:id="@+id/uploadButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/postTitle"
-        android:layout_marginEnd="10dp"
-        android:src="@drawable/post_send_button_24"
-        android:backgroundTint="@color/white"
-        android:padding="5sp"
-        android:scaleType="centerCrop"/>
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/feedList"
-        android:layout_width="match_parent"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/likeButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/postTitle"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/ic_heart_free_icon_font__1_"
+        app:backgroundTint="@color/pastelPink"
+        app:layout_constraintEnd_toEndOf="@id/uploadButton"
+        app:layout_constraintBottom_toTopOf="@id/uploadButton"
+        app:tint="@null" />
+
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/feedList"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

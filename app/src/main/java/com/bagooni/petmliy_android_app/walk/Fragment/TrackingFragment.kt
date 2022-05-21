@@ -70,7 +70,7 @@ import kotlin.math.round
 class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     var client: OkHttpClient? =
         httpLoggingInterceptor()?.let { OkHttpClient.Builder().addInterceptor(it).build() }
-
+//
     private var googleEmail: String? = null
     private var googleImage: Uri? = null
 

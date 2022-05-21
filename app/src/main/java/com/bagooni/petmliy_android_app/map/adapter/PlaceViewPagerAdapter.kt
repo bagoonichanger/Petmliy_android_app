@@ -9,8 +9,9 @@ import com.bagooni.petmliy_android_app.databinding.MapViewpagerDetailBinding
 import com.bagooni.petmliy_android_app.map.model.documents.PlaceModel
 
 class PlaceViewPagerAdapter(
-    val shareButton: (PlaceModel) -> Unit,
-    val likeButton: (PlaceModel) -> Unit
+    val linkButton: (PlaceModel) -> Unit,
+    val likeButton: (PlaceModel) -> Unit,
+    val shareButton: (PlaceModel) -> Unit
 ) : ListAdapter<PlaceModel, PlaceViewPagerAdapter.ItemViewHolder>(differ) {
     inner class ItemViewHolder(private val binding: MapViewpagerDetailBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -22,7 +23,11 @@ class PlaceViewPagerAdapter(
 
             titleTextView.text = placeModel.place_name
             addressTextView.text = placeModel.address_name
-            callNumberTextView.text = placeModel.phone
+            if(placeModel.phone == ""){
+                callNumberTextView.text = "전화번호가 없습니다."
+            } else {
+                callNumberTextView.text = placeModel.phone
+            }
             categoryTextView.text = placeModel.category_name
 
             binding.viewpagerShareButton.setOnClickListener {
@@ -30,6 +35,9 @@ class PlaceViewPagerAdapter(
             }
             binding.viewPagerLikeButton.setOnClickListener {
                 likeButton(placeModel)
+            }
+            binding.root.setOnClickListener {
+                linkButton(placeModel)
             }
         }
     }

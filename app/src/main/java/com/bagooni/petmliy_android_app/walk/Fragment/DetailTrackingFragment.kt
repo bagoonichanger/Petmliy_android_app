@@ -117,7 +117,7 @@ class DetailTrackingFragment : Fragment(R.layout.fragment_detail_tracking) {
 
         view.findViewById<TextView>(R.id.detailDate).text = date
         view.findViewById<TextView>(R.id.detailDistance).text =
-            args.tracking.distanceInMeters.toString()
+            (args.tracking.distanceInMeters/1000f).toString()
         view.findViewById<TextView>(R.id.detailVelocity).text =
             args.tracking.avgSpeedInKMH.toString()
         view.findViewById<TextView>(R.id.detailCalorie).text =

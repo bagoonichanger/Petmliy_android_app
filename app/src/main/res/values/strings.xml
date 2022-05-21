@@ -7,4 +7,8 @@
     <!-- Strings used for fragments for navigation -->
 
     <string name="server_client_id">888676227247-keki43t7at854brv89r5oh1lnsvu7ec1.apps.googleusercontent.com</string>
+
+    <string name="weather_url">http://api.openweathermap.org/</string>
+    <string name="weather_app_id">3aa98f9fd14058e713e2f5106bb82c40</string>
+    <string name="weather_seoul_id">1835848</string>
 </resources>

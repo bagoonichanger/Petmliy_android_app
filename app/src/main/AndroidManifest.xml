@@ -23,8 +23,14 @@
         android:theme="@style/Theme.Petmliy_android_app"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".post.Comment.CommentActivity"
-            android:exported="false" />
+            android:name=".splashActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAQNFZQbUk6i1FBwCId16YxODNjUnSNrpQ" />
@@ -34,19 +40,22 @@
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_key" />
+
         <service
             android:name=".walk.Fragment.Service.TrackingService"
             android:foregroundServiceType="location" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleInstance">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />

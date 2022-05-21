@@ -57,6 +57,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
 
     lateinit var mainActivity: MainActivity
 
+    private var googleImage: Uri? = null
     private var googleEmail: String? = null
 
     private lateinit var mapView: MapView
@@ -81,6 +82,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
     private fun updateUI(account: GoogleSignInAccount?) {
         if (account != null) {
             googleEmail = account.email
+            googleImage = account.photoUrl
         }
     }
 
@@ -96,7 +98,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         binding.placeViewPager
     }
 
-    private val viewPagerAdapter = PlaceViewPagerAdapter(shareButton = {
+    private val viewPagerAdapter = PlaceViewPagerAdapter(linkButton = {
         val intent = Intent().apply {
             action = Intent.ACTION_VIEW
             data = Uri.parse(it.place_url)
@@ -109,34 +111,46 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         val address = it.address_name
         val url = it.place_url
         val categories = it.category_name
+        val userImg = googleImage.toString()
 
-        val data = LikePlaceDto(null, name, phone, address, url, categories)
+        val data = LikePlaceDto(null, name, phone, address, url, categories, userImg)
         customAPi(data)
         Toast.makeText(requireContext(), "장소가 저장되었습니다.", Toast.LENGTH_SHORT).show()
+    }, shareButton = {
+        val sharingIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, it.place_url)
+        }
+        startActivity(Intent.createChooser(sharingIntent, "공유하기"))
     })
 
     private val recyclerView: RecyclerView by lazy {
         mainActivity.findViewById(R.id.recyclerView)
     }
 
-    private val recyclerAdapter = PlaceRecyclerAdapter(shareButton = {
-        val sendIntent: Intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, it.place_url)
-            type = "text/plain"
+    private val recyclerAdapter = PlaceRecyclerAdapter(linkButton = {
+        val intent = Intent().apply {
+            action = Intent.ACTION_VIEW
+            data = Uri.parse(it.place_url)
         }
+        startActivity(intent)
 
-        val shareIntent = Intent.createChooser(sendIntent, null)
-        startActivity(shareIntent)
     }, likeButton = {
         val name = it.place_name
         val phone = it.phone
         val address = it.address_name
         val url = it.place_url
         val categories = it.category_name
-        val data = LikePlaceDto(null, name, phone, address, url, categories)
+        val userImg = googleImage.toString()
+        val data = LikePlaceDto(null, name, phone, address, url, categories,userImg)
         customAPi(data)
         Toast.makeText(requireContext(), "장소가 저장되었습니다.", Toast.LENGTH_SHORT).show()
+    }, shareButton = {
+        val sharingIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, it.place_url)
+        }
+        startActivity(Intent.createChooser(sharingIntent, "공유하기"))
     })
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -237,25 +251,22 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
             .build()
 
         val api = retrofit.create(CustomMapApi::class.java)
-        val responseLikeList = googleEmail?.let { email ->
+
+        googleEmail?.let { email ->
             api.sendLikePlaces(email, data)
-        }
+        }?.enqueue(object : Callback<LikePlaceDto> {
+            override fun onResponse(
+                call: Call<LikePlaceDto>,
+                response: Response<LikePlaceDto>
+            ) {
+                if (!response.isSuccessful)
+                    response.body()?.let { it.address?.let { it1 -> Log.d("chicken", it1) } }
+            }
 
-        if (responseLikeList != null) {
-            responseLikeList.enqueue(object : Callback<LikePlaceDto> {
-                override fun onResponse(
-                    call: Call<LikePlaceDto>,
-                    response: Response<LikePlaceDto>
-                ) {
-                    if (!response.isSuccessful)
-                        response.body()?.let { it.address?.let { it1 -> Log.d("chicken", it1) } }
-                }
-
-                override fun onFailure(call: Call<LikePlaceDto>, t: Throwable) {
-                    Log.d("chicken", t.message.toString())
-                }
-            })
-        }
+            override fun onFailure(call: Call<LikePlaceDto>, t: Throwable) {
+                Log.d("chicken", t.message.toString())
+            }
+        })
     }
 
     private fun searchPlace(keyword: String) {
