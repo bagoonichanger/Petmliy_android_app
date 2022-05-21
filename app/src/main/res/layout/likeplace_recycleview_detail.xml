@@ -19,6 +19,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/recyclerView_shareButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="?selectableItemBackground"
+        android:src="@drawable/ic_free_icon_font_share"
+        app:layout_constraintEnd_toStartOf="@id/recyclerViewDeleteButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="0dp"

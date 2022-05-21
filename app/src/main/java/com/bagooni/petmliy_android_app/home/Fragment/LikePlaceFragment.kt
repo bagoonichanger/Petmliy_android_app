@@ -1,6 +1,7 @@
 package com.bagooni.petmliy_android_app.home.Fragment
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -53,6 +54,18 @@ class LikePlaceFragment : Fragment() {
     private val recyclerAdapter = LikePlaceRecyclerAdapter(deleteButton = { place ->
         Log.d("map",place.placeId.toString())
         place.placeId?.let { customAPi(it) }
+    }, linkButton = { place ->
+        val intent = Intent().apply {
+            action = Intent.ACTION_VIEW
+            data = Uri.parse(place.url)
+        }
+        startActivity(intent)
+    }, shareButton = { place ->
+        val sharingIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, place.url)
+        }
+        startActivity(Intent.createChooser(sharingIntent, "공유하기"))
     })
 
     private fun customAPi(placeId: Int) {

@@ -3,14 +3,45 @@ package com.bagooni.petmliy_android_app
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.bagooni.petmliy_android_app.Constants.ACTION_SHOW_TRACKING_FRAGMENT
+import com.bumptech.glide.Glide
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class MainActivity : AppCompatActivity() { // phone check
+    private var mGoogleSignInClient: GoogleSignInClient? = null
+    private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+
+    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+        try {
+            val account = completedTask.getResult(ApiException::class.java)
+//            val idToken = account.idToken
+            updateUI(account)
+        } catch (e: ApiException) {
+            Log.w("Google", "signInResult:failed code=" + e.statusCode)
+            updateUI(null)
+        }
+    }
+
+    private fun updateUI(account: GoogleSignInAccount?) {
+        if (account != null) {
+            return
+        }
+    }
+
     private val bottomNavigationView: BottomNavigationView by lazy {
         findViewById(R.id.bottomNavigationView)
     }
@@ -18,7 +49,8 @@ class MainActivity : AppCompatActivity() { // phone check
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        initLauncher()
+        googleSet()
 
         navigateToTrackingFragmentIfNeed(intent)
 1
@@ -40,14 +72,48 @@ class MainActivity : AppCompatActivity() { // phone check
         }
 
         bottomNavigationView.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.home -> navController.navigate(R.id.homeFragment)
-                R.id.story -> navController.navigate(R.id.postFragment)
-                R.id.walk -> navController.navigate(R.id.walkFragment)
-                R.id.map -> navController.navigate(R.id.mapFragment)
+            val account = GoogleSignIn.getLastSignedInAccount(this)
+            if(account != null) {
+                when (item.itemId) {
+
+                    R.id.home -> navController.navigate(R.id.homeFragment)
+                    R.id.story -> navController.navigate(R.id.postFragment)
+                    R.id.walk -> navController.navigate(R.id.walkFragment)
+                    R.id.map -> navController.navigate(R.id.mapFragment)
+                }
+                true
+            } else {
+                Toast.makeText(this,"로그인후 이용해주세요",Toast.LENGTH_SHORT).show()
+                true
             }
-            true
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val account = GoogleSignIn.getLastSignedInAccount(this)
+        if (account != null) {
+            updateUI(account)
+        }
+    }
+
+    private fun initLauncher() {
+        activityResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode != AppCompatActivity.RESULT_OK) {
+                    return@registerForActivityResult
+                }
+                val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+                handleSignInResult(task)
+            }
+    }
+
+    private fun googleSet() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
     }
 
     override fun onNewIntent(intent: Intent?) {

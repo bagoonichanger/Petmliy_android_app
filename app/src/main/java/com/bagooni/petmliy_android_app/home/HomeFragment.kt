@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -24,8 +25,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import org.json.JSONObject
+
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
@@ -71,6 +74,7 @@ class HomeFragment : Fragment() {
             binding.logoutButton.isEnabled = true
             binding.googleIcon.visibility = View.VISIBLE
             binding.logoutText.visibility = View.VISIBLE
+//            findNavController().navigate(R.id.homeFragment)
         }
     }
 
@@ -110,6 +114,8 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val account = GoogleSignIn.getLastSignedInAccount(requireContext())
+
         binding.signInButton.setOnClickListener {
             val intent = mGoogleSignInClient?.signInIntent
             activityResultLauncher.launch(intent)
@@ -119,6 +125,12 @@ class HomeFragment : Fragment() {
         }
         binding.placeButton.setOnClickListener {
             findNavController().navigate(R.id.bookMarkFragment)
+        }
+        binding.logoutButton.setOnClickListener {
+            mGoogleSignInClient!!.signOut()
+                .addOnCompleteListener(requireActivity(), OnCompleteListener<Void?> {
+                    findNavController().navigate(R.id.homeFragment)
+                })
         }
         initWeatherView()
         observeData()
@@ -130,7 +142,6 @@ class HomeFragment : Fragment() {
         if (account != null) {
             updateUI(account)
         }
-        binding.logoutButton.isEnabled = false
     }
 
     override fun onDestroy() {
@@ -138,20 +149,20 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    private fun initWeatherView(){
+    private fun initWeatherView() {
         viewModel = ViewModelProvider(this).get(WeatherViewModel::class.java)
         var jsonObject = JSONObject()
         jsonObject.put("url", getString(R.string.weather_url))
-        jsonObject.put("path","weather")
-        jsonObject.put("q","Seoul")
-        jsonObject.put("appid",getString(R.string.weather_app_id))
+        jsonObject.put("path", "weather")
+        jsonObject.put("q", "Seoul")
+        jsonObject.put("appid", getString(R.string.weather_app_id))
         viewModel.getWeatherInfoView(jsonObject)
     }
 
-    private fun observeData(){
+    private fun observeData() {
         viewModel.isSuccWeather.observe(
             viewLifecycleOwner, Observer { it ->
-                if(it) {
+                if (it) {
                     viewModel.responseWeather.observe(
                         viewLifecycleOwner, Observer { setWeatherData(it) }
                     )
@@ -160,10 +171,11 @@ class HomeFragment : Fragment() {
         )
     }
 
-    private fun setWeatherData(model: WeatherModel){
+    private fun setWeatherData(model: WeatherModel) {
         val temp = model.main.temp!!.toDouble() - 273.15
-        val weatherImgUrl = "http://openweathermap.org/img/w/"+model.weather[0].icon+".png"
-        binding.currentTemp.text = StringBuilder().append(String.format("%.2f", temp)).append(" 'C").toString()
+        val weatherImgUrl = "http://openweathermap.org/img/w/" + model.weather[0].icon + ".png"
+        binding.currentTemp.text =
+            StringBuilder().append(String.format("%.2f", temp)).append(" 'C").toString()
         binding.currentMain.text = model.weather[0].main
         binding.windSpeed.text = StringBuilder().append(model.wind.speed).append(" m/s").toString()
         binding.cloudCover.text = StringBuilder().append(model.clouds.all).append(" %").toString()

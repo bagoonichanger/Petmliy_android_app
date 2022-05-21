@@ -98,7 +98,7 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         binding.placeViewPager
     }
 
-    private val viewPagerAdapter = PlaceViewPagerAdapter(shareButton = {
+    private val viewPagerAdapter = PlaceViewPagerAdapter(linkButton = {
         val intent = Intent().apply {
             action = Intent.ACTION_VIEW
             data = Uri.parse(it.place_url)
@@ -116,13 +116,19 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         val data = LikePlaceDto(null, name, phone, address, url, categories, userImg)
         customAPi(data)
         Toast.makeText(requireContext(), "장소가 저장되었습니다.", Toast.LENGTH_SHORT).show()
+    }, shareButton = {
+        val sharingIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, it.place_url)
+        }
+        startActivity(Intent.createChooser(sharingIntent, "공유하기"))
     })
 
     private val recyclerView: RecyclerView by lazy {
         mainActivity.findViewById(R.id.recyclerView)
     }
 
-    private val recyclerAdapter = PlaceRecyclerAdapter(shareButton = {
+    private val recyclerAdapter = PlaceRecyclerAdapter(linkButton = {
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, it.place_url)
@@ -141,6 +147,12 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
         val data = LikePlaceDto(null, name, phone, address, url, categories,userImg)
         customAPi(data)
         Toast.makeText(requireContext(), "장소가 저장되었습니다.", Toast.LENGTH_SHORT).show()
+    }, shareButton = {
+        val sharingIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, it.place_url)
+        }
+        startActivity(Intent.createChooser(sharingIntent, "공유하기"))
     })
 
     override fun onCreate(savedInstanceState: Bundle?) {

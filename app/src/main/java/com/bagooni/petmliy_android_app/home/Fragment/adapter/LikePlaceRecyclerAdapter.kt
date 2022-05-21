@@ -8,10 +8,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bagooni.petmliy_android_app.databinding.LikeplaceRecycleviewDetailBinding
 import com.bagooni.petmliy_android_app.map.model.Dto.LikePlaceDto
+import com.bagooni.petmliy_android_app.map.model.documents.PlaceModel
 
 
 class LikePlaceRecyclerAdapter(
-    val deleteButton: (LikePlaceDto) -> Unit,
+    val shareButton: (LikePlaceDto) -> Unit,
+    val linkButton: (LikePlaceDto) -> Unit,
+    val deleteButton: (LikePlaceDto) -> Unit
 ) : ListAdapter<LikePlaceDto, LikePlaceRecyclerAdapter.ItemViewHolder>(differ) {
     inner class ItemViewHolder(private val binding: LikeplaceRecycleviewDetailBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -32,6 +35,12 @@ class LikePlaceRecyclerAdapter(
 
             binding.recyclerViewDeleteButton.setOnClickListener {
                 deleteButton(placeModel)
+            }
+            binding.recyclerViewShareButton.setOnClickListener {
+                shareButton(placeModel)
+            }
+            binding.root.setOnClickListener {
+                linkButton(placeModel)
             }
         }
     }
