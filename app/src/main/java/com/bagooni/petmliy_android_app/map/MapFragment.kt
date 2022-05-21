@@ -129,14 +129,12 @@ class MapFragment : Fragment(R.layout.fragment_map), OnMapReadyCallback, Overlay
     }
 
     private val recyclerAdapter = PlaceRecyclerAdapter(linkButton = {
-        val sendIntent: Intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, it.place_url)
-            type = "text/plain"
+        val intent = Intent().apply {
+            action = Intent.ACTION_VIEW
+            data = Uri.parse(it.place_url)
         }
+        startActivity(intent)
 
-        val shareIntent = Intent.createChooser(sendIntent, null)
-        startActivity(shareIntent)
     }, likeButton = {
         val name = it.place_name
         val phone = it.phone
