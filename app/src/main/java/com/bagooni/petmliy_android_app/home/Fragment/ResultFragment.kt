@@ -119,6 +119,7 @@ class ResultFragment : Fragment() {
                     option.inSampleSize = 10
                     val bitmap = BitmapFactory.decodeFile(filePath, option)
                     Glide.with(this).load(petImageUri).centerCrop().into(binding.petImg)
+                    petImageUri?.let { it1 -> getEmotion(it1) }
                 }
             }
         val filename = "${System.currentTimeMillis()}.png"
@@ -136,7 +137,6 @@ class ResultFragment : Fragment() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         intent.putExtra(MediaStore.EXTRA_OUTPUT, petImageUri)
         resultLauncher.launch(intent)
-        getEmotion(petImageUri)
     }
 
     private fun getEmotion(petImgUri: Uri) {
@@ -169,7 +169,8 @@ class ResultFragment : Fragment() {
             }
             override fun onFailure(call: Call<AnalysisResult>, t: Throwable) {
                 Log.d("onFailure",t.message.toString())
-                Toast.makeText(activity as MainActivity,"응답 요청에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity as MainActivity,"동물 사진이 아닙니다.", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.albumFragment)
                 loading.dismiss()
             }
         })
