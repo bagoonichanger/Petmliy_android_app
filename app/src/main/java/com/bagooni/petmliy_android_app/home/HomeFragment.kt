@@ -132,6 +132,7 @@ class HomeFragment : Fragment() {
                     findNavController().navigate(R.id.homeFragment)
                 })
         }
+        //
         initWeatherView()
         observeData()
     }
