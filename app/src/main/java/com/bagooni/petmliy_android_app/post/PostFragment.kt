@@ -1,15 +1,10 @@
 package com.bagooni.petmliy_android_app.post
 
 import android.Manifest
-import android.content.ContentValues
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.media.Image
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
@@ -94,8 +89,7 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         val inflater: LayoutInflater,
         val glide: RequestManager,
         val postFragment: PostFragment,
-        val activity: MainActivity,
-        val shareButton: (String) -> Unit
+        val activity: MainActivity
     ): RecyclerView.Adapter<PostRecyclerViewAdapter.ViewHolder>(){
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -110,7 +104,7 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             val postHeart : ImageView
             val commentBtn : ImageButton
             val countLike : TextView
-            val shareBtn : ImageButton
+
             init{
                 userImg = itemView.findViewById(R.id.userImg)
                 userName = itemView.findViewById(R.id.userEmail)
@@ -123,7 +117,6 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 postHeart = itemView.findViewById(R.id.postHeart)
                 commentBtn = itemView.findViewById(R.id.commentBtn)
                 countLike = itemView.findViewById(R.id.likeCount)
-                shareBtn = itemView.findViewById(R.id.shareBtn)
 
                 favoriteBtn.setOnClickListener {
                     postFragment.postLike(postList[adapterPosition].postId)
@@ -210,14 +203,6 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             holder.commentBtn.setOnClickListener {
                 postFragment.postToComment(post.postId)
             }
-
-            holder.shareBtn.setOnClickListener {
-                val bytes = Base64.decode(post.postImg, Base64.DEFAULT)
-                val changeImg = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-
-                shareButton(post.postImg)
-            }
-
         }
         override fun getItemCount(): Int {
             return postList.size
@@ -238,13 +223,7 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         LayoutInflater.from(activity),
                         Glide.with(activity!!),
                         this@PostFragment,
-                        activity as (MainActivity),
-                        shareButton = {
-                            Log.d("post",it)
-                            val bytes = Base64.decode(it, Base64.DEFAULT)
-                            val changeImg = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                            bitmapToUri(changeImg)
-                        }
+                        activity as (MainActivity)
                     )
                 }
             }
@@ -319,48 +298,5 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onRefresh() {
         swipeRefreshLayout.isRefreshing = false
-    }
-
-    fun bitmapToUri(bitmap: Bitmap) {
-        val fileName = "${System.currentTimeMillis()}.jpeg"
-        Log.d("post",fileName)
-        val resolver = requireContext().contentResolver
-        val imageCollections =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                MediaStore.Images.Media.getContentUri(
-                    MediaStore.VOLUME_EXTERNAL_PRIMARY
-                )
-            } else {
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-            }
-        val imageDetails = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
-            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                put(MediaStore.Images.Media.IS_PENDING, 1)
-            }
-        }
-
-        val imageUri = resolver.insert(imageCollections, imageDetails)
-        imageUri ?: return
-
-        Log.d("post",imageUri.toString())
-        resolver.openOutputStream(imageUri).use { outputStream ->
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            imageDetails.clear()
-            imageDetails.put(MediaStore.Images.Media.IS_PENDING, 0)
-            resolver.update(imageUri, imageDetails, null, null)
-        }
-
-
-        val sharingIntent = Intent(Intent.ACTION_SEND).apply {
-            type = "image/jpeg"
-            putExtra(Intent.EXTRA_STREAM, imageUri)
-        }
-        startActivity(Intent.createChooser(sharingIntent, "공유하기"))
     }
 }

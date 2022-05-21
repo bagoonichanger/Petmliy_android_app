@@ -7,7 +7,7 @@ import retrofit2.Call
 import retrofit2.http.*
 
 class Post(
-    val postId: Long, val userImg: String, val email: String, val postImg: String, val postContent: String
+    val postId: Long, val userImg: String, val email: String, val postImg: String, val postContent: String, val tags: String
 )
 
 interface RetrofitService {
