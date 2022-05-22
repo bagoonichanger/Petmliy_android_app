@@ -155,11 +155,6 @@ class ResultFragment : Fragment() {
                     val result = response.body()
                     result?.let { updateUI(it) }
                     loading.dismiss()
-//                    binding.resultConstraintLayout.addView(result?.let {
-//                        Rectangle(activity as MainActivity,
-//                            it
-//                        )
-//                    })
                     Log.d("type",response.body()?.crop_position?.leftX?.javaClass.toString())
                 }else{
                     Toast.makeText(activity as MainActivity,"동물 사진이 아닙니다.", Toast.LENGTH_SHORT).show()
