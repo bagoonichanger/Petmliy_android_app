@@ -91,7 +91,8 @@ https://github.com/wolfdate25/Petmily_flask_server
 
 ### 구조
 
-![Structure](Images/Structure.png)
+![Structure](Images/Structure1.png)
+![Structure](Images/Structure2.png)
 
 ### 간략한 기능 설명
 
