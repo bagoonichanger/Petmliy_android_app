@@ -2,7 +2,7 @@
 
 **2022-1학기 한성대학교 컴퓨터공학부 캡스톤디자인**
 
-<img src="/Users/bagooni/Downloads/IMG_1567.jpg" alt="IMG_1567" style="zoom: 25%;" />
+<img src="Images/Logo.jpg" alt="Logo" style="zoom:25%;" />
 
 ## 팀 구성
 
@@ -72,7 +72,7 @@ https://github.com/wolfdate25/Petmily_flask_server
 
 ### 앱 소개
 
-<img src="/Users/bagooni/Downloads/IMG_1567.jpg" alt="IMG_1567" style="zoom: 25%;" />
+<img src="Images/Logo.jpg" alt="Logo" style="zoom:25%;" />
 
 이 어플리케이션은 총 5가지의 기능을 제공한다.
 
@@ -92,9 +92,11 @@ https://github.com/wolfdate25/Petmily_flask_server
 
 ### 구조
 
-![구조](/Users/bagooni/Library/Application Support/typora-user-images/구조.png)
+![Structure](Images/Structure.png)
 
 ### 간략한 기능 설명
+
+
 
 
 
@@ -108,17 +110,29 @@ https://github.com/wolfdate25/Petmily_flask_server
 
 Server와 Google 로그인을 연동하기 위해서는 Google Cloud Platform에 프로젝트를 등록해야 한다.
 
-![스크린샷 2022-05-23 오후 12.14.01](/Users/bagooni/Library/Application Support/typora-user-images/스크린샷 2022-05-23 오후 12.14.01.png)
+![2_1](Images/2_1.png)
+
+------
 
 Google 로그인을 사용 하므로 '디버그 서명 인증서 SHA-1'을 알아야 한다.
 
-<'SHA-1'은 안드로이드 스튜디오 오른쪽에 있는 Gradle -> Tasks->android->signInReport를 클릭 하면 알 수 있다.>
+<'SHA-1'은 안드로이드 스튜디오 오른쪽에 있는 Gradle -> Tasks->android->signInReport를 클릭 하면 알 수 있다>
 
-![스크린샷 2022-05-23 오후 12.14.54 복사본](/Users/bagooni/Library/Application Support/typora-user-images/스크린샷 2022-05-23 오후 12.14.54 복사본.jpg)
+![2_2](Images/2_2.jpg)
+
+------
 
 구성 파일을 다운로드 한 뒤 , 생성된 프로젝트 파일->app 폴더 에다가 저장한다(JSON 형식)
 
-![스크린샷 2022-05-23 오후 12.23.00 복사본](/Users/bagooni/Library/Application Support/typora-user-images/스크린샷 2022-05-23 오후 12.23.00 복사본.jpg)
+![2_3](Images/2_3.jpg)
+
+------
+
+![2_4](Images/2_4.png)
+
+
+
+#### Android Studio에 google Login SDK 추가 완료
 
 ## 3. 기능구현
 
