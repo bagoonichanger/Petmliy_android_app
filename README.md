@@ -2,8 +2,7 @@
 
 **2022-1학기 한성대학교 컴퓨터공학부 캡스톤디자인**
 
-<img src="Images/Logo.jpg" alt="Logo" style="zoom:5%;" />
-
+<img src="Images/Logo.jpg" width="200" height="200"/>
 ## 팀 구성
 
 **팀장** : 박우림(Client)   
