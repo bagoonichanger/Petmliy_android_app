@@ -2,7 +2,8 @@
 
 **2022-1학기 한성대학교 컴퓨터공학부 캡스톤디자인**
 
-<img src="Images/Logo.jpg" width="200" height="200"/>
+<img src="Images/Logo.jpg" width="200" height="200" />
+
 ## 팀 구성
 
 **팀장** : 박우림(Client)   
@@ -71,7 +72,7 @@ https://github.com/wolfdate25/Petmily_flask_server
 
 ### 앱 소개
 
-<img src="Images/Logo.jpg" width="200" height="200"/>
+<img src="Images/Logo.jpg" width="200" height="200" />
 
 이 어플리케이션은 총 5가지의 기능을 제공한다.
 
@@ -92,6 +93,11 @@ https://github.com/wolfdate25/Petmily_flask_server
 ### 구조
 
 ![Structure](Images/Structure1.jpg)
+
+
+
+------
+
 
 
 ![Structure](Images/Structure2.jpg)
