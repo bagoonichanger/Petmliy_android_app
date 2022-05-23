@@ -33,7 +33,7 @@ import java.io.File
 import java.io.IOException
 
 class AnalysisFragment : Fragment() {
-    private val PERMISSIONS_REQUEST = 100
+    private val PERMISSIONS_REQUEST = 101
     private val PERMISSIONS = arrayOf(
         Manifest.permission.CAMERA,
         Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -90,5 +90,4 @@ class AnalysisFragment : Fragment() {
             )
         }
     }
-
 }

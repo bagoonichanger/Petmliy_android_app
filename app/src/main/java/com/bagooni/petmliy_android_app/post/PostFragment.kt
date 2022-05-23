@@ -113,7 +113,6 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             val favoriteBtn : ImageButton
             val favoriteColorBtn : ImageButton
             val postLayer : ImageView
-            val postTags: TextView
             val postHeart : ImageView
             val commentBtn : ImageButton
             val countLike : TextView
@@ -127,7 +126,6 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 postUserName = itemView.findViewById(R.id.postUserName)
                 postImg = itemView.findViewById(R.id.postImg)
                 postContent = itemView.findViewById(R.id.postContent)
-                postTags = itemView.findViewById(R.id.postTags)
                 favoriteBtn = itemView.findViewById(R.id.favoriteBtn) //좋아요 버튼
                 favoriteColorBtn = itemView.findViewById(R.id.favoriteColorBtn) //좋아요 색 버튼
                 postLayer = itemView.findViewById(R.id.postLayer)
