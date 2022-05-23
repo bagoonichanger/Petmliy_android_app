@@ -1,16 +1,19 @@
 package com.bagooni.petmliy_android_app.home
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -113,13 +116,13 @@ class HomeFragment : Fragment() {
     // set develop2
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val account = GoogleSignIn.getLastSignedInAccount(requireContext())
 
         binding.signInButton.setOnClickListener {
             val intent = mGoogleSignInClient?.signInIntent
             activityResultLauncher.launch(intent)
         }
         binding.analysisButton.setOnClickListener {
+            getPermissions()
             findNavController().navigate(R.id.albumFragment)
         }
         binding.placeButton.setOnClickListener {
@@ -183,4 +186,28 @@ class HomeFragment : Fragment() {
         Glide.with(this).load(weatherImgUrl).into(binding.weatherImg)
     }
 
+    private fun getPermissions() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(
+                    Manifest.permission.CAMERA
+                ),
+                1000
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
 }
