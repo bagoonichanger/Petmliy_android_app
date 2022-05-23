@@ -5,12 +5,16 @@ import android.content.ContentValues
 import android.content.Intent
 import android.app.Dialog
 import android.content.Context
+import android.app.Dialog
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
@@ -195,14 +199,6 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             holder.userName.text = post.email.split("@")[0]
             holder.postContent.text = post.postContent
             ("#"+post.tags.replace(", "," #")).also { holder.tagText.text = it }
-            holder.tagText.text = "#"+post.tags.replace(", "," #")
-            Log.d("postId",post.postId.toString())
-            holder.postTags.text =
-                post.tags.split(",").stream().map { tag -> "#${tag.trim()}" }
-                    .collect(
-                        Collectors.toList()
-                    ).joinToString(" ")
-            Log.d("postId", post.postId.toString())
 
             if(post.email == postFragment.personEmailInput){
                 holder.deleteBtn.visibility = VISIBLE
@@ -305,6 +301,7 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             }
             override fun onFailure(call: Call<Like>, t: Throwable) {
             }
+
         })
     }
 
