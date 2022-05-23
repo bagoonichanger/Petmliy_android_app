@@ -3,10 +3,18 @@ package com.bagooni.petmliy_android_app.post
 import android.Manifest
 import android.content.ContentValues
 import android.content.Intent
+import android.app.Dialog
+import android.content.Context
+import android.app.Dialog
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
@@ -19,12 +27,14 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.bagooni.petmliy_android_app.LoadingDialog
 import com.bagooni.petmliy_android_app.MainActivity
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentPostBinding
@@ -34,6 +44,7 @@ import com.bagooni.petmliy_android_app.walk.WalkFragment.Companion.PERMISSIONS_R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -77,6 +88,9 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             getPermissions()
             findNavController().navigate(R.id.action_postFragment_to_postUploadFragment)
         }
+        binding.likeButton.setOnClickListener {
+            findNavController().navigate(R.id.action_postFragment_to_postLikeFragment)
+        }
 
         var gson = GsonBuilder().setLenient().create()
         val retrofit = Retrofit.Builder()
@@ -112,6 +126,8 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             val commentBtn : ImageButton
             val countLike : TextView
             val shareBtn : ImageButton
+            val deleteBtn : ImageView
+            val tagText : TextView
 
             init{
                 userImg = itemView.findViewById(R.id.userImg)
@@ -127,10 +143,13 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 commentBtn = itemView.findViewById(R.id.commentBtn)
                 countLike = itemView.findViewById(R.id.likeCount)
                 shareBtn = itemView.findViewById(R.id.shareBtn)
+                deleteBtn = itemView.findViewById(R.id.deleteButton)
+                tagText = itemView.findViewById(R.id.tagText)
 
                 favoriteBtn.setOnClickListener {
                     postFragment.postLike(postList[adapterPosition].postId)
                     Thread {
+                        postFragment.postLike(postList[adapterPosition].postId)
                         activity.runOnUiThread {
                             favoriteColorBtn.visibility = VISIBLE
                             postLayer.visibility = VISIBLE
@@ -140,6 +159,7 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         activity.runOnUiThread {
                             postLayer.visibility = INVISIBLE
                             postHeart.visibility = INVISIBLE
+                            postFragment.getCountLike(postList[adapterPosition].postId, countLike)
                         }
                     }.start()
                 }
@@ -147,7 +167,12 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     postFragment.deleteData(postList[adapterPosition].postId)
                     Thread{
                         activity.runOnUiThread {
+                            postFragment.deleteData(postList[adapterPosition].postId)
                             favoriteColorBtn.visibility = INVISIBLE
+                        }
+                        Thread.sleep(1000)
+                        activity.runOnUiThread {
+                            postFragment.getCountLike(postList[adapterPosition].postId, countLike)
                         }
                     }.start()
                 }
@@ -159,13 +184,13 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val post = postList.get(position)
+            val post = postList[position]
 
             post.userImg.let{
                 glide.load(it).centerCrop().circleCrop().into(holder.userImg)
             }
 
-            if (!post.postImg.isNullOrEmpty() ){
+            if (post.postImg.isNotEmpty()){
                 val byte = Base64.decode(post.postImg, Base64.DEFAULT)
                 val img:Bitmap = BitmapFactory.decodeByteArray(byte, 0, byte.size)
                 holder.postImg.setImageBitmap(img)
@@ -173,13 +198,11 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             holder.postUserName.text = post.email.split("@")[0]
             holder.userName.text = post.email.split("@")[0]
             holder.postContent.text = post.postContent
-            holder.postTags.text =
-                post.tags.split(",").stream().map { tag -> "#${tag.trim()}" }
-                    .collect(
-                        Collectors.toList()
-                    ).joinToString(" ")
-            Log.d("postId", post.postId.toString())
+            ("#"+post.tags.replace(", "," #")).also { holder.tagText.text = it }
 
+            if(post.email == postFragment.personEmailInput){
+                holder.deleteBtn.visibility = VISIBLE
+            }
             postFragment.likeRetrofitService.aboutLike(postFragment.personEmailInput,post.postId)
                 .enqueue(object : Callback<Int>{
                 override fun onResponse(call: Call<Int>, response: Response<Int>) {
@@ -201,20 +224,17 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 override fun onFailure(call: Call<Int>, t: Throwable) {
                 }
             })
-
-            postFragment.likeRetrofitService.countLike(post.postId).enqueue(object : Callback<Int>{
-                override fun onResponse(call: Call<Int>, response: Response<Int>) {
-                    if(response.body() != 0){
-                        holder.countLike.text = "좋아요 "+response.body().toString()+"개"
-                    }else{
-                        holder.countLike.text = ""
+            postFragment.getCountLike(post.postId, holder.countLike)
+            holder.deleteBtn.setOnClickListener {
+                Thread{
+                    activity.runOnUiThread {
+                        postFragment.deletePost(post.postId)
+                        Thread.sleep(1000)
+                        Toast.makeText(activity as MainActivity,"게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                        postFragment.getPost()
                     }
-                }
-                override fun onFailure(call: Call<Int>, t: Throwable) {
-                }
-
-            })
-
+                }.start()
+            }
             holder.commentBtn.setOnClickListener {
                 postFragment.postToComment(post.postId)
             }
@@ -231,7 +251,19 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
+    private fun getCountLike(postId: Long, textView: TextView) {
+        likeRetrofitService.countLike(postId).enqueue(object : Callback<Int>{
+            override fun onResponse(call: Call<Int>, response: Response<Int>) {
+                ("좋아요 "+response.body().toString()+"개").also { textView.text = it }
+            }
+            override fun onFailure(call: Call<Int>, t: Throwable) {
+            }
+        })
+    }
+
     private fun getPost(){
+        val loading = LoadingDialog(activity as MainActivity)
+        loading.show()
         retrofitService.getPost().enqueue(object : Callback<ArrayList<Post>>{
             override fun onResponse(
                 call: Call<ArrayList<Post>>,
@@ -254,6 +286,7 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         }
                     )
                 }
+                loading.dismiss()
             }
             override fun onFailure(call: Call<ArrayList<Post>>, t: Throwable) {
                 Log.d("log",t.message.toString())
@@ -279,6 +312,16 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             }
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 Log.d("log",t.message.toString())
+            }
+        })
+    }
+
+    private fun deletePost(postId: Long){
+        retrofitService.deletePost(personEmailInput, postId).enqueue(object : Callback<Void>{
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+            }
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.d("log delete",t.message.toString())
             }
         })
     }
@@ -325,6 +368,7 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     override fun onRefresh() {
+        getPost()
         swipeRefreshLayout.isRefreshing = false
     }
 
