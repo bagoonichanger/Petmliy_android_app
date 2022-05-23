@@ -160,10 +160,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="3dp"
             android:textColor="@color/black"
-            app:layout_constraintBottom_toTopOf="@id/postUserName"
             app:layout_constraintStart_toStartOf="@id/favoriteBtn"
             app:layout_constraintTop_toBottomOf="@id/favoriteBtn"
             tools:text="좋아요 0개" />
@@ -172,13 +171,12 @@
             android:id="@+id/postUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:text="petmily"
             android:textColor="@color/black"
             android:textSize="15sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/likeCount"
             app:layout_constraintTop_toBottomOf="@id/likeCount" />
 
@@ -195,28 +193,6 @@
             app:layout_constraintStart_toEndOf="@id/postUserName"
             app:layout_constraintTop_toTopOf="@id/postUserName"
             tools:text="내용" />
-
-        <TextView
-            android:id="@+id/tagText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15dp"
-            android:textStyle="bold"
-            android:textColor="@color/pastelBlue"
-            android:layout_marginTop="5dp"
-            app:layout_constraintStart_toStartOf="@id/postUserName"
-            app:layout_constraintTop_toBottomOf="@id/postUserName"
-            tools:text="#고양이"/>
-
-        <TextView
-            android:id="@+id/postTags"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="태그"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/favoriteBtn"
-            android:layout_marginEnd="20dp"
-            />
 
         <TextView
             android:id="@+id/tagText"

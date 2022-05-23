@@ -7,7 +7,7 @@ import retrofit2.http.*
 import java.net.URI
 
 class AnalysisResult(
-    val type: String, val crop_position: CropPosition, val breed: Breed, val emotion: Emotion
+    val type: String, val cropPosition: CropPosition, val breed: Breed, val emotion: Emotion
 )
 
 class CropPosition(

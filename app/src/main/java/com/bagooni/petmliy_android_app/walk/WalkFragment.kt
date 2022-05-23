@@ -19,6 +19,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bagooni.petmliy_android_app.LoadingDialog
+import com.bagooni.petmliy_android_app.MainActivity
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.walk.Db.Tracking
 import com.bagooni.petmliy_android_app.walk.Db.TrackingViewModel
@@ -191,6 +193,8 @@ class WalkFragment : Fragment(R.layout.fragment_walk) {
             .build()
 
         val api = retrofit.create(CustomWalkApi::class.java)
+        val loading = LoadingDialog(activity as MainActivity)
+        loading.show()
 
         googleEmail?.let { email ->
             api.searchAllData(email)
@@ -230,6 +234,7 @@ class WalkFragment : Fragment(R.layout.fragment_walk) {
                     val thread = Thread(r)
                     thread.start()
                 }
+                loading.dismiss()
             }
 
             override fun onFailure(call: Call<List<Tracking>>, t: Throwable) {

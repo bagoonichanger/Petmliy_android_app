@@ -61,7 +61,7 @@ class ResultFragment : Fragment() {
     lateinit var filePath: String
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     lateinit var analysisApi: AnalysisService
-
+////
     private val imagePickerLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             val petImageUri = it.data?.data
@@ -160,7 +160,6 @@ class ResultFragment : Fragment() {
 //                            it
 //                        )
 //                    })
-                    Log.d("type",response.body()?.crop_position?.leftX?.javaClass.toString())
                 }else{
                     Toast.makeText(activity as MainActivity,"동물 사진이 아닙니다.", Toast.LENGTH_SHORT).show()
                     findNavController().navigate(R.id.albumFragment)
@@ -176,15 +175,13 @@ class ResultFragment : Fragment() {
         })
     }
 
-    private class Rectangle(context: Context?, val result: AnalysisResult) : View(context) {
+    private class drawBox(context: Context?, val result: AnalysisResult) : View(context) {
         var paint: Paint = Paint()
         @SuppressLint("DrawAllocation")
         override fun onDraw(canvas: Canvas) {
             paint.color = Color.RED
             paint.style = Paint.Style.STROKE
-            val rect = Rect(result.crop_position.leftX, result.crop_position.leftY,
-                result.crop_position.rightX, result.crop_position.rightY)
-            canvas.drawRect(rect, paint)
+//            canvas.drawLine()
         }
     }
 
