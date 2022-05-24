@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:text="Type : "
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -85,10 +85,10 @@
             android:id="@+id/petType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/Dark_Gray"
-            android:textSize="20dp"
-            android:textStyle="bold"
             android:layout_marginStart="10dp"
+            android:textColor="@color/Dark_Gray"
+            android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/petTypeText"
             app:layout_constraintTop_toTopOf="@id/petTypeText"
             tools:text="Dog" />
@@ -97,11 +97,11 @@
             android:id="@+id/petBreedText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:text="Breed : "
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="@id/petTypeText"
             app:layout_constraintTop_toBottomOf="@id/petTypeText" />
 
@@ -109,10 +109,10 @@
             android:id="@+id/petBreed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/Dark_Gray"
-            android:textSize="20dp"
-            android:textStyle="bold"
             android:layout_marginStart="10dp"
+            android:textColor="@color/Dark_Gray"
+            android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/petBreedText"
             app:layout_constraintTop_toTopOf="@id/petBreedText"
             tools:text="Toy Poodle(100%)" />
@@ -121,11 +121,11 @@
             android:id="@+id/petEmotionText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:text="Emotion : "
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginTop="10dp"
             app:layout_constraintStart_toStartOf="@id/petBreedText"
             app:layout_constraintTop_toBottomOf="@id/petBreedText" />
 
@@ -133,10 +133,10 @@
             android:id="@+id/petEmotion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/Dark_Gray"
-            android:textSize="20dp"
-            android:textStyle="bold"
             android:layout_marginStart="10dp"
+            android:textColor="@color/Dark_Gray"
+            android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/petEmotionText"
             app:layout_constraintTop_toTopOf="@id/petEmotionText"
             tools:text="Angry(90.0%)" />
@@ -145,10 +145,10 @@
             android:id="@+id/petEmotionSet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/Light_Gray"
-            android:textSize="18dp"
-            android:textStyle="bold"
             android:layout_marginTop="10dp"
+            android:textColor="@color/Light_Gray"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/petEmotionText"
             app:layout_constraintTop_toBottomOf="@id/petEmotionText"
             tools:text="Angry(90.0%), Happy(4.4%), Sad(5.6%)" />
@@ -156,14 +156,28 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/deleteButton"
+        android:id="@+id/shareButton"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/delete_rectangle_button_background"
+        android:layout_marginTop="20dp"
+
+        android:background="@drawable/save_rectangle_button_background"
+        app:layout_constraintTop_toBottomOf="@id/resultLayout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SHARE"
+        android:textColor="#2061DC"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/shareButton"
+        app:layout_constraintEnd_toEndOf="@+id/shareButton"
+        app:layout_constraintStart_toStartOf="@+id/shareButton"
+        app:layout_constraintTop_toTopOf="@+id/shareButton" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

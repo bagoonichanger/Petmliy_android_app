@@ -1,10 +1,10 @@
 package com.bagooni.petmliy_android_app.home.Fragment.Api
 
-import android.net.Uri
 import okhttp3.MultipartBody
 import retrofit2.Call
-import retrofit2.http.*
-import java.net.URI
+import retrofit2.http.Multipart
+import retrofit2.http.POST
+import retrofit2.http.Part
 
 class AnalysisResult(
     val type: String, val cropPosition: CropPosition, val breed: Breed, val emotion: Emotion

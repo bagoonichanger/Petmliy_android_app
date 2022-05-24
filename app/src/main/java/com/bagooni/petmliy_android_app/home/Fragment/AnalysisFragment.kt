@@ -1,39 +1,20 @@
 package com.bagooni.petmliy_android_app.home.Fragment
 
 import android.Manifest
-import android.content.ContentValues
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.database.Cursor
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.bagooni.petmliy_android_app.MainActivity
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentAnalysisBinding
-import com.bagooni.petmliy_android_app.walk.WalkFragment
-import com.bumptech.glide.Glide
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.File
-import java.io.IOException
 
 class AnalysisFragment : Fragment() {
-    private val PERMISSIONS_REQUEST = 101
+    private val PERMISSIONS_REQUEST = 100
     private val PERMISSIONS = arrayOf(
         Manifest.permission.CAMERA,
         Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -90,4 +71,5 @@ class AnalysisFragment : Fragment() {
             )
         }
     }
+
 }

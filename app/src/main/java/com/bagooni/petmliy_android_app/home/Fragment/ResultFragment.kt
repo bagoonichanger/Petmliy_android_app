@@ -1,21 +1,19 @@
 package com.bagooni.petmliy_android_app.home.Fragment
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Activity.RESULT_OK
-import android.app.Dialog
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.*
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Environment
+import android.os.*
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.PixelCopy
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -85,6 +83,13 @@ class ResultFragment : Fragment() {
             findNavController().navigate(R.id.action_resultFragment_to_albumFragment)
         }
 
+        binding.shareButton.setOnClickListener {
+            getBitmapFromView(requireView(), requireActivity()) { bitmap ->
+                bitmapToUri(bitmap)
+            }
+        }
+
+
         var gson = GsonBuilder().setLenient().create()
 
         val retrofit = Retrofit.Builder()
@@ -99,6 +104,77 @@ class ResultFragment : Fragment() {
         } else {
             openGallery()
         }
+    }
+
+    private fun getBitmapFromView(view: View, activity: Activity, callback: (Bitmap) -> Unit) {
+        activity.window?.let { window ->
+            val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+            val locationOfViewInWindow = IntArray(2)
+            view.getLocationInWindow(locationOfViewInWindow)
+            try {
+                PixelCopy.request(
+                    window,
+                    Rect(
+                        locationOfViewInWindow[0],
+                        locationOfViewInWindow[1],
+                        locationOfViewInWindow[0] + view.width,
+                        locationOfViewInWindow[1] + view.height
+                    ),
+                    bitmap,
+                    { copyResult ->
+                        if (copyResult == PixelCopy.SUCCESS) {
+                            callback(bitmap)
+                        }
+                        // possible to handle other result codes ...
+                    },
+                    Handler(Looper.getMainLooper())
+                )
+            } catch (e: IllegalArgumentException) {
+                // PixelCopy may throw IllegalArgumentException, make sure to handle it
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun bitmapToUri(bitmap: Bitmap?) {
+        val fileName = "${System.currentTimeMillis()}.png"
+        val resolver = requireContext().contentResolver
+        val imageCollections =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                MediaStore.Images.Media.getContentUri(
+                    MediaStore.VOLUME_EXTERNAL_PRIMARY
+                )
+            } else {
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            }
+        val imageDetails = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
+            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                put(MediaStore.Images.Media.IS_PENDING, 1)
+            }
+        }
+
+        val imageUri = resolver.insert(imageCollections, imageDetails)
+        imageUri ?: return
+
+        resolver.openOutputStream(imageUri).use { outputStream ->
+            bitmap?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            imageDetails.clear()
+            imageDetails.put(MediaStore.Images.Media.IS_PENDING, 0)
+            resolver.update(imageUri, imageDetails, null, null)
+        }
+
+
+        val sharingIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "image/png"
+            putExtra(Intent.EXTRA_STREAM, imageUri)
+        }
+        startActivity(Intent.createChooser(sharingIntent, "공유하기"))
     }
 
     private fun openGallery() {

@@ -1,14 +1,19 @@
 package com.bagooni.petmliy_android_app.walk.Fragment
 
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
+import android.view.PixelCopy
 import android.view.View
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
@@ -139,10 +144,43 @@ class DetailTrackingFragment : Fragment(R.layout.fragment_detail_tracking) {
             findNavController().navigate(R.id.action_detailTrackingFragment_to_walkFragment)
         }
         binding.shareButton.setOnClickListener {
-            val bytes = Base64.decode(args.tracking.img, Base64.DEFAULT)
-            val changeImg = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+//            val bytes = Base64.decode(args.tracking.img, Base64.DEFAULT)
+//            val changeImg = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
 
-            bitmapToUri(changeImg)
+            getBitmapFromView(requireView(), requireActivity()) { bitmap ->
+                bitmapToUri(bitmap)
+            }
+//            bitmapToUri(changeImg)
+        }
+    }
+
+    private fun getBitmapFromView(view: View, activity: Activity, callback: (Bitmap) -> Unit) {
+        activity.window?.let { window ->
+            val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+            val locationOfViewInWindow = IntArray(2)
+            view.getLocationInWindow(locationOfViewInWindow)
+            try {
+                PixelCopy.request(
+                    window,
+                    Rect(
+                        locationOfViewInWindow[0],
+                        locationOfViewInWindow[1],
+                        locationOfViewInWindow[0] + view.width,
+                        locationOfViewInWindow[1] + view.height
+                    ),
+                    bitmap,
+                    { copyResult ->
+                        if (copyResult == PixelCopy.SUCCESS) {
+                            callback(bitmap)
+                        }
+                        // possible to handle other result codes ...
+                    },
+                    Handler(Looper.getMainLooper())
+                )
+            } catch (e: IllegalArgumentException) {
+                // PixelCopy may throw IllegalArgumentException, make sure to handle it
+                e.printStackTrace()
+            }
         }
     }
 
