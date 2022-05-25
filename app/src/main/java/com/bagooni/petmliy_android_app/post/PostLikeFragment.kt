@@ -1,5 +1,7 @@
 package com.bagooni.petmliy_android_app.post
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -196,26 +198,31 @@ class PostLikeFragment : Fragment() {
                 })
 
             holder.deleteBtn.setOnClickListener {
-                Thread {
-                    activity.runOnUiThread {
-                        postLikeFragment.deletePost(post.postId)
-                        Thread.sleep(1000)
-                        Toast.makeText(
-                            activity as MainActivity,
-                            "게시글이 삭제되었습니다.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        postLikeFragment.getLikePost()
-                    }
-                }.start()
+                val builder = AlertDialog.Builder(activity as MainActivity)
+                builder.setTitle("게시글을 삭제하시겠습니까?")
+                    .setMessage("업로드한 게시글이 삭제됩니다.")
+                    .setPositiveButton("확인", DialogInterface.OnClickListener{ dialog, id ->
+                        Thread {
+                            activity.runOnUiThread {
+                                postLikeFragment.deletePost(post.postId)
+                                Thread.sleep(1000)
+                                Toast.makeText(
+                                    activity as MainActivity,
+                                    "게시글이 삭제되었습니다.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                postLikeFragment.getLikePost()
+                            }
+                        }.start()
+                    })
+                    .setNegativeButton("취소", DialogInterface.OnClickListener{ dialog, id ->
+                    })
+                builder.show()
             }
-            holder.commentBtn.setOnClickListener {
-                postLikeFragment.postToComment(post.postId)
-            }
+
+            holder.commentBtn.setOnClickListener { postLikeFragment.postToComment(post.postId) }
             postLikeFragment.getCountLike(post.postId, holder.countLike)
-            holder.commentBtn.setOnClickListener {
-                postLikeFragment.postToComment(post.postId)
-            }
+            holder.commentBtn.setOnClickListener { postLikeFragment.postToComment(post.postId) }
         }
 
         override fun getItemCount(): Int {
