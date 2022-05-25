@@ -38,18 +38,14 @@ import com.bagooni.petmliy_android_app.walk.WalkFragment.Companion.PERMISSIONS_R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.reflect.Modifier
-import java.util.stream.Collectors
 
 class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     var client: OkHttpClient? =
@@ -354,15 +350,28 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun getPermissions() {
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
+                Manifest.permission.CAMERA
+            )
+            != PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(
+                requireContext(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            != PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
             )
             != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
                 requireActivity(),
                 arrayOf(
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ), PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION_AND_WRITE_EXTERNAL_STORAGE_PERMISSION
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.CAMERA
+                ),
+                PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION_AND_WRITE_EXTERNAL_STORAGE_PERMISSION
             )
         }
     }

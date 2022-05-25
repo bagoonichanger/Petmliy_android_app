@@ -139,7 +139,7 @@ class ResultFragment : Fragment() {
     }
 
     private fun bitmapToUri(bitmap: Bitmap?) {
-        val fileName = "${System.currentTimeMillis()}.png"
+        val fileName = "${System.currentTimeMillis()}.jpeg"
         val resolver = requireContext().contentResolver
         val imageCollections =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -151,7 +151,7 @@ class ResultFragment : Fragment() {
             }
         val imageDetails = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
-            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 put(MediaStore.Images.Media.IS_PENDING, 1)
@@ -162,7 +162,7 @@ class ResultFragment : Fragment() {
         imageUri ?: return
 
         resolver.openOutputStream(imageUri).use { outputStream ->
-            bitmap?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -173,7 +173,7 @@ class ResultFragment : Fragment() {
 
 
         val sharingIntent = Intent(Intent.ACTION_SEND).apply {
-            type = "image/png"
+            type = "image/jpeg"
             putExtra(Intent.EXTRA_STREAM, imageUri)
         }
         startActivity(Intent.createChooser(sharingIntent, "공유하기"))
@@ -199,11 +199,11 @@ class ResultFragment : Fragment() {
                     petImageUri?.let { it1 -> getEmotion(it1) }
                 }
             }
-        val filename = "${System.currentTimeMillis()}.png"
+        val filename = "${System.currentTimeMillis()}.jpeg"
         val storageDir: File? =
             (activity as MainActivity).getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
-        val file = File.createTempFile(filename, ".png", storageDir)
+        val file = File.createTempFile(filename, ".jpeg", storageDir)
         filePath = file.absolutePath
 
         petImageUri = FileProvider.getUriForFile(
@@ -324,7 +324,7 @@ class ResultFragment : Fragment() {
     }
 
     private fun bitmapToRequestBody(name: String, bitmap: Bitmap?): MultipartBody.Part {
-        val fileName = "${System.currentTimeMillis()}.png"
+        val fileName = "${System.currentTimeMillis()}.jpeg"
         val resolver = requireContext().contentResolver
         val imageCollections =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -336,7 +336,7 @@ class ResultFragment : Fragment() {
             }
         val imageDetails = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
-            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 put(MediaStore.Images.Media.IS_PENDING, 1)
@@ -347,7 +347,7 @@ class ResultFragment : Fragment() {
 
         if (imageUri != null) {
             resolver.openOutputStream(imageUri).use { outputStream ->
-                bitmap?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+                bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
             }
         }
 
@@ -362,7 +362,7 @@ class ResultFragment : Fragment() {
         Log.d("filename", imageUri.toString() + "_" + imageUri?.encodedPath + "_" + fileName)
         val path = imageUri?.let { getRealFile(it) }
         val file = File(path)
-        val file_RequestBody = file.asRequestBody("image/png".toMediaTypeOrNull())
+        val file_RequestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         var uploadFile = MultipartBody.Part.createFormData(name, fileName, file_RequestBody)
 
         return uploadFile

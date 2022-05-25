@@ -213,7 +213,7 @@ class DetailTrackingFragment : Fragment(R.layout.fragment_detail_tracking) {
     }
 
     private fun bitmapToUri(bitmap: Bitmap?) {
-        val fileName = "${System.currentTimeMillis()}.png"
+        val fileName = "${System.currentTimeMillis()}.jpeg"
         val resolver = requireContext().contentResolver
         val imageCollections =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -225,7 +225,7 @@ class DetailTrackingFragment : Fragment(R.layout.fragment_detail_tracking) {
             }
         val imageDetails = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
-            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 put(MediaStore.Images.Media.IS_PENDING, 1)
@@ -236,7 +236,7 @@ class DetailTrackingFragment : Fragment(R.layout.fragment_detail_tracking) {
         imageUri ?: return
 
         resolver.openOutputStream(imageUri).use { outputStream ->
-            bitmap?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -247,7 +247,7 @@ class DetailTrackingFragment : Fragment(R.layout.fragment_detail_tracking) {
 
 
         val sharingIntent = Intent(Intent.ACTION_SEND).apply {
-            type = "image/png"
+            type = "image/jpeg"
             putExtra(Intent.EXTRA_STREAM, imageUri)
         }
         startActivity(Intent.createChooser(sharingIntent, "공유하기"))
