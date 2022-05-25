@@ -34,6 +34,9 @@
         <argument
             android:name="postIdString"
             app:argType="long"/>
+        <action
+            android:id="@+id/action_postFragment_to_postLikeFragment"
+            app:destination="@id/postLikeFragment" />
     </keep_state_fragment>
     <keep_state_fragment
         android:id="@+id/walkFragment"
@@ -69,7 +72,11 @@
         android:id="@+id/albumFragment"
         android:name="com.bagooni.petmliy_android_app.home.Fragment.AnalysisFragment"
         android:label="fragment_album"
-        tools:layout="@layout/fragment_analysis" />
+        tools:layout="@layout/fragment_analysis" >
+        <action
+            android:id="@+id/action_albumFragment_to_resultFragment"
+            app:destination="@id/resultFragment" />
+    </keep_state_fragment>
     <keep_state_fragment
         android:id="@+id/bookMarkFragment"
         android:name="com.bagooni.petmliy_android_app.home.Fragment.LikePlaceFragment"
@@ -96,4 +103,28 @@
             android:name="postId"
             app:argType="long"/>
     </fragment>
+    <keep_state_fragment
+        android:id="@+id/postLikeFragment"
+        android:name="com.bagooni.petmliy_android_app.post.PostLikeFragment"
+        android:label="fragment_post_like"
+        tools:layout="@layout/fragment_post_like" >
+        <action
+            android:id="@+id/action_postLikeFragment_to_postFragment"
+            app:destination="@id/postFragment" />
+        <action
+            android:id="@+id/action_postLikeFragment_to_commentFragment"
+            app:destination="@id/commentFragment" />
+    </keep_state_fragment>
+    <keep_state_fragment
+        android:id="@+id/resultFragment"
+        android:name="com.bagooni.petmliy_android_app.home.Fragment.ResultFragment"
+        android:label="fragment_result"
+        tools:layout="@layout/fragment_result" >
+        <action
+            android:id="@+id/action_resultFragment_to_albumFragment"
+            app:destination="@id/albumFragment" />
+        <argument
+            android:name="selectNum"
+            app:argType="integer" />
+    </keep_state_fragment>
 </navigation>

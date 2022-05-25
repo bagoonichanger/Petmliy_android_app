@@ -1,11 +1,11 @@
 package com.bagooni.petmliy_android_app.post
 
+
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
@@ -17,16 +17,17 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.bagooni.petmliy_android_app.LoadingDialog
 import com.bagooni.petmliy_android_app.MainActivity
 import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentPostUploadBinding
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.material.snackbar.Snackbar
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
@@ -39,8 +40,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import java.io.IOException
-import java.net.MalformedURLException
-import java.net.URL
 
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -121,6 +120,8 @@ class PostUploadFragment : Fragment() {
 
         //업로드버튼 클릭
         binding.uploadButton.setOnClickListener{
+            val loading = LoadingDialog(activity as MainActivity)
+            loading.show()
             val postContent = MultipartBody.Part.createFormData("postContent", contentInput)
             val userUploadFile = MultipartBody.Part.createFormData("userImg",userImgUri)
 
@@ -130,17 +131,22 @@ class PostUploadFragment : Fragment() {
             if (uploadFile != null) {
                 retrofitService.postUpload(personEmailInput,uploadFile,postContent,userUploadFile).enqueue(object : Callback<Post> {
                     override fun onResponse(call: Call<Post>, response: Response<Post>) {
-                        Log.d("log",response.toString())
-                        Log.d("log", response.body().toString())
+                        if(response.isSuccessful){
+                            Log.d("log",response.toString())
+                        } else{
+                            Log.d("error",response.errorBody().toString())
+                            Toast.makeText(activity as MainActivity,"동물 사진이 아닙니다.", Toast.LENGTH_SHORT).show()
+                            findNavController().navigate(R.id.postUploadFragment)
+                            loading.dismiss()
+                        }
                     }
                     override fun onFailure(call: Call<Post>, t: Throwable) {
-                        Log.d("log",t.message.toString())
-
+                        Toast.makeText(activity as MainActivity,"포스트 업로드했습니다.", Toast.LENGTH_SHORT).show()
+                        findNavController().navigate(R.id.postFragment)
+                        loading.dismiss()
                     }
                 })
             }
-            Snackbar.make(requireView(), "포스트 업로드", Snackbar.LENGTH_LONG).show()
-            findNavController().navigate(R.id.postFragment)
         }
     }
 
@@ -161,7 +167,7 @@ class PostUploadFragment : Fragment() {
     }
 
     private fun bitmapToRequestBody(name: String, bitmap: Bitmap?): MultipartBody.Part {
-        val fileName = "${System.currentTimeMillis()}.png"
+        val fileName = "${System.currentTimeMillis()}.jpeg"
         val resolver = requireContext().contentResolver
         val imageCollections =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -173,7 +179,7 @@ class PostUploadFragment : Fragment() {
             }
         val imageDetails = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
-            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 put(MediaStore.Images.Media.IS_PENDING, 1)
@@ -184,7 +190,9 @@ class PostUploadFragment : Fragment() {
 
         if (imageUri != null) {
             resolver.openOutputStream(imageUri).use { outputStream ->
-                bitmap?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+                val uploadImage = bitmap?.let { Bitmap.createScaledBitmap(it, 400, 400, true) }
+                uploadImage?.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                bitmap
             }
         }
 
@@ -199,7 +207,7 @@ class PostUploadFragment : Fragment() {
         Log.d("filename",imageUri.toString()+"_"+imageUri?.encodedPath+"_"+fileName)
         val path = imageUri?.let { getRealFile(it) }
         val file = File(path)
-        val file_RequestBody = file.asRequestBody("image/png".toMediaTypeOrNull())
+        val file_RequestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         var uploadFile = MultipartBody.Part.createFormData (name, fileName, file_RequestBody)
 
         return uploadFile

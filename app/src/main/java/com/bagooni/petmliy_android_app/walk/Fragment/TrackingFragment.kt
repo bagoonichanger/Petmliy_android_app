@@ -8,7 +8,10 @@ import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.net.Uri
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
 import android.view.PixelCopy
@@ -31,7 +34,6 @@ import com.bagooni.petmliy_android_app.Constants.POLYLINE_COLOR
 import com.bagooni.petmliy_android_app.Constants.POLYLINE_WIDTH
 import com.bagooni.petmliy_android_app.MainActivity
 import com.bagooni.petmliy_android_app.R
-import com.bagooni.petmliy_android_app.walk.Db.Tracking
 import com.bagooni.petmliy_android_app.walk.Db.TrackingViewModel
 import com.bagooni.petmliy_android_app.walk.Fragment.Api.CustomWalkApi
 import com.bagooni.petmliy_android_app.walk.Fragment.Dto.sendTrackingDto
@@ -279,7 +281,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     }
 
     private fun bitmapToRequestBody(bitmap: Bitmap?): MultipartBody.Part {
-        val fileName = "${System.currentTimeMillis()}.png"
+        val fileName = "${System.currentTimeMillis()}.jpeg"
         val resolver = requireContext().contentResolver
         val imageCollections =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -291,7 +293,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             }
         val imageDetails = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
-            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 put(MediaStore.Images.Media.IS_PENDING, 1)
@@ -303,7 +305,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
 
         if (imageUri != null) {
             resolver.openOutputStream(imageUri).use { outputStream ->
-                bitmap?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+                bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
             }
         }
 
@@ -323,7 +325,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             Log.d("절대경로", path)
         }
 
-        val file_RequestBody = file.asRequestBody("image/png".toMediaTypeOrNull())
+        val file_RequestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         var uploadFile = MultipartBody.Part.createFormData("img", fileName, file_RequestBody)
 
         return uploadFile
@@ -561,7 +563,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     private fun showSaveTrackingDialog() {
         AlertDialog.Builder(requireContext())
             .setTitle("산책 기록을 저장하시겠습니까?")
-            .setMessage("현재까지의 기록을 취소하고 모든 데이터를 삭제하시겠습니까?")
+            .setMessage("현재까지의 기록을 저장할까요?")
             .setPositiveButton("저장") { _, _ ->
                 zoomToSeeWholeTrack()
                 endTracking_saveToDb()

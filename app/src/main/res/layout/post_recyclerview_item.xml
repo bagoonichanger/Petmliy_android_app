@@ -12,8 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -42,6 +42,18 @@
             app:layout_constraintStart_toEndOf="@id/userImg"
             app:layout_constraintTop_toTopOf="@id/userImg"
             tools:text="petmily" />
+
+        <ImageView
+            android:id="@+id/deleteButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/post_delete_btn_ic"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -60,8 +72,8 @@
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="@id/postImgLayout"
             app:layout_constraintEnd_toEndOf="@id/postImgLayout"
-            app:layout_constraintTop_toTopOf="@id/postImgLayout"
-            app:layout_constraintStart_toStartOf="@id/postImgLayout" />
+            app:layout_constraintStart_toStartOf="@id/postImgLayout"
+            app:layout_constraintTop_toTopOf="@id/postImgLayout" />
 
         <ImageView
             android:id="@+id/postLayer"
@@ -70,9 +82,9 @@
             android:alpha="0.3"
             android:background="@color/white"
             android:visibility="invisible"
-            app:layout_constraintStart_toStartOf="@id/postImgLayout"
-            app:layout_constraintEnd_toEndOf="@id/postImgLayout"
             app:layout_constraintBottom_toBottomOf="@id/postImgLayout"
+            app:layout_constraintEnd_toEndOf="@id/postImgLayout"
+            app:layout_constraintStart_toStartOf="@id/postImgLayout"
             app:layout_constraintTop_toTopOf="@id/postImgLayout" />
 
         <ImageView
@@ -161,13 +173,11 @@
             android:id="@+id/postUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:layout_marginBottom="10dp"
             android:text="petmily"
             android:textColor="@color/black"
             android:textSize="15sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/likeCount"
             app:layout_constraintTop_toBottomOf="@id/likeCount" />
 
@@ -186,14 +196,18 @@
             tools:text="내용" />
 
         <TextView
-            android:id="@+id/postTags"
+            android:id="@+id/tagText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="태그"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/favoriteBtn"
-            android:layout_marginEnd="20dp"
-            />
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/pastelBlue"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/postUserName"
+            app:layout_constraintTop_toBottomOf="@id/postUserName"
+            tools:text="#고양이" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
