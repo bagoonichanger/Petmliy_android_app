@@ -31,5 +31,4 @@ interface LikeRetrofitService {
     fun countLike(
         @Path("postId") postId: Long
     ): Call<Int>
-
 }

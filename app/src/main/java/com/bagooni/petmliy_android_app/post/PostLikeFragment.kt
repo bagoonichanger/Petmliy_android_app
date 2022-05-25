@@ -1,5 +1,7 @@
 package com.bagooni.petmliy_android_app.post
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -9,11 +11,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AbsListView
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.view.menu.ActionMenuItemView
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -99,6 +100,8 @@ class PostLikeFragment : Fragment() {
             val postHeart : ImageView
             val commentBtn : ImageButton
             val countLike : TextView
+            val tagText : TextView
+            val deleteBtn : ImageView
 
             init {
                 userImg = itemView.findViewById(R.id.userImg)
@@ -112,6 +115,8 @@ class PostLikeFragment : Fragment() {
                 postHeart = itemView.findViewById(R.id.postHeart)
                 commentBtn = itemView.findViewById(R.id.commentBtn)
                 countLike = itemView.findViewById(R.id.likeCount)
+                tagText = itemView.findViewById(R.id.tagText)
+                deleteBtn = itemView.findViewById(R.id.deleteButton)
 
                 favoriteBtn.setOnClickListener {
                     Thread {
@@ -164,6 +169,11 @@ class PostLikeFragment : Fragment() {
             holder.postUserName.text = post.email.split("@")[0]
             holder.userName.text = post.email.split("@")[0]
             holder.postContent.text = post.postContent
+            ("#" + post.tags.replace(", ", " #")).also { holder.tagText.text = it }
+
+            if (post.email == postLikeFragment.personEmailInput) {
+                holder.deleteBtn.visibility = View.VISIBLE
+            }
 
             postLikeFragment.likeRetrofitService.aboutLike(postLikeFragment.personEmailInput,post.postId)
                 .enqueue(object : Callback<Int>{
@@ -187,10 +197,32 @@ class PostLikeFragment : Fragment() {
                     }
                 })
 
-            postLikeFragment.getCountLike(post.postId, holder.countLike)
-            holder.commentBtn.setOnClickListener {
-                postLikeFragment.postToComment(post.postId)
+            holder.deleteBtn.setOnClickListener {
+                val builder = AlertDialog.Builder(activity as MainActivity)
+                builder.setTitle("게시글을 삭제하시겠습니까?")
+                    .setMessage("업로드한 게시글이 삭제됩니다.")
+                    .setPositiveButton("확인", DialogInterface.OnClickListener{ dialog, id ->
+                        Thread {
+                            activity.runOnUiThread {
+                                postLikeFragment.deletePost(post.postId)
+                                Thread.sleep(1000)
+                                Toast.makeText(
+                                    activity as MainActivity,
+                                    "게시글이 삭제되었습니다.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                postLikeFragment.getLikePost()
+                            }
+                        }.start()
+                    })
+                    .setNegativeButton("취소", DialogInterface.OnClickListener{ dialog, id ->
+                    })
+                builder.show()
             }
+
+            holder.commentBtn.setOnClickListener { postLikeFragment.postToComment(post.postId) }
+            postLikeFragment.getCountLike(post.postId, holder.countLike)
+            holder.commentBtn.setOnClickListener { postLikeFragment.postToComment(post.postId) }
         }
 
         override fun getItemCount(): Int {
@@ -256,6 +288,17 @@ class PostLikeFragment : Fragment() {
         })
     }
 
+    private fun deletePost(postId: Long) {
+        retrofitService.deletePost(personEmailInput, postId).enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.d("log delete", t.message.toString())
+            }
+        })
+    }
+
     private fun checkSign(){
         val acct = GoogleSignIn.getLastSignedInAccount(activity as MainActivity)
         if (acct != null) {
@@ -267,7 +310,7 @@ class PostLikeFragment : Fragment() {
     }
 
     fun postToComment(postId : Long){
-        var action = PostFragmentDirections.actionPostFragmentToCommentFragment(postId)
+        var action = PostLikeFragmentDirections.actionPostLikeFragmentToCommentFragment(postId)
         findNavController().navigate(action)
     }
 

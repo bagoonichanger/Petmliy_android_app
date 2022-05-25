@@ -59,7 +59,6 @@ class ResultFragment : Fragment() {
     lateinit var filePath: String
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     lateinit var analysisApi: AnalysisService
-////
     private val imagePickerLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             val petImageUri = it.data?.data
