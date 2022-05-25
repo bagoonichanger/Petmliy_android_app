@@ -281,7 +281,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     }
 
     private fun bitmapToRequestBody(bitmap: Bitmap?): MultipartBody.Part {
-        val fileName = "${System.currentTimeMillis()}.png"
+        val fileName = "${System.currentTimeMillis()}.jpeg"
         val resolver = requireContext().contentResolver
         val imageCollections =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -293,7 +293,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             }
         val imageDetails = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
-            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 put(MediaStore.Images.Media.IS_PENDING, 1)
@@ -305,7 +305,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
 
         if (imageUri != null) {
             resolver.openOutputStream(imageUri).use { outputStream ->
-                bitmap?.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+                bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
             }
         }
 
@@ -325,7 +325,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             Log.d("절대경로", path)
         }
 
-        val file_RequestBody = file.asRequestBody("image/png".toMediaTypeOrNull())
+        val file_RequestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         var uploadFile = MultipartBody.Part.createFormData("img", fileName, file_RequestBody)
 
         return uploadFile
