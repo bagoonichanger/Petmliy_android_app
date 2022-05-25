@@ -1,7 +1,9 @@
 package com.bagooni.petmliy_android_app.post
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.ContentValues
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -40,11 +42,13 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.reflect.Modifier
 import java.util.stream.Collectors
 
 class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
@@ -205,23 +209,30 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     }
                 })
             postFragment.getCountLike(post.postId, holder.countLike)
+
             holder.deleteBtn.setOnClickListener {
-                Thread {
-                    activity.runOnUiThread {
-                        postFragment.deletePost(post.postId)
-                        Thread.sleep(1000)
-                        Toast.makeText(
-                            activity as MainActivity,
-                            "게시글이 삭제되었습니다.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        postFragment.getPost()
-                    }
-                }.start()
+                val builder = AlertDialog.Builder(activity as MainActivity)
+                builder.setTitle("게시글을 삭제하시겠습니까?")
+                    .setMessage("업로드한 게시글이 삭제됩니다.")
+                    .setPositiveButton("확인", DialogInterface.OnClickListener{ dialog, id ->
+                        Thread {
+                            activity.runOnUiThread {
+                                postFragment.deletePost(post.postId)
+                                Thread.sleep(1000)
+                                Toast.makeText(
+                                    activity as MainActivity,
+                                    "게시글이 삭제되었습니다.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                postFragment.getPost()
+                            }
+                        }.start()
+                    })
+                    .setNegativeButton("취소", DialogInterface.OnClickListener{ dialog, id ->
+                    })
+                builder.show()
             }
-            holder.commentBtn.setOnClickListener {
-                postFragment.postToComment(post.postId)
-            }
+            holder.commentBtn.setOnClickListener { postFragment.postToComment(post.postId) }
             holder.shareBtn.setOnClickListener {
                 val bytes = Base64.decode(post.postImg, Base64.DEFAULT)
                 val changeImg = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)

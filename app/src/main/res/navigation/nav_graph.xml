@@ -102,9 +102,6 @@
         <argument
             android:name="postId"
             app:argType="long"/>
-        <action
-            android:id="@+id/action_commentFragment_self"
-            app:destination="@id/commentFragment" />
     </fragment>
     <keep_state_fragment
         android:id="@+id/postLikeFragment"
@@ -114,6 +111,9 @@
         <action
             android:id="@+id/action_postLikeFragment_to_postFragment"
             app:destination="@id/postFragment" />
+        <action
+            android:id="@+id/action_postLikeFragment_to_commentFragment"
+            app:destination="@id/commentFragment" />
     </keep_state_fragment>
     <keep_state_fragment
         android:id="@+id/resultFragment"
