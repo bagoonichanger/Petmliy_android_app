@@ -1,13 +1,14 @@
 package com.bagooni.petmliy_android_app.home.Fragment
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
 import android.database.Cursor
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
+import android.graphics.Rect
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
@@ -160,7 +161,8 @@ class ResultFragment : Fragment() {
         imageUri ?: return
 
         resolver.openOutputStream(imageUri).use { outputStream ->
-            bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            bitmap?.let { Bitmap.createScaledBitmap(it, 400, 400  , false) }
+            bitmap?.compress(Bitmap.CompressFormat.JPEG, 60, outputStream)
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -250,16 +252,6 @@ class ResultFragment : Fragment() {
         })
     }
 
-    private class drawBox(context: Context?, val result: AnalysisResult) : View(context) {
-        var paint: Paint = Paint()
-        @SuppressLint("DrawAllocation")
-        override fun onDraw(canvas: Canvas) {
-            paint.color = Color.RED
-            paint.style = Paint.Style.STROKE
-//            canvas.drawLine()
-        }
-    }
-
     private fun updateUI(result: AnalysisResult){
         binding.petType.text = result.type
         binding.petBreed.text = StringBuilder().append(result.breed.top1)
@@ -289,15 +281,12 @@ class ResultFragment : Fragment() {
     private fun loadBitmapFromMediaStoreBy(photoUri: Uri): Bitmap? {
         var image: Bitmap? = null
         try {
-            image = if (Build.VERSION.SDK_INT > 27) { // Api 버전별 이미지 처리
+            image = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { // Api 버전별 이미지 처리
                 val source: ImageDecoder.Source =
-                    ImageDecoder.createSource((activity as MainActivity).contentResolver, photoUri)
+                    ImageDecoder.createSource(requireActivity().contentResolver, photoUri)
                 ImageDecoder.decodeBitmap(source)
             } else {
-                MediaStore.Images.Media.getBitmap(
-                    (activity as MainActivity).contentResolver,
-                    photoUri
-                )
+                MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, photoUri)
             }
         } catch (e: IOException) {
             e.printStackTrace()
@@ -329,7 +318,7 @@ class ResultFragment : Fragment() {
 
         if (imageUri != null) {
             resolver.openOutputStream(imageUri).use { outputStream ->
-                bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                bitmap?.compress(Bitmap.CompressFormat.JPEG, 60, outputStream)
             }
         }
 

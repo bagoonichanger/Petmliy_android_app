@@ -129,7 +129,7 @@ class PostUploadFragment : Fragment() {
             val uploadFile = bitmapToRequestBody("postImg",bitmap)
 
             if (uploadFile != null) {
-                retrofitService.postUpload(personEmailInput,uploadFile,postContent,userUploadFile).enqueue(object : Callback<Post> {
+                retrofitService.postUpload(personEmailInput, uploadFile, postContent, userUploadFile).enqueue(object : Callback<Post> {
                     override fun onResponse(call: Call<Post>, response: Response<Post>) {
                         if(response.isSuccessful){
                             Log.d("log",response.toString())
@@ -153,12 +153,12 @@ class PostUploadFragment : Fragment() {
     fun loadBitmapFromMediaStoreBy(photoUri: Uri): Bitmap? {
         var image: Bitmap? = null
         try {
-            image = if (Build.VERSION.SDK_INT > 27) { // Api 버전별 이미지 처리
+            image = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { // Api 버전별 이미지 처리
                 val source: ImageDecoder.Source =
-                    ImageDecoder.createSource((activity as MainActivity).contentResolver, photoUri)
+                    ImageDecoder.createSource(requireActivity().contentResolver, photoUri)
                 ImageDecoder.decodeBitmap(source)
             } else {
-                MediaStore.Images.Media.getBitmap((activity as MainActivity).contentResolver, photoUri)
+                MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, photoUri)
             }
         } catch (e: IOException) {
             e.printStackTrace()
@@ -190,8 +190,9 @@ class PostUploadFragment : Fragment() {
 
         if (imageUri != null) {
             resolver.openOutputStream(imageUri).use { outputStream ->
-                val uploadImage = bitmap?.let { Bitmap.createScaledBitmap(it, 400, 400, true) }
-                uploadImage?.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                val changeBitmap =
+                    bitmap?.let { Bitmap.createScaledBitmap(it, 400, 400  , false) }
+                changeBitmap?.compress(Bitmap.CompressFormat.JPEG, 60, outputStream)
                 bitmap
             }
         }
