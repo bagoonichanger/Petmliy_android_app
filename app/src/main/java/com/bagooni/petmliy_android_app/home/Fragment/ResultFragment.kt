@@ -1,16 +1,17 @@
 package com.bagooni.petmliy_android_app.home.Fragment
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.database.Cursor
 import android.graphics.*
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.PixelCopy
@@ -45,6 +46,7 @@ import java.io.File
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.TimeUnit
+
 
 class ResultFragment : Fragment() {
     var client: OkHttpClient? =
@@ -231,9 +233,7 @@ class ResultFragment : Fragment() {
                     result?.let { updateUI(it) }
                     loading.dismiss()
 //                    binding.resultConstraintLayout.addView(result?.let {
-//                        Rectangle(activity as MainActivity,
-//                            it
-//                        )
+//                        drawBox(activity as MainActivity, it)
 //                    })
                 }else{
                     Toast.makeText(activity as MainActivity,"동물 사진이 아닙니다.", Toast.LENGTH_SHORT).show()
@@ -252,11 +252,29 @@ class ResultFragment : Fragment() {
 
     private class drawBox(context: Context?, val result: AnalysisResult) : View(context) {
         var paint: Paint = Paint()
-        @SuppressLint("DrawAllocation")
+        val rect = RectF()
         override fun onDraw(canvas: Canvas) {
+//            rect.set(
+//                result.cropPosition.leftX.toFloat(), result.cropPosition.leftY.toFloat(),
+//                (result.cropPosition.rightX - result.cropPosition.leftX).toFloat(),
+//                (result.cropPosition.rightY - result.cropPosition.leftY).toFloat())
+            rect.set(200f,200f,500f,800f)
             paint.color = Color.RED
             paint.style = Paint.Style.STROKE
-//            canvas.drawLine()
+            paint.strokeWidth = 2F
+            canvas?.drawRect(rect, paint)
+        }
+
+        private fun px2dp(px: Int): Float {
+            val resources: Resources = this.resources
+            val metrics: DisplayMetrics = resources.displayMetrics
+            return px / (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
+        }
+
+        private fun dp2px(dp: Int): Float {
+            val resources = this.resources
+            val metrics = resources.displayMetrics
+            return dp * (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
         }
     }
 
