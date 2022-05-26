@@ -93,7 +93,6 @@ class ResultFragment : Fragment() {
 
 
         var gson = GsonBuilder().setLenient().create()
-
         val retrofit = Retrofit.Builder()
             .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080/")
             .client(client)
