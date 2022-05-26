@@ -21,9 +21,7 @@ import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.FileProvider
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -33,7 +31,6 @@ import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentPostUploadBinding
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.gson.GsonBuilder
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
@@ -178,7 +175,6 @@ class PostUploadFragment : Fragment() {
                             loading.dismiss()
                         }
                     }
-
                     override fun onFailure(call: Call<Post>, t: Throwable) {
                         Log.d("log",t.message.toString())
                         Toast.makeText(activity as MainActivity, "포스트 업로드했습니다.", Toast.LENGTH_SHORT)
@@ -187,22 +183,19 @@ class PostUploadFragment : Fragment() {
                         loading.dismiss()
                     }
                 })
+            }
         }
-
     }
 
     fun loadBitmapFromMediaStoreBy(photoUri: Uri): Bitmap? {
         var image: Bitmap? = null
         try {
-            image = if (Build.VERSION.SDK_INT > 27) { // Api 버전별 이미지 처리
+            image = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { // Api 버전별 이미지 처리
                 val source: ImageDecoder.Source =
-                    ImageDecoder.createSource((activity as MainActivity).contentResolver, photoUri)
+                    ImageDecoder.createSource(requireActivity().contentResolver, photoUri)
                 ImageDecoder.decodeBitmap(source)
             } else {
-                MediaStore.Images.Media.getBitmap(
-                    (activity as MainActivity).contentResolver,
-                    photoUri
-                )
+                MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, photoUri)
             }
         } catch (e: IOException) {
             e.printStackTrace()
@@ -234,8 +227,9 @@ class PostUploadFragment : Fragment() {
 
         if (imageUri != null) {
             resolver.openOutputStream(imageUri).use { outputStream ->
-                val uploadImage = bitmap?.let { Bitmap.createScaledBitmap(it, 400, 400, true) }
-                uploadImage?.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                val changeBitmap =
+                    bitmap?.let { Bitmap.createScaledBitmap(it, 400, 400  , false) }
+                changeBitmap?.compress(Bitmap.CompressFormat.JPEG, 60, outputStream)
                 bitmap
             }
         }

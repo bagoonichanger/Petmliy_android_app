@@ -24,7 +24,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bagooni.petmliy_android_app.Constants.ACTION_PAUSE_SERVICE
 import com.bagooni.petmliy_android_app.Constants.ACTION_START_OR_RESUME_SERVICE
@@ -34,7 +33,6 @@ import com.bagooni.petmliy_android_app.Constants.POLYLINE_COLOR
 import com.bagooni.petmliy_android_app.Constants.POLYLINE_WIDTH
 import com.bagooni.petmliy_android_app.MainActivity
 import com.bagooni.petmliy_android_app.R
-import com.bagooni.petmliy_android_app.walk.Db.TrackingViewModel
 import com.bagooni.petmliy_android_app.walk.Fragment.Api.CustomWalkApi
 import com.bagooni.petmliy_android_app.walk.Fragment.Dto.sendTrackingDto
 import com.bagooni.petmliy_android_app.walk.Fragment.Service.Polyline
@@ -79,11 +77,6 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     private var mGoogleSignInClient: GoogleSignInClient? = null
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
 
-    private val viewModel by lazy {
-        ViewModelProvider(this, TrackingViewModel.Factory(requireActivity().application)).get(
-            TrackingViewModel::class.java
-        )
-    }
     private lateinit var mapView: MapView
     private var map: GoogleMap? = null
 
@@ -148,7 +141,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
 
         mapView.getMapAsync {
             map = it
-            addAllPolylines()
+            addAllPolyLines()
         }
 
         subscribeToObservers(view)
@@ -171,7 +164,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
                 checkDistanceInMeters += TrackingUtility.calculatePolylineLength(polyline).toInt()
             }
             val checkAvgSpeed =
-                round((checkDistanceInMeters / 100f) / (curTimeInMillis / 1000f / 60 / 60) * 10) / 10f
+                round((checkDistanceInMeters / 100f) / (curTimeInMillis / 1000f / 60 / 60) * 10) / 100f
             view.findViewById<TextView>(R.id.velocity).text = checkAvgSpeed.toString()
 
             val checkCaloriesBurned = ((checkDistanceInMeters / 1000f) * 70f).toInt()
@@ -210,14 +203,14 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         )
     }
 
-    private fun endTracking_saveToDb() {
+    private fun saveServer() {
         map?.snapshot { bitmap ->
             var distanceInMeters = 0
             for (polyline in pathPoints) {
                 distanceInMeters += TrackingUtility.calculatePolylineLength(polyline).toInt()
             }
             val avgSpeed =
-                round((distanceInMeters / 100f) / (curTimeInMillis / 1000f / 60 / 60) * 10) / 10f
+                round((distanceInMeters / 100f) / (curTimeInMillis / 1000f / 60 / 60) * 10) / 100f
             val year = Calendar.getInstance().get(Calendar.YEAR)
             val month = Calendar.getInstance().get(Calendar.MONTH) + 1
             val day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
@@ -260,19 +253,6 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             customAPi(post_img, textHashMap)
             //////////////////////////////////////////////////////////////////////
 
-//            val tracking = Tracking(
-//                randomId,
-//                year,
-//                month,
-//                day,
-//                bitmap, // TODO: 수정부분
-//                avgSpeed,
-//                distanceInMeters,
-//                curTimeInMillis,
-//                caloriesBurned
-//            )
-
-//            viewModel.insertTracking(tracking)
             view?.let {
                 Snackbar.make(it, "산책이 저장되었습니다.", Snackbar.LENGTH_LONG).show()
             }
@@ -368,7 +348,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         })
     }
 
-    private fun addAllPolylines() {
+    private fun addAllPolyLines() {
         for (polyline in pathPoints) {
             val polylineOptions = PolylineOptions()
                 .color(POLYLINE_COLOR)
@@ -566,7 +546,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             .setMessage("현재까지의 기록을 저장할까요?")
             .setPositiveButton("저장") { _, _ ->
                 zoomToSeeWholeTrack()
-                endTracking_saveToDb()
+                saveServer()
             }
             .setNegativeButton("취소") { dialog, _ ->
                 dialog.cancel()

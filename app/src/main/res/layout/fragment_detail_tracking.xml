@@ -94,7 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:text="속도(h/Km)"
+            android:text="속도(Km/h)"
             android:textColor="@color/Dark_Gray"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/deleteButton"
