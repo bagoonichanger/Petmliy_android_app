@@ -181,7 +181,7 @@ Google 로그인을 사용 하므로 '디버그 서명 인증서 SHA-1'을 알�
 
 
 ## 3. 기능구현
-> [3. 기능구현]((https://github.com/yerin506/Petmliy-Func-Explain/blob/main/README.md))
+> [3. 기능구현](https://github.com/yerin506/Petmliy-Func-Explain/blob/main/README.md)
 
 ## 4. 차별성(x)
 
