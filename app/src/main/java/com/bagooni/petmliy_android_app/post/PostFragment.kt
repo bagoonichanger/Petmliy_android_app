@@ -253,7 +253,7 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     private fun getPost() {
-        val loading = LoadingDialog(activity as MainActivity)
+        val loading = LoadingDialog(requireActivity())
         loading.show()
         retrofitService.getPost().enqueue(object : Callback<ArrayList<Post>> {
             override fun onResponse(
@@ -268,7 +268,7 @@ class PostFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         LayoutInflater.from(activity),
                         Glide.with(activity!!),
                         this@PostFragment,
-                        activity as (MainActivity),
+                        requireActivity() as MainActivity,
                         shareButton = {
                             Log.d("post", it)
                             val bytes = Base64.decode(it, Base64.DEFAULT)

@@ -19,7 +19,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-//check
+//check0528
 class MainActivity : AppCompatActivity() { // phone check
     private var mGoogleSignInClient: GoogleSignInClient? = null
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
