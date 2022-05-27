@@ -6,11 +6,13 @@ import android.app.Activity.RESULT_OK
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.database.Cursor
 import android.graphics.*
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.PixelCopy
@@ -91,7 +93,6 @@ class ResultFragment : Fragment() {
 
 
         var gson = GsonBuilder().setLenient().create()
-
         val retrofit = Retrofit.Builder()
             .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080/")
             .client(client)
@@ -160,7 +161,8 @@ class ResultFragment : Fragment() {
         imageUri ?: return
 
         resolver.openOutputStream(imageUri).use { outputStream ->
-            bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            bitmap?.let { Bitmap.createScaledBitmap(it, 400, 400  , false) }
+            bitmap?.compress(Bitmap.CompressFormat.JPEG, 60, outputStream)
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -231,9 +233,7 @@ class ResultFragment : Fragment() {
                     result?.let { updateUI(it) }
                     loading.dismiss()
 //                    binding.resultConstraintLayout.addView(result?.let {
-//                        Rectangle(activity as MainActivity,
-//                            it
-//                        )
+//                        drawBox(activity as MainActivity, it)
 //                    })
                 }else{
                     Toast.makeText(activity as MainActivity,"동물 사진이 아닙니다.", Toast.LENGTH_SHORT).show()
@@ -252,11 +252,29 @@ class ResultFragment : Fragment() {
 
     private class drawBox(context: Context?, val result: AnalysisResult) : View(context) {
         var paint: Paint = Paint()
-        @SuppressLint("DrawAllocation")
+        val rect = RectF()
         override fun onDraw(canvas: Canvas) {
+//            rect.set(
+//                result.cropPosition.leftX.toFloat(), result.cropPosition.leftY.toFloat(),
+//                (result.cropPosition.rightX - result.cropPosition.leftX).toFloat(),
+//                (result.cropPosition.rightY - result.cropPosition.leftY).toFloat())
+            rect.set(200f,200f,500f,800f)
             paint.color = Color.RED
             paint.style = Paint.Style.STROKE
-//            canvas.drawLine()
+            paint.strokeWidth = 2F
+            canvas?.drawRect(rect, paint)
+        }
+
+        private fun px2dp(px: Int): Float {
+            val resources: Resources = this.resources
+            val metrics: DisplayMetrics = resources.displayMetrics
+            return px / (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
+        }
+
+        private fun dp2px(dp: Int): Float {
+            val resources = this.resources
+            val metrics = resources.displayMetrics
+            return dp * (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
         }
     }
 
@@ -289,15 +307,12 @@ class ResultFragment : Fragment() {
     private fun loadBitmapFromMediaStoreBy(photoUri: Uri): Bitmap? {
         var image: Bitmap? = null
         try {
-            image = if (Build.VERSION.SDK_INT > 27) { // Api 버전별 이미지 처리
+            image = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { // Api 버전별 이미지 처리
                 val source: ImageDecoder.Source =
-                    ImageDecoder.createSource((activity as MainActivity).contentResolver, photoUri)
+                    ImageDecoder.createSource(requireActivity().contentResolver, photoUri)
                 ImageDecoder.decodeBitmap(source)
             } else {
-                MediaStore.Images.Media.getBitmap(
-                    (activity as MainActivity).contentResolver,
-                    photoUri
-                )
+                MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, photoUri)
             }
         } catch (e: IOException) {
             e.printStackTrace()
@@ -329,7 +344,7 @@ class ResultFragment : Fragment() {
 
         if (imageUri != null) {
             resolver.openOutputStream(imageUri).use { outputStream ->
-                bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                bitmap?.compress(Bitmap.CompressFormat.JPEG, 60, outputStream)
             }
         }
 
