@@ -1,15 +1,18 @@
 package com.bagooni.petmliy_android_app.post
 
 
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,7 +21,9 @@ import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -28,6 +33,7 @@ import com.bagooni.petmliy_android_app.R
 import com.bagooni.petmliy_android_app.databinding.FragmentPostUploadBinding
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.gson.GsonBuilder
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
@@ -47,18 +53,39 @@ class PostUploadFragment : Fragment() {
     var client: OkHttpClient? =
         httpLoggingInterceptor()?.let { OkHttpClient.Builder().addInterceptor(it).build() }
 
-    private var _binding: FragmentPostUploadBinding?=null
+    private var _binding: FragmentPostUploadBinding? = null
     private val binding get() = _binding!!
-    private var postImageUri : Uri? = null
-    private var contentInput : String = ""
-    private var personEmailInput : String = ""
-    private var userImgUri : String = ""
+    lateinit var filePath: String
+    private var postImageUri: Uri? = null
+    private var cameraImageUri: Uri? = null
+    private var contentInput: String = ""
+    private var personEmailInput: String = ""
+    private var userImgUri: String = ""
+
+    private val imagePickerLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            postImageUri = it.data?.data
+            if (it.data == null) {
+                findNavController().navigate(R.id.action_postUploadFragment_to_postFragment)
+            }
+            binding.noneImage.visibility = INVISIBLE
+            Glide.with(activity as MainActivity).load(postImageUri).centerCrop()
+                .into(binding.postImg)
+        }
+
+    private val cameraLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                Glide.with(this).load(cameraImageUri).centerCrop().into(binding.postImg)
+                binding.noneImage.visibility = INVISIBLE
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentPostUploadBinding.inflate(inflater,container,false)
+        _binding = FragmentPostUploadBinding.inflate(inflater, container, false)
         binding.closeButton.setOnClickListener {
             findNavController().navigate(R.id.action_postUploadFragment_to_postFragment)
         }
@@ -66,99 +93,116 @@ class PostUploadFragment : Fragment() {
         return binding.root
     }
 
-    private val imagePickerLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-            postImageUri = it.data?.data
-            if(it.data == null){
-                findNavController().navigate(R.id.action_postUploadFragment_to_postFragment)
-            }
-            binding.noneImage.visibility = INVISIBLE
-            Glide.with(activity as MainActivity).load(postImageUri).centerCrop().into(binding.postImg)
-        }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         checkSign()
         binding.noneImage.setOnClickListener { openGallery() }
-
-        postUpload()
+        binding.takePicture.setOnClickListener { openCamera() }
     }
 
-    private fun checkSign(){
+    private fun checkSign() {
         val acct = GoogleSignIn.getLastSignedInAccount(activity as MainActivity)
         if (acct != null) {
             val personEmail = acct.email
             val userImg = acct.photoUrl
             personEmailInput = personEmail.toString()
             userImgUri = userImg.toString()
-            Log.d("google",personEmailInput)
-            Log.d("google",userImg.toString())
+            Log.d("google", personEmailInput)
+            Log.d("google", userImg.toString())
         }
     }
 
-    private fun openGallery(){
+    private fun openGallery() {
         imagePickerLauncher.launch(
             Intent.createChooser(Intent(Intent.ACTION_GET_CONTENT).apply {
                 type = "image/*"
-            },"사진 선택하기")
+            }, "사진 선택하기")
         )
+        binding.uploadButton.setOnClickListener { postImageUri?.let { it1 -> postUpload(it1) } }
     }
 
-    private fun postUpload(){
+    private fun openCamera() {
+        val filename = "${System.currentTimeMillis()}.jpeg"
+        val storageDir: File? =
+            (activity as MainActivity).getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+        val file = File.createTempFile(filename, ".jpeg", storageDir)
+        filePath = file.absolutePath
+
+        cameraImageUri = FileProvider.getUriForFile(
+            activity as MainActivity,
+            "com.bagooni.petmliy_android_app",
+            file
+        )
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, cameraImageUri)
+        cameraLauncher.launch(intent)
+        binding.uploadButton.setOnClickListener { cameraImageUri?.let {it1 -> postUpload(it1)} }
+    }
+
+    private fun postUpload(postImageUri: Uri) {
+        var gson = GsonBuilder().setLenient().create()
         val retrofit = Retrofit.Builder()
             .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080/")
             .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
         val retrofitService = retrofit.create(RetrofitService::class.java)
 
         //입력문구 얻어옴
-        binding.postContent.doAfterTextChanged {
-            contentInput = it.toString()
-        }
+        contentInput = binding.postContent.text.toString()
 
-        //업로드버튼 클릭
-        binding.uploadButton.setOnClickListener{
-            val loading = LoadingDialog(activity as MainActivity)
-            loading.show()
-            val postContent = MultipartBody.Part.createFormData("postContent", contentInput)
-            val userUploadFile = MultipartBody.Part.createFormData("userImg",userImgUri)
+        val loading = LoadingDialog(activity as MainActivity)
+        loading.show()
+        val postContent = MultipartBody.Part.createFormData("postContent", contentInput)
+        val userUploadFile = MultipartBody.Part.createFormData("userImg", userImgUri)
 
-            val bitmap = postImageUri?.let { it1 -> loadBitmapFromMediaStoreBy(it1) }
-            val uploadFile = bitmapToRequestBody("postImg",bitmap)
+        val bitmap = postImageUri?.let { it1 -> loadBitmapFromMediaStoreBy(it1) }
+        val uploadFile = bitmapToRequestBody("postImg", bitmap)
 
-            if (uploadFile != null) {
-                retrofitService.postUpload(personEmailInput, uploadFile, postContent, userUploadFile).enqueue(object : Callback<Post> {
+        if (uploadFile != null) {
+            retrofitService.postUpload(personEmailInput, uploadFile, postContent, userUploadFile)
+                .enqueue(object : Callback<Post> {
                     override fun onResponse(call: Call<Post>, response: Response<Post>) {
-                        if(response.isSuccessful){
-                            Log.d("log",response.toString())
-                        } else{
-                            Log.d("error",response.errorBody().toString())
-                            Toast.makeText(activity as MainActivity,"동물 사진이 아닙니다.", Toast.LENGTH_SHORT).show()
+                        if (response.isSuccessful) {
+                            Log.d("log", response.toString())
+                        } else {
+                            Log.d("error", response.errorBody().toString())
+                            Toast.makeText(
+                                activity as MainActivity,
+                                "동물 사진이 아닙니다.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             findNavController().navigate(R.id.postUploadFragment)
                             loading.dismiss()
                         }
                     }
+
                     override fun onFailure(call: Call<Post>, t: Throwable) {
-                        Toast.makeText(activity as MainActivity,"포스트 업로드했습니다.", Toast.LENGTH_SHORT).show()
+                        Log.d("log",t.message.toString())
+                        Toast.makeText(activity as MainActivity, "포스트 업로드했습니다.", Toast.LENGTH_SHORT)
+                            .show()
                         findNavController().navigate(R.id.postFragment)
                         loading.dismiss()
                     }
                 })
-            }
         }
+
     }
 
     fun loadBitmapFromMediaStoreBy(photoUri: Uri): Bitmap? {
         var image: Bitmap? = null
         try {
-            image = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { // Api 버전별 이미지 처리
+            image = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) { // Api 버전별 이미지 처리
                 val source: ImageDecoder.Source =
-                    ImageDecoder.createSource(requireActivity().contentResolver, photoUri)
+                    ImageDecoder.createSource((activity as MainActivity).contentResolver, photoUri)
                 ImageDecoder.decodeBitmap(source)
             } else {
-                MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, photoUri)
+                MediaStore.Images.Media.getBitmap(
+                    (activity as MainActivity).contentResolver,
+                    photoUri
+                )
             }
         } catch (e: IOException) {
             e.printStackTrace()
@@ -190,9 +234,8 @@ class PostUploadFragment : Fragment() {
 
         if (imageUri != null) {
             resolver.openOutputStream(imageUri).use { outputStream ->
-                val changeBitmap =
-                    bitmap?.let { Bitmap.createScaledBitmap(it, 400, 400  , false) }
-                changeBitmap?.compress(Bitmap.CompressFormat.JPEG, 60, outputStream)
+                val changeImage = bitmap?.let { Bitmap.createScaledBitmap(it, 400, 400, false) }
+                changeImage?.compress(Bitmap.CompressFormat.JPEG, 60, outputStream)
                 bitmap
             }
         }
@@ -205,19 +248,20 @@ class PostUploadFragment : Fragment() {
             }
         }
 
-        Log.d("filename",imageUri.toString()+"_"+imageUri?.encodedPath+"_"+fileName)
+        Log.d("filename", imageUri.toString() + "_" + imageUri?.encodedPath + "_" + fileName)
         val path = imageUri?.let { getRealFile(it) }
         val file = File(path)
         val file_RequestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-        var uploadFile = MultipartBody.Part.createFormData (name, fileName, file_RequestBody)
+        var uploadFile = MultipartBody.Part.createFormData(name, fileName, file_RequestBody)
 
         return uploadFile
     }
 
     //절대경로 string 변환
-    private fun getRealFile(uri: Uri): String?{
+    private fun getRealFile(uri: Uri): String? {
         var project: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
-        var c: Cursor? = (activity as MainActivity).contentResolver.query(uri!!,project,null,null,null)
+        var c: Cursor? =
+            (activity as MainActivity).contentResolver.query(uri!!, project, null, null, null)
         var index = c?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
         c?.moveToFirst()
 
@@ -227,7 +271,8 @@ class PostUploadFragment : Fragment() {
 
     private fun hideKeyboard() {
         if (activity != null && (activity as MainActivity).currentFocus != null) {
-            val inputManager = (activity as MainActivity).getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val inputManager =
+                (activity as MainActivity).getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputManager.hideSoftInputFromWindow(
                 (activity as MainActivity).currentFocus!!.windowToken,
                 InputMethodManager.HIDE_NOT_ALWAYS
