@@ -1008,13 +1008,77 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     }  
 	val calendar = Calendar.getInstance()  
     viewModel.trackingSortedByCalendar(  
-        calendar.get(Calendar.YEAR),  
+        calendar.get(Calendar.YEAR),
 		calendar.get(Calendar.MONTH) + 1,  
 		calendar.get(Calendar.DAY_OF_MONTH)  
 	).observe(viewLifecycleOwner, Observer {  
 		allDataAPi(calendarView)  
         customAPi(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH))  
     })  
+}
+```
+#### CalendarRecyclerAdapter
+해당 날짜의 산책 기록(날짜, 시간, 거리, 평균 속도, 칼로리) 리스트를 보여준다.
+```kotlin
+class CalendarRecyclerAdapter(val detailRecyclerView: (Tracking) -> Unit) :  
+    ListAdapter<Tracking, CalendarRecyclerAdapter.ItemViewHolder>(CalendarRecyclerAdapter.differ) {  
+    inner class ItemViewHolder(private val binding: WalkRecycleviewDetailBinding) :  
+        RecyclerView.ViewHolder(binding.root) {  
+        fun bind(tracking: Tracking) {  
+			val trackingImageView = binding.trackingImage  
+			trackingImageView.clipToOutline = true  
+			val trackingDateTextView = binding.trackingDate  
+			val trackingAvgSpeedTextView = binding.trackingAvgSpeed  
+			val trackingDistanceTextView = binding.trackingDistance  
+			val trackingTimeTextView = binding.trackingTime  
+			val trackingCaloriesTextView = binding.trackingCalories 
+  
+			trackingDateTextView.text = "${tracking.year}/${tracking.month}/${tracking.day}"  
+  
+			val avgSpeed = "${tracking.avgSpeedInKMH}km/h"  
+			trackingAvgSpeedTextView.text = avgSpeed  
+  
+            val distanceInKm = "${tracking.distanceInMeters / 1000f}km"  
+			trackingDistanceTextView.text = distanceInKm  
+  
+            trackingTimeTextView.text =  
+                TrackingUtility.getFormattedStopWatchTime(tracking.timeInMillis)  
+  
+            val caloriesBurned = "${tracking.caloriesBurned}kcal"  
+  trackingCaloriesTextView.text = caloriesBurned  
+  
+            binding.root.setOnClickListener {  
+  detailRecyclerView(tracking)  
+            }  
+		}  
+    }  
+  
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {  
+        return ItemViewHolder(  
+            WalkRecycleviewDetailBinding.inflate(  
+                LayoutInflater.from(parent.context),  
+				parent, false )  
+        )  
+    }  
+  
+    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {  
+        holder.bind(currentList[position])  
+    }  
+  
+    override fun getItemCount(): Int {  
+        return currentList.size  
+  }  
+  
+    companion object {  
+        val differ = object : DiffUtil.ItemCallback<Tracking>() {  
+            override fun areItemsTheSame(oldItem: Tracking, newItem: Tracking): Boolean {  
+                return oldItem.id == newItem.id  
+			}  
+            override fun areContentsTheSame(oldItem: Tracking, newItem: Tracking): Boolean {  
+                return oldItem.hashCode() == newItem.hashCode()  
+            }  
+        }  
+    }  
 }
 ```
 #### Tracking 데이터 모델
@@ -1118,9 +1182,40 @@ private fun allDataAPi(calendarView: MaterialCalendarView) {
     })  
 }
 ```
+#### 해당 날짜에 저장된 산책 기록 가져오기 customAPi
+```kotlin
+private fun customAPi(year: Int, month: Int, day: Int) {  
+    val retrofit = Retrofit.Builder()  
+        .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080")  
+        .client(client)  
+        .addConverterFactory(GsonConverterFactory.create())  
+        .build()  
+  
+    val api = retrofit.create(CustomWalkApi::class.java)  
+  
+    googleEmail?.let { email ->  
+		api.searchData(email, year, month, day)  
+    }?.enqueue(object : Callback<List<Tracking>> {  
+        override fun onResponse(  
+            call: Call<List<Tracking>>,  
+			response: Response<List<Tracking>>  
+        ) {  
+            response.body().let { dto ->  
+				Log.d("Walk", response.body().toString())  
+                recyclerAdapter.submitList(dto)  
+            }  
+		}  
+  
+        override fun onFailure(call: Call<List<Tracking>>, t: Throwable) {  
+            Log.d("walk Error1", t.message.toString())  
+        }  
+    })  
+}
+```
 #### DetailTrackingFragment.kt
 
 ### 실시간 산책 기록
+산책할 때 실시간으로 산책 시간, 산책 거리, 속도, 칼로리가 기록된다.
 #### TrackingFragment.kt
 
 ## 장소
@@ -1129,7 +1224,422 @@ private fun allDataAPi(calendarView: MaterialCalendarView) {
 * 나만의 장소를 즐겨찾기로 관리한다.
 
 ### 장소 검색
+KakaoApi을 이용해 키워드를 검색하면 장소를 추천 받을 수 있고 맘에 드는 장소는 즐겨 찾기 및 공유할 수 있다.
 #### MapFragment.kt
+```kotlin
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {  
+    super.onViewCreated(view, savedInstanceState)  
+  
+    mapView = binding.mapView  
+	mapView.onCreate(savedInstanceState)  
+    mapView.getMapAsync(this)  
+      
+    initButtons()  
+    clickViewPager()  
+  
+    viewPager.adapter = viewPagerAdapter  
+	recyclerView.adapter = recyclerAdapter  
+	recyclerView.layoutManager = LinearLayoutManager(activity)  
+}  
+  
+private fun initButtons() {  
+    binding.searchButton.setOnClickListener {  //검색 버튼
+		val searchText = binding.searchBar.text.toString()  
+        if (searchText == "") {  
+            Toast.makeText(activity, "장소를 입력해주세요.", Toast.LENGTH_SHORT).show()  
+        } else {  
+            deleteMarkers(markers)  
+            searchPlace(searchText)  
+        }  
+    }  
+  
+	binding.likeButton.setOnClickListener {  //좋아요 버튼
+	findNavController().navigate(R.id.action_mapFragment_to_bookMarkFragment)  
+    }  
+}  
+  
+private fun clickViewPager() {  
+    viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {  
+        override fun onPageSelected(position: Int) {  
+            super.onPageSelected(position)
+            val selectedModel = viewPagerAdapter.currentList[position]  
+            val cameraUpdate = CameraUpdate.scrollTo(  
+                LatLng(  
+                    selectedModel.y.toDouble(),  
+					selectedModel.x.toDouble()  
+                )  
+            )  
+                .animate(CameraAnimation.Easing)  
+            naverMap.moveCamera(cameraUpdate)  
+        }  
+    })  
+}
+```
+#### PlaceViewPagerAdapter
+지도 아래 간단히 뜨는 옆으로 넘겨 볼 수 있는 장소 리스트
+```kotlin
+class PlaceViewPagerAdapter(  
+    val linkButton: (PlaceModel) -> Unit,  
+	val likeButton: (PlaceModel) -> Unit,  
+	val shareButton: (PlaceModel) -> Unit  
+) : ListAdapter<PlaceModel, PlaceViewPagerAdapter.ItemViewHolder>(differ) {  
+    inner class ItemViewHolder(private val binding: MapViewpagerDetailBinding) :  
+        RecyclerView.ViewHolder(binding.root) {  
+        fun bind(placeModel: PlaceModel) {  
+            val titleTextView = binding.titleTextView  
+			val addressTextView = binding.addressTextView  
+			val callNumberTextView = binding.callNumberTextView  
+			val categoryTextView = binding.categoryTextView  
+  
+			titleTextView.text = placeModel.place_name  
+			addressTextView.text = placeModel.address_name  
+			if(placeModel.phone == ""){  
+                callNumberTextView.text = "전화번호가 없습니다."  
+			} else {  
+                callNumberTextView.text = placeModel.phone  
+			}  
+            categoryTextView.text = placeModel.category_name  
+  
+			binding.viewpagerShareButton.setOnClickListener { shareButton(placeModel) }  
+			binding.viewPagerLikeButton.setOnClickListener { likeButton(placeModel) }  
+			binding.root.setOnClickListener { linkButton(placeModel) }  
+		}  
+	}  
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {  
+        return ItemViewHolder(  
+            MapViewpagerDetailBinding.inflate(  
+                LayoutInflater.from(parent.context), parent, false ) 
+  ) }  
+  
+    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {  
+        holder.bind(currentList[position])  
+    }  
+  
+    companion object {  
+        val differ = object : DiffUtil.ItemCallback<PlaceModel>() {  
+            override fun areItemsTheSame(oldItem: PlaceModel, newItem: PlaceModel): Boolean {  
+                return oldItem.id == newItem.id 
+            }  
+            override fun areContentsTheSame(oldItem: PlaceModel, newItem: PlaceModel): Boolean {  
+                return oldItem == newItem  
+            }  
+        }  
+    }
+```
 
+```kotlin
+private val viewPagerAdapter = PlaceViewPagerAdapter(linkButton = {  
+	val intent = Intent().apply {  
+		action = Intent.ACTION_VIEW  
+		data = Uri.parse(it.place_url)  
+    }  
+	startActivity(intent)  
+	}, likeButton = {  
+	val name = it.place_name  
+	val phone = it.phone  
+	val address = it.address_name  
+	val url = it.place_url  
+	val categories = it.category_name  
+	val userImg = googleImage.toString()  
+  
+    val data = LikePlaceDto(null, name, phone, address, url, categories, userImg)  
+    customAPi(data)  
+    Toast.makeText(requireContext(), "장소가 저장되었습니다.", Toast.LENGTH_SHORT).show()  
+}, shareButton = {  
+	val sharingIntent = Intent(Intent.ACTION_SEND).apply {  
+		type = "text/plain"  
+		putExtra(Intent.EXTRA_TEXT, it.place_url)  
+    }  
+	startActivity(Intent.createChooser(sharingIntent, "공유하기"))  
+})
+```
+#### PlaceRecyclerAdapter
+아래에서 위로 올렸을 때 볼 수 있는 장소 리스트
+```kotlin
+private val recyclerAdapter = PlaceRecyclerAdapter(linkButton = {  
+	val intent = Intent().apply {  
+		action = Intent.ACTION_VIEW  
+		data = Uri.parse(it.place_url)  
+    }  
+	startActivity(intent)  
+}, likeButton = {  
+	val name = it.place_name  
+	val phone = it.phone  
+	val address = it.address_name  
+	val url = it.place_url  
+	val categories = it.category_name  
+	val userImg = googleImage.toString()  
+    val data = LikePlaceDto(null, name, phone, address, url, categories,userImg)  
+    customAPi(data)  
+    Toast.makeText(requireContext(), "장소가 저장되었습니다.", Toast.LENGTH_SHORT).show()  
+}, shareButton = {  
+	val sharingIntent = Intent(Intent.ACTION_SEND).apply {  
+		type = "text/plain"  
+		putExtra(Intent.EXTRA_TEXT, it.place_url)  
+    }  
+	startActivity(Intent.createChooser(sharingIntent, "공유하기"))  
+})
+```
+#### 장소 검색 API : KakaoApi
+```kotlin
+interface KakaoApi {  
+    @GET("/v2/local/search/keyword.json")  
+    fun getSearchPlaces(  
+        @Header("Authorization") key: String,  
+		@Query("query") query: String,  
+		@Query("page") page: Int,  
+		@Query("size") size: Int  
+    ): Call<PlaceDto>  
+}
+```
+#### PlaceDto
+```kotlin
+data class PlaceDto(  
+    var meta: Meta?, // 장소 메타데이터  
+  var documents: List<PlaceModel>? // 검색 결과  
+)
+```
+#### Meta
+```kotlin
+data class Meta(  
+    var total_count: Int, // 검색어에 검색된 문서 수  
+	var pageable_count: Int, //total_count 중 노출 가능 문서 수 (최대: 45)  
+	var same_name: RegionInfo          // 질의어의 지역 및 키워드 분석 정보  
+)
+```
+#### PlaceModel
+장소 데이터 모델
+```kotlin
+data class PlaceModel(  
+    var id: String, // 장소 ID  var place_name: String, // 장소명, 업체명  
+	var category_name: String, // 카테고리 이름  
+	var phone: String, // 전화번호  
+	var address_name: String, // 전체 지번 주소  
+	var road_address_name: String, // 전체 도로명 주소  
+	var x: String, // X 좌표값 혹은 longitude  
+	var y: String, // Y 좌표값 혹은 latitude  
+	var place_url: String, // 장소 상세페이지 URL  
+	var distance: String  // 중심좌표까지의 거리. 단, x,y 파라미터를 준 경우에만 존재. 단위는 meter
+)
+```
+
+#### 장소 검색 searchPlace
+```kotlin
+private fun searchPlace(keyword: String) {  
+    val retrofit = Retrofit.Builder()  
+        .baseUrl("https://dapi.kakao.com")  
+        .addConverterFactory(GsonConverterFactory.create())  
+        .build()   
+    val api = retrofit.create(KakaoApi::class.java)  
+    //장소검색 kakao  
+    val responsePlace = api.getSearchPlaces(API_KEY, keyword, 1, 15)  
+    responsePlace.enqueue(object : Callback<PlaceDto> {  
+        override fun onResponse(call: Call<PlaceDto>, response: Response<PlaceDto>) {  
+            if (!response.isSuccessful) return  
+			response.body()?.let { dto ->  
+				//결과 받기  
+				updateMarker(dto.documents)  
+                viewPagerAdapter.submitList(dto.documents)  
+                recyclerAdapter.submitList(dto.documents)  
+                bottomSheetTitleTextView.text = "${dto.documents?.size}개의 장소"  
+			}  
+		}  
+  
+        override fun onFailure(call: Call<PlaceDto>, t: Throwable) {  
+            Log.d("MapFragment", "통신 실패 : ${t.message}")  
+        }  
+    })  
+}
+```
+#### 위치 이동 updateMarker, deleteMarkers
+```kotlin
+private fun updateMarker(documents: List<PlaceModel>?) {  
+    documents?.forEach { document ->  
+		val marker = Marker()  
+        val lat = document.y.toDouble()  
+        val lng = document.x.toDouble()  
+  
+        marker.position = LatLng(lat, lng)  
+        marker.icon = MarkerIcons.BLACK  
+		marker.iconTintColor = Color.rgb(245, 189, 213)  
+        marker.onClickListener = this  
+		marker.tag = document.id  
+		markers.add(marker)  
+        marker.map = naverMap  
+	}  
+}
+private fun deleteMarkers(markers: MutableList<Marker>) {  
+    markers.let { Markers ->  
+		Markers.forEach { marker ->  
+			marker.map = null  
+		}  
+	}
+}
+```
 ### 즐겨찾기
+#### 장소 즐겨찾기 관리 API : CustomMapApi 
+```kotlin
+interface CustomMapApi {  
+    @POST("/api/place/save")  
+    fun sendLikePlaces(  
+        @Header("email") email: String,  
+		@Body data: LikePlaceDto  
+    ): Call<LikePlaceDto>  
+  
+    @DELETE("/api/place/delete/{placeId}")  
+    fun deletePlace(  
+        @Header("email") email: String,  
+		@Path("placeId") placeId: Int  
+    ):Call<Void>  
+}
+```
+#### LikePlaceDto
+```kotlin
+data class LikePlaceDto(  
+    @SerializedName("placeId") var placeId: Int?,  
+	@SerializedName("placeName") var placeName: String?,  
+	@SerializedName("phone") var phone: String?,  
+	@SerializedName("address") var address: String?,  
+	@SerializedName("url") var url: String?,  
+	@SerializedName("categories") var categories: String?,  
+	@SerializedName("userImg") var userImg: String?  
+)
+```
+#### 즐겨찾기 장소 추가 sendLikePlaces
+```kotlin
+private fun customAPi(data: LikePlaceDto) {  
+    val retrofit = Retrofit.Builder()  
+        .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080")  
+        .client(client)  
+        .addConverterFactory(GsonConverterFactory.create())  
+        .build()  
+  
+    val api = retrofit.create(CustomMapApi::class.java)  
+  
+    googleEmail?.let { email ->  
+		//즐겨찾기 장소 추가  
+		api.sendLikePlaces(email, data)  
+    }?.enqueue(object : Callback<LikePlaceDto> {  
+        override fun onResponse(  
+            call: Call<LikePlaceDto>,  
+			response: Response<LikePlaceDto>  
+        ) {  
+            if (!response.isSuccessful)  
+                response.body()?.let { it.address?.let { it1 -> Log.d("chicken", it1) } }  
+		}  
+  
+        override fun onFailure(call: Call<LikePlaceDto>, t: Throwable) {  
+            Log.d("chicken", t.message.toString())  
+        }  
+    })  
+}
+```
+#### 즐겨찾기에 저장한 장소 모아보기
 #### LikePlaceFragment.kt
+즐겨찾기에 추가한 장소들을 리스트 형식으로 한 번에 모아볼 수 있고 삭제도 가능하다.
+#### LikePlaceRecyclerAdapter
+```kotlin
+class LikePlaceRecyclerAdapter(  
+    val shareButton: (LikePlaceDto) -> Unit,  
+	val linkButton: (LikePlaceDto) -> Unit,  
+	val deleteButton: (LikePlaceDto) -> Unit  
+) : ListAdapter<LikePlaceDto, LikePlaceRecyclerAdapter.ItemViewHolder>(differ) {
+	inner class ItemViewHolder(private val binding: LikeplaceRecycleviewDetailBinding) :  
+	    RecyclerView.ViewHolder(binding.root) {
+	    fun bind(placeModel: LikePlaceDto) {  
+			val titleTextView = binding.titleTextView  
+			val addressTextView = binding.addressTextView  
+			val callNumberTextView = binding.callNumberTextView  
+			val categoryTextView = binding.categoryTextView
+			...
+		}
+	}
+}
+```
+```kotlin
+private val recyclerAdapter = LikePlaceRecyclerAdapter(deleteButton = { place ->  
+	Log.d("map",place.placeId.toString())  
+    place.placeId?.let { customAPi(it) }  
+}, linkButton = { place ->  
+  val intent = Intent().apply {  
+	  action = Intent.ACTION_VIEW  
+		data = Uri.parse(place.url)  
+	}  
+  startActivity(intent)  
+}, shareButton = { place ->  
+	val sharingIntent = Intent(Intent.ACTION_SEND).apply {  
+		type = "text/plain"  
+		putExtra(Intent.EXTRA_TEXT, place.url)  
+    }  
+	startActivity(Intent.createChooser(sharingIntent, "공유하기"))  
+})
+```
+#### 즐겨찾기 장소 API : LikePlaceApi
+```kotlin
+interface LikePlaceApi {  
+    @GET("/api/place/findByEmail")  
+    fun searchAllData(  
+        @Header("email") email: String,  
+	): Call<List<LikePlaceDto>>  
+}
+```
+#### 즐겨찾기 장소 받기 searchAllData
+```kotlin
+private fun customAPi() {  
+    val retrofit = Retrofit.Builder()  
+        .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080")  
+        .client(client)  
+        .addConverterFactory(GsonConverterFactory.create())  
+        .build()  
+  
+    val api = retrofit.create(LikePlaceApi::class.java)  
+    val allData = googleEmail?.let { email -> api.searchAllData(email) }  
+  
+	allData?.enqueue(object : Callback<List<LikePlaceDto>> {  
+        override fun onResponse(  
+            call: Call<List<LikePlaceDto>>,  
+			response: Response<List<LikePlaceDto>>  
+        ) {  
+            response.body().let{ dto ->  
+				recyclerAdapter.submitList(dto)  
+            }  
+		}  
+  
+        override fun onFailure(call: Call<List<LikePlaceDto>>, t: Throwable) {  
+            Log.d("bookmark",t.message.toString())  
+        }  
+    })  
+}
+```
+#### 즐겨찾기 장소 삭제 deletePlace
+```kotlin
+private fun customAPi(placeId: Int) {  
+    val retrofit = Retrofit.Builder()  
+        .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080")  
+        .client(client)  
+        .addConverterFactory(GsonConverterFactory.create())  
+        .build()  
+  
+    val api = retrofit.create(CustomMapApi::class.java)  
+  
+    googleEmail?.let { email ->  
+		api.deletePlace(email, placeId)  
+    }?.enqueue(object : Callback<Void> {  
+  
+        override fun onResponse(  
+            call: Call<Void>,  
+			response: Response<Void>  
+        ) {Log.d("map", "2")  
+            if (!response.isSuccessful) {  
+            }  
+        }  
+  
+        override fun onFailure(call: Call<Void>, t: Throwable) {  
+            Log.d("map Error", t.message.toString())  
+        }  
+  
+    })  
+    Toast.makeText(context,"장소가 삭제되었습니다.",Toast.LENGTH_SHORT).show()  
+    findNavController().navigate(R.id.bookMarkFragment)  
+}
+```
