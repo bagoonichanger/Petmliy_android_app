@@ -128,15 +128,14 @@ https://github.com/wolfdate25/Petmily_flask_server
 
 #### 2. 동물 감정 분석
 
-<figure class="half">
-<img src="Images/3_2-1.png" width="360" height="720" />
-<img src="Images/3_2-2.png" width="360" height="720" />
-figure>
-  
+<img src="Images/a3_2.png"/>
+
 - 개/고양이 분류, 종 분류, 감정 분석
 - 앨범 속 사진이나 카메라로 찍어서 사용
 
 #### 3. 커뮤니티 화면
+
+<img src="Images/a3_3.png"/>
 
 - 개, 고양이 사진만 업로드 가능
 - 딥 러닝을 이용한 자동 태그 기능 (개, 고양이 종 / 감정)
@@ -145,7 +144,11 @@ figure>
 
 #### 4. 산책 화면
 
-![3_4](Images/3_4.PNG)
+<img src="Images/a3_4-1.png"/>
+
+
+
+<img src="Images/a3_4-2.png"/>
 
 - GPS을 이용한 실시간 산책 위치 확인
 - 산책 종료 시 자동으로 기록 저장
@@ -153,7 +156,7 @@ figure>
 
 #### 5. 장소 공유 화면
 
-![3_5](Images/3_5.PNG)
+<img src="Images/a3_5.png"/>
 
 - 키워드 검색 장소 추천 기능
 - 나만의 장소 즐겨찾기, 공유 및 삭제 기능
