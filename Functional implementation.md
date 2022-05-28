@@ -1,5 +1,17 @@
 # Petmily Android Application 기능 구현
 
+## 목차
+
+- 
+
+  ### Client 부문
+
+- ### Server 부문
+
+
+
+## Client 부문
+
 ##   각 액티비티 기능 설명
 
 | 클래스   | 기능                     | layout                       |
@@ -37,6 +49,7 @@ Handler(Looper.getMainLooper()).postDelayed({
 ```
 
 ## 메인 화면
+
 #### MainActivity.kt
 
 BottomNavigationView를 이용해 하단 탭으로 화면을 이동한다.
@@ -61,10 +74,13 @@ bottomNavigationView.setOnItemSelectedListener { item ->
 ```
 
 ## 홈 화면
+
 #### HomeFragment.kt
+
 (홈 화면 추가)
 
 ### 로그인
+
 로그인 방법은 구글 로그인이다.
 만약 로그인이 되어 있지 않다면 버튼을 누르더라도 홈 화면이 아닌 다른 화면으로 넘어가지 못한다.
 
@@ -89,11 +105,14 @@ bottomNavigationView.setOnItemSelectedListener { item ->
     mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)  
 }
 ```
+
 ### 날씨
+
 OpenWeatherMap API에서 Retrofit을 이용해 날씨 상태를 받아와 실시간으로 보여준다.
 현재 온도, 바람, 구름, 습도를 확인할 수 있다.
 
 #### WeatherAPIClient.kt
+
 ```kotlin
 object WeatherAPIClient {  
     fun getClient(url: String): Retrofit {  
@@ -109,7 +128,9 @@ object WeatherAPIClient {
     }  
 }
 ```
+
 #### WeatherAPIService.kt
+
 ```kotlin
 @GET("data/2.5/{path}")  
 fun doGetJsonDataWeather(  
@@ -120,6 +141,7 @@ fun doGetJsonDataWeather(
 ```
 
 #### RemoteDataSourceImpl.kt
+
 ```kotlin
 override fun getWeatherInfo(  
     jsonObject: JSONObject,  
@@ -183,6 +205,7 @@ private fun setWeatherData(model: WeatherModel) {
     Glide.with(this).load(weatherImgUrl).into(binding.weatherImg)  
 }
 ```
+
 ```kotlin
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {  
     super.onViewCreated(view, savedInstanceState)
@@ -191,9 +214,11 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     observeData() 
 }
 ```
+
 ## 동물 감정 분석
 
 개, 고양이가 있는 사진을 선택하고 전송하여 감정 분석 값을 받아볼 수 있다.
+
 * 사진을 앨범에서 고르거나 카메라로 찍어서 전송한다.
 * 로딩 시간이 흐른 후 결과를 받아온다.
 * 결과 값은 개, 고양이의 종과 화남, 행복, 슬픔의 감정을 퍼센트로 보내준다.
@@ -203,6 +228,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 #### AnalysisFragment.kt
 
 앨범, 카메라 접근 권한이 있는지 확인한다.
+
 ```kotlin
 private fun getPermissions() {  
     if (ContextCompat.checkSelfPermission(  
@@ -232,6 +258,7 @@ private fun getPermissions() {
 
 앨범 또는 카메라를 선택한다. 
 다음 ResultFragment 에서 무엇을 선택했는지 알기 위해 navArgs을 이용한다.
+
 ```kotlin
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {  
     super.onViewCreated(view, savedInstanceState)  
@@ -250,6 +277,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 #### ResultFragment.kt
 
 사진을 서버로 전송하기 위해 Retrofit을 이용한다.
+
 ```kotlin
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {  
     super.onViewCreated(view, savedInstanceState)  
@@ -269,7 +297,9 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 	}
 }
 ```
+
 감정 분석 리턴 값을 생성한다.
+
 ```kotlin
 class AnalysisResult(  
     val type: String, val cropPosition: CropPosition, val breed: Breed, val emotion: Emotion  
@@ -284,7 +314,9 @@ class Breed(
     val top1: String, val top1_result: Float  
 )
 ```
+
 감정 분석 Retrofit Api을 생성한다.
+
 ```kotlin
 interface AnalysisService {  
 	@Multipart  
@@ -294,7 +326,9 @@ interface AnalysisService {
     ): Call<AnalysisResult>  
 }
 ```
+
 앨범을 열어 사진을 선택 후 전송한다.
+
 ```kotlin
 private val imagePickerLauncher =  
     registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {  
@@ -311,7 +345,9 @@ private fun openGallery() {
     )  
 }
 ```
+
 카메라로 사진을 찍고 전송한다.
+
 ```kotlin
 private fun openCamera() {  
     var petImageUri: Uri? = null  
@@ -341,7 +377,9 @@ private fun openCamera() {
     resultLauncher.launch(intent)  
 }
 ```
+
 서버로 사진을 post하고 감정 분석을 받아온다.
+
 ```kotlin
 private fun getEmotion(petImgUri: Uri) {  
         val bitmap = petImgUri?.let { it1 -> loadBitmapFromMediaStoreBy(it1) }  
@@ -375,7 +413,9 @@ private fun getEmotion(petImgUri: Uri) {
         })  
     }
 ```
+
 받아온 감정 분석 정보를 화면 UI에 업데이트한다.
+
 ```kotlin
 private fun updateUI(result: AnalysisResult){  
     binding.petType.text = result.type  
@@ -403,17 +443,24 @@ private fun updateUI(result: AnalysisResult){
         .append("Sad(").append(emotionMap["Sad"]).append("%)")  
 }
 ```
+
 ## 커뮤니티
+
 자신의 반려 동물 사진을 올리고 여러 사람들과 소통하며 공유할 수 있다.
+
 * 강아지, 고양이 사진만 업로드할 수 있다.
 * 자동으로 태그를 달아준다. (종 분류, 감정 분석)
 * 게시글마다 좋아요, 댓글, 공유를 할 수 있다.
 * 자신이 '좋아요'한 게시물을 모아볼 수 있다.
 
 (커뮤니티 사진 추가)
+
 ### 게시물 가져오기
+
 #### PostFragment.kt
+
 게시물을 서버로부터 받아오기 위해 Retrofit을 이용한다.
+
 ```kotlin
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {  
     super.onViewCreated(view, savedInstanceState)
@@ -426,8 +473,11 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         .build()  
     retrofitService = retrofit.create(RetrofitService::class.java)
 ```
+
 #### RetrofitService
+
 게시물 받아오는 데이터 모델과 인터페이스를 생성한다.
+
 ```kotlin
 class Post(  
     val postId: Long, val userImg: String, val email: String, val postImg: String,  
@@ -440,7 +490,9 @@ interface RetrofitService {
     ): Call<ArrayList<Post>>   
 }
 ```
+
 게시글은 RecyclerView와 Adapter로 구성한다.
+
 ```kotlin
 class PostRecyclerViewAdapter(  
     val postList: ArrayList<Post>,  
@@ -470,8 +522,11 @@ class PostRecyclerViewAdapter(
 	}
 }
 ```
+
 #### 게시물 가져오기 getPost
+
 인터페이스 getPost 함수를 이용해 서버에서 게시글을 받아온다.
+
 ```kotlin
 private fun getPost() {  
     val loading = LoadingDialog(activity as MainActivity)  
@@ -504,7 +559,9 @@ private fun getPost() {
     })  
 }
 ```
+
 Retrofit 응답 객체(Response<ArrayList<Post>>)를 받고 adapter로 RecyclerView에 item과 각각 연결한다.
+
 ```kotlin
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {  
     val post = postList[position]  
@@ -527,15 +584,24 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 	}  
 }
 ```
+
 ### 게시물 작성
+
 자신의 반려 동물 사진을 올려 다른 사람들과 공유할 수 있다.
+
 * 개, 고양이가 없는 사진은 업로드할 수 없다.
+
 #### PostUploadFragment.kt
+
 앨범 속 사진이나 카메라로 찍은 사진과 짧을 글을 써서 게시글을 작성하는 화면이다.
+
 * 감정 분석에 있는 imagePickerLauncher, cameraLauncher을 사용해서 사진을 선택한 후 똑같이 RequestBody로 바꾼다.
+
 #### postUpload
+
 게시글 내용을 서버에 전송하는 함수이다.
 개, 고양이 사진이 없는 경우 Toast 실패 메세지를 출력하고 전송에 성공하면 Toast 성공 메세지 출력 후 포스트 화면으로 이동한다.
+
 ```kotlin
 private fun postUpload(postImageUri: Uri) {  
     var gson = GsonBuilder().setLenient().create()  
@@ -587,14 +653,19 @@ private fun postUpload(postImageUri: Uri) {
 ```
 
 ### 좋아요
+
 게시물을 구경하다 마음에 드는 게시물에 '좋아요'로 공감할 수 있다.
+
 * 좋아요 누른 게시물은 분홍색 하트로 표현되고 누르지 않은 게시물은 투명 하트로 표시한다.
 * 몇 명이 '좋아요'를 눌렀는지 표시한다.
 * 하트 버튼을 누름으로써 '좋아요' 또는 '좋아요'를 취소할 수 있다.
 * '좋아요' 한 게시물 모아보기
+
 #### PostLikeFragment.kt
+
 * 모든 게시물은 원래 투명 하트로 표시하고 클릭 시 분홍 하트로 바뀌고 이미지 위에 하얀 하트가 1초 동안 보일 수 있도록 한다.
 * 바로 화면을 바꾸고 순서대로 진행하기 위해 쓰레드를 이용한다.
+
 ```kotlin
 class PostRecyclerViewAdapter(  
     val postList: ArrayList<Post>, 
@@ -648,7 +719,9 @@ class PostRecyclerViewAdapter(
 		}  
 	}
 ```
+
 #### LikeRetrofitService
+
 ```kotlin
 class Like(  
     val postId: Long, val userImg: String  
@@ -680,7 +753,9 @@ interface LikeRetrofitService {
     ): Call<Int>  
 }
 ```
+
 #### 좋아요 표시 postLike
+
 ```kotlin
 private fun postLike(postId: Long) {  
     likeRetrofitService.postLike(personEmailInput, postId, userImgUri)  
@@ -692,7 +767,9 @@ private fun postLike(postId: Long) {
         })  
 }
 ```
+
 #### 좋아요 삭제 deleteData
+
 ```kotlin
 private fun deleteData(postId: Long) {  
     likeRetrofitService.deleteLike(personEmailInput, postId).enqueue(object : Callback<Void> {  
@@ -704,7 +781,9 @@ private fun deleteData(postId: Long) {
     })  
 }
 ```
+
 #### 좋아요 개수 getCountLike
+
 ```kotlin
 private fun getCountLike(postId: Long, textView: TextView) {  
     likeRetrofitService.countLike(postId).enqueue(object : Callback<Int> {  
@@ -716,7 +795,9 @@ private fun getCountLike(postId: Long, textView: TextView) {
     })  
 }
 ```
+
 #### 좋아요 했는지 확인 aboutLike
+
 ```kotlin
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     ...
@@ -737,32 +818,50 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 ```
 
 ### 좋아요 모아보기
+
 #### PostUploadFragment.kt
+
 PostFragment에서 '좋아요'한 게시물만 모아보도록 한다.
 
 ### 댓글
+
 게시물에 댓글을 달아 글 쓴 사람과 직접 소통할 수 있다.
+
 #### CommentFragment.kt
 
 ## 산책
+
 산책 기록을 저장하고 날짜 별로 확인할 수 있다.
+
 * 실시간으로 산책하는 위치를 지도로 볼 수 있고 경로를 추적하여 저장한다.
 * 날짜 별로 산책 기록을 확인, 삭제, 공유가 가능하다
 
 ### 산책 저장 확인
+
 #### WalkFragment.kt
+
 #### DetailTrackingFragment.kt
 
 ### 실시간 산책 기록
+
 #### TrackingFragment.kt
 
 ## 장소
+
 지도에서 장소를 추천하고 즐겨 찾기 추가 및 공유가 가능하다.
+
 * 키워드로 검색하여 장소를 추천 받는다.
 * 나만의 장소를 즐겨찾기로 관리한다.
 
 ### 장소 검색
+
 #### MapFragment.kt
 
 ### 즐겨찾기
+
 #### LikePlaceFragment.kt
+
+
+
+## Server 부문
+
