@@ -410,6 +410,7 @@ private fun updateUI(result: AnalysisResult){
 * 자신이 '좋아요'한 게시물을 모아볼 수 있다.
 
 <img src="Images/a3_3.png"/>
+
 ### 게시물 가져오기
 #### PostFragment.kt
 게시물을 서버로부터 받아오기 위해 Retrofit을 이용한다.
