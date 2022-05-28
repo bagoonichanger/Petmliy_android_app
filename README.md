@@ -2,7 +2,7 @@
 
 **2022-1학기 한성대학교 컴퓨터공학부 캡스톤디자인**
 
-<img src="Images/Petmily.png" align="right" />
+<img src="Images/petmily.jpeg"  />
 
 ## 팀 구성
 
