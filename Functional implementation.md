@@ -1,31 +1,20 @@
-# Petmily Android Application 기능 구현
 
-## 목차
-
-- ### Client 부문
-
-- ### Server 부문
-
-
-
-## Client 부문
-
+# 3. 기능 구현
 ##   각 액티비티 기능 설명
-
-| 클래스   | 기능                     | layout                       |
-| -------- | ------------------------ | ---------------------------- |
-| Home     | 구글 로그인, 날씨        | fragment_home.xml            |
-| Analysis | 동물 감정 분석           | fragment_analysis.xml        |
-|          | 동물 감정 분석 결과      | fragment_result.xml          |
-| BookMark | 즐겨 찾기 장소 보기      | fragment_likeplace.xml       |
-| Post     | 게시물 보기              | fragment_post.xml            |
-|          | 게시물 업로드            | fragment_upload.xml          |
-|          | 좋아요 한 게시물 보기    | fragment_post_like.xml       |
-|          | 댓글 보기                | fragment_comment.xml         |
-| Walk     | 날짜별 산책 기록 보기    | fragment_walk.xml            |
-|          | 산책 기록 자세히 보기    | fragment_detail_tracking.xml |
-|          | 산책 시작 후 트래킹 모드 | fragment_tracking.xml        |
-| Map      | 장소 검색                | fragment_map.xml             |
+|  클래스              | 기능                     |layout                         |
+|----------------|-------------------------------|-----------------------------|
+|Home            |  구글 로그인, 날씨              |fragment_home.xml               |
+|Analysis        |동물 감정 분석                   |fragment_analysis.xml           |
+|		         |동물 감정 분석 결과              |fragment_result.xml           |
+|BookMark        |즐겨 찾기 장소 보기               |fragment_likeplace.xml       |
+|Post            |게시물 보기                       |fragment_post.xml             |
+|                |게시물 업로드                    |fragment_upload.xml             |
+|                |좋아요 한 게시물 보기             |fragment_post_like.xml       |
+|                |댓글 보기                        |fragment_comment.xml       |
+|Walk            |날짜별 산책 기록 보기             |fragment_walk.xml           |
+|                |산책 기록 자세히 보기             |fragment_detail_tracking.xml     |
+|                |산책 시작 후 트래킹 모드           |fragment_tracking.xml        |
+|Map             |장소 검색                        |fragment_map.xml   |
 
 ## 로딩 화면
 
@@ -47,7 +36,6 @@ Handler(Looper.getMainLooper()).postDelayed({
 ```
 
 ## 메인 화면
-
 #### MainActivity.kt
 
 BottomNavigationView를 이용해 하단 탭으로 화면을 이동한다.
@@ -72,13 +60,10 @@ bottomNavigationView.setOnItemSelectedListener { item ->
 ```
 
 ## 홈 화면
-
 #### HomeFragment.kt
-
 (홈 화면 추가)
 
 ### 로그인
-
 로그인 방법은 구글 로그인이다.
 만약 로그인이 되어 있지 않다면 버튼을 누르더라도 홈 화면이 아닌 다른 화면으로 넘어가지 못한다.
 
@@ -103,14 +88,11 @@ bottomNavigationView.setOnItemSelectedListener { item ->
     mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)  
 }
 ```
-
 ### 날씨
-
 OpenWeatherMap API에서 Retrofit을 이용해 날씨 상태를 받아와 실시간으로 보여준다.
 현재 온도, 바람, 구름, 습도를 확인할 수 있다.
 
 #### WeatherAPIClient.kt
-
 ```kotlin
 object WeatherAPIClient {  
     fun getClient(url: String): Retrofit {  
@@ -126,9 +108,7 @@ object WeatherAPIClient {
     }  
 }
 ```
-
 #### WeatherAPIService.kt
-
 ```kotlin
 @GET("data/2.5/{path}")  
 fun doGetJsonDataWeather(  
@@ -139,7 +119,6 @@ fun doGetJsonDataWeather(
 ```
 
 #### RemoteDataSourceImpl.kt
-
 ```kotlin
 override fun getWeatherInfo(  
     jsonObject: JSONObject,  
@@ -203,7 +182,6 @@ private fun setWeatherData(model: WeatherModel) {
     Glide.with(this).load(weatherImgUrl).into(binding.weatherImg)  
 }
 ```
-
 ```kotlin
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {  
     super.onViewCreated(view, savedInstanceState)
@@ -212,11 +190,9 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     observeData() 
 }
 ```
-
 ## 동물 감정 분석
 
 개, 고양이가 있는 사진을 선택하고 전송하여 감정 분석 값을 받아볼 수 있다.
-
 * 사진을 앨범에서 고르거나 카메라로 찍어서 전송한다.
 * 로딩 시간이 흐른 후 결과를 받아온다.
 * 결과 값은 개, 고양이의 종과 화남, 행복, 슬픔의 감정을 퍼센트로 보내준다.
@@ -226,7 +202,6 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 #### AnalysisFragment.kt
 
 앨범, 카메라 접근 권한이 있는지 확인한다.
-
 ```kotlin
 private fun getPermissions() {  
     if (ContextCompat.checkSelfPermission(  
@@ -256,7 +231,6 @@ private fun getPermissions() {
 
 앨범 또는 카메라를 선택한다. 
 다음 ResultFragment 에서 무엇을 선택했는지 알기 위해 navArgs을 이용한다.
-
 ```kotlin
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {  
     super.onViewCreated(view, savedInstanceState)  
@@ -275,7 +249,6 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 #### ResultFragment.kt
 
 사진을 서버로 전송하기 위해 Retrofit을 이용한다.
-
 ```kotlin
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {  
     super.onViewCreated(view, savedInstanceState)  
@@ -295,9 +268,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 	}
 }
 ```
-
 감정 분석 리턴 값을 생성한다.
-
 ```kotlin
 class AnalysisResult(  
     val type: String, val cropPosition: CropPosition, val breed: Breed, val emotion: Emotion  
@@ -312,9 +283,7 @@ class Breed(
     val top1: String, val top1_result: Float  
 )
 ```
-
 감정 분석 Retrofit Api을 생성한다.
-
 ```kotlin
 interface AnalysisService {  
 	@Multipart  
@@ -324,9 +293,7 @@ interface AnalysisService {
     ): Call<AnalysisResult>  
 }
 ```
-
 앨범을 열어 사진을 선택 후 전송한다.
-
 ```kotlin
 private val imagePickerLauncher =  
     registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {  
@@ -343,9 +310,7 @@ private fun openGallery() {
     )  
 }
 ```
-
 카메라로 사진을 찍고 전송한다.
-
 ```kotlin
 private fun openCamera() {  
     var petImageUri: Uri? = null  
@@ -375,9 +340,7 @@ private fun openCamera() {
     resultLauncher.launch(intent)  
 }
 ```
-
 서버로 사진을 post하고 감정 분석을 받아온다.
-
 ```kotlin
 private fun getEmotion(petImgUri: Uri) {  
         val bitmap = petImgUri?.let { it1 -> loadBitmapFromMediaStoreBy(it1) }  
@@ -410,10 +373,8 @@ private fun getEmotion(petImgUri: Uri) {
             }  
         })  
     }
-```
-
+``` 
 받아온 감정 분석 정보를 화면 UI에 업데이트한다.
-
 ```kotlin
 private fun updateUI(result: AnalysisResult){  
     binding.petType.text = result.type  
@@ -441,24 +402,17 @@ private fun updateUI(result: AnalysisResult){
         .append("Sad(").append(emotionMap["Sad"]).append("%)")  
 }
 ```
-
 ## 커뮤니티
-
 자신의 반려 동물 사진을 올리고 여러 사람들과 소통하며 공유할 수 있다.
-
 * 강아지, 고양이 사진만 업로드할 수 있다.
 * 자동으로 태그를 달아준다. (종 분류, 감정 분석)
-* 게시글마다 좋아요, 댓글, 공유를 할 수 있다.
+* 게시물마다 좋아요, 댓글, 공유를 할 수 있다.
 * 자신이 '좋아요'한 게시물을 모아볼 수 있다.
 
 (커뮤니티 사진 추가)
-
 ### 게시물 가져오기
-
 #### PostFragment.kt
-
 게시물을 서버로부터 받아오기 위해 Retrofit을 이용한다.
-
 ```kotlin
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {  
     super.onViewCreated(view, savedInstanceState)
@@ -471,11 +425,8 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         .build()  
     retrofitService = retrofit.create(RetrofitService::class.java)
 ```
-
 #### RetrofitService
-
 게시물 받아오는 데이터 모델과 인터페이스를 생성한다.
-
 ```kotlin
 class Post(  
     val postId: Long, val userImg: String, val email: String, val postImg: String,  
@@ -488,9 +439,7 @@ interface RetrofitService {
     ): Call<ArrayList<Post>>   
 }
 ```
-
-게시글은 RecyclerView와 Adapter로 구성한다.
-
+게시물은 RecyclerView와 Adapter로 구성한다.
 ```kotlin
 class PostRecyclerViewAdapter(  
     val postList: ArrayList<Post>,  
@@ -520,11 +469,8 @@ class PostRecyclerViewAdapter(
 	}
 }
 ```
-
 #### 게시물 가져오기 getPost
-
-인터페이스 getPost 함수를 이용해 서버에서 게시글을 받아온다.
-
+인터페이스 getPost 함수를 이용해 서버에서 게시물을 받아온다.
 ```kotlin
 private fun getPost() {  
     val loading = LoadingDialog(activity as MainActivity)  
@@ -557,9 +503,7 @@ private fun getPost() {
     })  
 }
 ```
-
 Retrofit 응답 객체(Response<ArrayList<Post>>)를 받고 adapter로 RecyclerView에 item과 각각 연결한다.
-
 ```kotlin
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {  
     val post = postList[position]  
@@ -582,24 +526,15 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 	}  
 }
 ```
-
 ### 게시물 작성
-
 자신의 반려 동물 사진을 올려 다른 사람들과 공유할 수 있다.
-
 * 개, 고양이가 없는 사진은 업로드할 수 없다.
-
 #### PostUploadFragment.kt
-
-앨범 속 사진이나 카메라로 찍은 사진과 짧을 글을 써서 게시글을 작성하는 화면이다.
-
+앨범 속 사진이나 카메라로 찍은 사진과 짧을 글을 써서 게시물을 작성하는 화면이다.
 * 감정 분석에 있는 imagePickerLauncher, cameraLauncher을 사용해서 사진을 선택한 후 똑같이 RequestBody로 바꾼다.
-
 #### postUpload
-
-게시글 내용을 서버에 전송하는 함수이다.
+게시물 내용을 서버에 전송하는 함수이다.
 개, 고양이 사진이 없는 경우 Toast 실패 메세지를 출력하고 전송에 성공하면 Toast 성공 메세지 출력 후 포스트 화면으로 이동한다.
-
 ```kotlin
 private fun postUpload(postImageUri: Uri) {  
     var gson = GsonBuilder().setLenient().create()  
@@ -649,21 +584,61 @@ private fun postUpload(postImageUri: Uri) {
   
 }
 ```
-
+### 게시물 삭제
+#### RetrofitService
+```kotlin
+interface RetrofitService {
+	@DELETE("api/post/delete/{postId}")  
+	fun deletePost(  
+	    @Header("email") email: String,  
+		@Path("postId") postId: Long  
+	): Call<Void>
+}
+```
+본인 이메일로 올린 게시물만 삭제 버튼을 볼 수 있고 버튼 클릭 시 확인 dialog 뜨고 삭제된다.
+```kotlin
+override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+	...
+	holder.deleteBtn.setOnClickListener {  
+		val builder = AlertDialog.Builder(activity as MainActivity)  
+		builder.setTitle("게시글을 삭제하시겠습니까?")  
+	        .setMessage("업로드한 게시글이 삭제됩니다.")  
+	        .setPositiveButton("확인", DialogInterface.OnClickListener{ dialog, id ->  
+		Thread {  
+			activity.runOnUiThread {  
+				postFragment.deletePost(post.postId)  
+				Thread.sleep(1000)  
+				Toast.makeText( activity as MainActivity, "게시글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()  
+				postFragment.getPost()  //새로고침
+			}  
+		}.start()  
+		})  
+        .setNegativeButton("취소", DialogInterface.OnClickListener{ dialog, id ->  })  
+	    builder.show()  
+	}
+}
+```
+#### 게시물 삭제 deletePost
+```kotlin
+private fun deletePost(postId: Long) {  
+    retrofitService.deletePost(personEmailInput, postId).enqueue(object : Callback<Void> {  
+        override fun onResponse(call: Call<Void>, response: Response<Void>) {  
+        }  
+        override fun onFailure(call: Call<Void>, t: Throwable) {  
+            Log.d("log delete", t.message.toString())  
+        }  
+    })  
+}
+```
 ### 좋아요
-
 게시물을 구경하다 마음에 드는 게시물에 '좋아요'로 공감할 수 있다.
-
 * 좋아요 누른 게시물은 분홍색 하트로 표현되고 누르지 않은 게시물은 투명 하트로 표시한다.
 * 몇 명이 '좋아요'를 눌렀는지 표시한다.
 * 하트 버튼을 누름으로써 '좋아요' 또는 '좋아요'를 취소할 수 있다.
 * '좋아요' 한 게시물 모아보기
-
 #### PostLikeFragment.kt
-
 * 모든 게시물은 원래 투명 하트로 표시하고 클릭 시 분홍 하트로 바뀌고 이미지 위에 하얀 하트가 1초 동안 보일 수 있도록 한다.
 * 바로 화면을 바꾸고 순서대로 진행하기 위해 쓰레드를 이용한다.
-
 ```kotlin
 class PostRecyclerViewAdapter(  
     val postList: ArrayList<Post>, 
@@ -717,9 +692,7 @@ class PostRecyclerViewAdapter(
 		}  
 	}
 ```
-
 #### LikeRetrofitService
-
 ```kotlin
 class Like(  
     val postId: Long, val userImg: String  
@@ -751,9 +724,7 @@ interface LikeRetrofitService {
     ): Call<Int>  
 }
 ```
-
 #### 좋아요 표시 postLike
-
 ```kotlin
 private fun postLike(postId: Long) {  
     likeRetrofitService.postLike(personEmailInput, postId, userImgUri)  
@@ -765,9 +736,7 @@ private fun postLike(postId: Long) {
         })  
 }
 ```
-
 #### 좋아요 삭제 deleteData
-
 ```kotlin
 private fun deleteData(postId: Long) {  
     likeRetrofitService.deleteLike(personEmailInput, postId).enqueue(object : Callback<Void> {  
@@ -779,9 +748,7 @@ private fun deleteData(postId: Long) {
     })  
 }
 ```
-
 #### 좋아요 개수 getCountLike
-
 ```kotlin
 private fun getCountLike(postId: Long, textView: TextView) {  
     likeRetrofitService.countLike(postId).enqueue(object : Callback<Int> {  
@@ -793,9 +760,7 @@ private fun getCountLike(postId: Long, textView: TextView) {
     })  
 }
 ```
-
 #### 좋아요 했는지 확인 aboutLike
-
 ```kotlin
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     ...
@@ -816,50 +781,355 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 ```
 
 ### 좋아요 모아보기
-
+#### RetrofitService
+```kotlin
+interface RetrofitService {
+	//좋아요 누른 게시물  
+	@GET("api/post/findAllLike")  
+	fun getLikePost(  
+	    @Header("email") email:String,  
+	): Call<ArrayList<Post>>
+}
+```
 #### PostUploadFragment.kt
-
-PostFragment에서 '좋아요'한 게시물만 모아보도록 한다.
+PostFragment에서 getLikePost 사용하여 '좋아요'한 게시물만 모아보도록 한다.
+```kotlin
+private fun getLikePost(){  
+    //로딩 화면  
+	val loading = LoadingDialog(activity as MainActivity)  
+    loading.show()  
+    retrofitService.getLikePost(personEmailInput).enqueue(object : Callback<ArrayList<Post>>{  
+        override fun onResponse(call: Call<ArrayList<Post>>, response: Response<ArrayList<Post>>) {  
+            val postList = response.body()  
+            val likeRecyclerView = view?.findViewById<RecyclerView>(R.id.likeList)  
+            likeRecyclerView?.adapter = postList?.let{ LikeRecyclerViewAdapter(  
+				it,  
+				LayoutInflater.from(activity),  
+				Glide.with(activity!!),  
+				this@PostLikeFragment,  
+				activity as (MainActivity)  
+			)}  
+			loading.dismiss() //로딩 화면 멈추기  
+		}  
+        override fun onFailure(call: Call<ArrayList<Post>>, t: Throwable) {  
+            Log.d("log",t.message.toString())  
+        }  
+    })  
+}
+```
 
 ### 댓글
-
 게시물에 댓글을 달아 글 쓴 사람과 직접 소통할 수 있다.
+#### 해당 댓글 화면으로 이동 postToComment
+게시물 댓글 버튼을 클릭하면 그 게시물 id을 CommentFragment로 전달해서 해당 게시물의 댓글을 보여준다.
+```kotlin
+override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+	...
+	holder.commentBtn.setOnClickListener { postFragment.postToComment(post.postId) }
+}
 
+fun postToComment(postId: Long) {  
+    var action = PostFragmentDirections.actionPostFragmentToCommentFragment(postId)  
+    findNavController().navigate(action)  
+}
+```
 #### CommentFragment.kt
+전달 받은 게시물 id을 저장하고 retrofit 연결해 댓글을 불러오고 새로 입력할 수 있다.
+```kotlin
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {  
+    super.onViewCreated(view, savedInstanceState)  
+    //postId 전달 받음  
+	val commentArgs by navArgs<CommentFragmentArgs>()  
+    val inputPostId: Long = commentArgs.postId  
+	//구글 로그인 정보  
+	checkSign()  
+    //retrofit 연결  
+	val CommentListView = view.findViewById<RecyclerView>(R.id.commentList)  
+    val retrofit = Retrofit.Builder()  
+        .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080/")  
+        .client(client)  
+        .addConverterFactory(GsonConverterFactory.create())  
+        .build()  
+    commentRetrofitService = retrofit.create(CommentRetrofitService::class.java)  
+    //해당 postId 댓글 불러오기  
+	commentGet(inputPostId)  
+    //댓글 입력  
+	binding.uploadButton.setOnClickListener { commentUpload(inputPostId) }  
+}
+```
+#### CommentRetrofitService
+```kotlin
+class Comment(  
+    val postId: Long, val email: String, val commentContent: String, val userImg: String?  
+)  
+  
+interface CommentRetrofitService {  
+	//댓글 받기
+    @GET("api/comment/findByPostId/{postId}")  
+    fun getComment(  
+        @Path("postId") postId: Long  
+    ): Call<ArrayList<Comment>>  
+
+	//댓글 입력
+    @POST("api/comment/save")  
+    fun postComment(  
+        @Header("email") email: String,  
+		@Query("userImg") userImg: String?,  
+		@Query("postId") postId: Long,  
+		@Query("commentContent") commentContent: String,  
+	): Call<Comment>  
+}
+```
+#### 댓글 받아오기 commentGet
+```kotlin
+private fun commentGet(postId: Long){  
+    commentRetrofitService.getComment(postId).enqueue(object : Callback<ArrayList<Comment>>{  
+        override fun onResponse(  
+            call: Call<ArrayList<Comment>>,  
+			response: Response<ArrayList<Comment>>  
+        ) {  
+            //응답 객체 받기  
+			val commentList = response.body()  
+            //recyclerView와 연결  
+			val commentRecyclerView = view?.findViewById<RecyclerView>(R.id.commentList)  
+            commentRecyclerView?.adapter = commentList?.let{ CommentRecyclerViewAdapter(  
+                it,  
+				LayoutInflater.from(activity),  
+				activity as (MainActivity),  
+				Glide.with(activity!!)  
+			) }  
+		}  
+        override fun onFailure(call: Call<ArrayList<Comment>>, t: Throwable) {  
+            Log.d("log",t.message.toString())  
+        }  
+    })  
+}
+```
+#### 댓글 입력 commentUpload
+```kotlin
+private fun commentUpload(postId : Long){  
+    //댓글 입력 내용 가져오기  
+	commentContent = binding.commentEdit.text.toString()  
+    //댓글 post
+    commentRetrofitService.postComment(personEmailInput,userImgUri,postId,commentContent)  
+        .enqueue(object : Callback<Comment>{  
+        override fun onResponse(  
+            call: Call<Comment>,  
+            response: Response<Comment>  
+        ) {  
+            Log.d("log", response.body().toString())  
+        }  
+        override fun onFailure(call: Call<Comment>, t: Throwable) {  
+            Log.d("log",t.message.toString())  
+        }  
+    })  
+    //댓글 post 이후  
+	binding.commentEdit.text = null //댓글 입력 내용 지우기  
+	hideKeyboard()  //키보드 숨기기  
+	commentGet(postId)  //댓글 새로고침  
+}
+```
+#### CommentRecyclerViewAdapter
+```kotlin
+class CommentRecyclerViewAdapter(  
+    val commentList: ArrayList<Comment>,  
+	val inflater: LayoutInflater,  
+	val activity: MainActivity,  
+	val glide: RequestManager  
+): RecyclerView.Adapter<CommentRecyclerViewAdapter.ViewHolder>(){  
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){  
+        val userEmail : TextView  
+        val userImg : ImageView  
+        val commentText : TextView  
+  
+        init {  
+            userEmail = itemView.findViewById(R.id.userEmail)  
+            userImg = itemView.findViewById(R.id.userImg)  
+            commentText = itemView.findViewById(R.id.commentText)  
+        }  
+    }  
+    
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {  
+        return ViewHolder(inflater.inflate(R.layout.post_comment_item_detail,parent,false))  
+    }  
+  
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {  
+        val comment = commentList[position]  
+        comment.userImg?.let { glide.load(it).centerCrop().circleCrop().into(holder.userImg)}  
+        holder.userEmail.text = comment.email.split("@")[0]  
+        holder.commentText.text = comment.commentContent  
+	}  
+
+    override fun getItemCount(): Int {  
+        return commentList.size  
+    }  
+}
+```
 
 ## 산책
-
 산책 기록을 저장하고 날짜 별로 확인할 수 있다.
-
 * 실시간으로 산책하는 위치를 지도로 볼 수 있고 경로를 추적하여 저장한다.
 * 날짜 별로 산책 기록을 확인, 삭제, 공유가 가능하다
 
+(산책 사진 추가)
+
 ### 산책 저장 확인
-
 #### WalkFragment.kt
+* MaterialCalendarView에 산책 기록이 있는 날은 빨간 점으로 표시한다.
+* 날짜를 클릭하면 해당 날의 산책 기록 리스트를 볼 수 있다.
+* 산책 기록을 클릭하면 DetailTrackingFragment으로 넘어가고 삭제 및 공유할 수 있다.
 
+처음 화면을 그릴 때 저장된 모든 산책 정보를 서버로부터 받아오고 날짜를 선택하면 해당 날짜에 저장된 산책 기록을 가져와 보여준다.
+```kotlin
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {  
+    super.onViewCreated(view, savedInstanceState)  
+  
+    val current = LocalDateTime.now()  
+    val formatter = DateTimeFormatter.ofPattern("yyyy/M/d")  
+    val formatted = current.format(formatter)  
+    view.findViewById<TextView>(R.id.calendarTitle).text = formatted  
+  
+    val recyclerView = view.findViewById<RecyclerView>(R.id.calendarRecyclerView)  
+    recyclerView.adapter = recyclerAdapter  
+	recyclerView.layoutManager = LinearLayoutManager(activity).also{  
+		it.reverseLayout = true  
+		it.stackFromEnd = true  
+	}  
+    var calendarView = view.findViewById<MaterialCalendarView>(R.id.calendarView)  
+  
+    calendarView.setSelectedDate(CalendarDay.today())  
+    calendarView.setOnDateChangedListener { widget, date, selected ->  
+	view.findViewById<TextView>(R.id.calendarTitle).text =  
+            "${date.year}/${date.month}/${date.day}"  
+	viewModel.trackingSortedByCalendar(date.year, date.month, date.day)  
+            .observe(viewLifecycleOwner, Observer {  
+				customAPi(date.year, date.month, date.day)  
+            })  
+    }  
+	val calendar = Calendar.getInstance()  
+    viewModel.trackingSortedByCalendar(  
+        calendar.get(Calendar.YEAR),  
+		calendar.get(Calendar.MONTH) + 1,  
+		calendar.get(Calendar.DAY_OF_MONTH)  
+	).observe(viewLifecycleOwner, Observer {  
+		allDataAPi(calendarView)  
+        customAPi(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH))  
+    })  
+}
+```
+#### Tracking 데이터 모델
+```kotlin
+@Entity(tableName = TRACKING_DATABASE_NAME)  
+@Parcelize  
+data class Tracking(  
+    @PrimaryKey  
+	var id: Int = 0,  
+	val year: Int = 0,  
+	val month: Int = 0,  
+	val day: Int = 0,  
+	var img: String? = null, 
+	var avgSpeedInKMH: Float = 0f,  
+	var distanceInMeters: Int = 0,  
+	var timeInMillis: Long = 0L,  
+	var caloriesBurned: Int = 0  
+) : Parcelable
+```
+#### CustomWalkApi
+```kotlin
+interface CustomWalkApi {
+	@DELETE("/api/walk/delete/{id}/{year}/{month}/{day}")  
+	fun deleteDate(  
+	    @Header("email") email: String,  
+		@Path("id") id: Int,  
+		@Path("year") year: Int,  
+		@Path("month") month: Int,  
+		@Path("day") day: Int  
+	):Call<Void>  
+	
+	@GET("/api/walk/findByDate/{year}/{month}/{day}")  
+	fun searchData(  
+	    @Header("email") email: String,  
+		@Path("year") year: Int,  
+		@Path("month") month: Int,  
+		@Path("day") day: Int  
+	): Call<List<Tracking>>  
+  
+	@GET("/api/walk/findAll")  
+	fun searchAllData(  
+		@Header("email") email: String,  
+	): Call<List<Tracking>>
+}
+```
+#### 모든 산책 기록 가져오기 allDataApi
+```kotlin
+private fun allDataAPi(calendarView: MaterialCalendarView) {  
+    val retrofit = Retrofit.Builder()  
+        .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080")  
+        .client(client)  
+        .addConverterFactory(GsonConverterFactory.create())  
+        .build()  
+  
+    val api = retrofit.create(CustomWalkApi::class.java)  
+    val loading = LoadingDialog(activity as MainActivity)  
+    loading.show()  
+  
+    googleEmail?.let { email ->  
+		api.searchAllData(email)  
+    }?.enqueue(object : Callback<List<Tracking>> {  
+        override fun onResponse(  
+            call: Call<List<Tracking>>,  
+			response: Response<List<Tracking>>  
+        ) {  
+            response.body().let { dto ->  
+			Log.d("Walk", response.body().toString())  
+                val r = Runnable {  
+					val iterator = dto?.iterator() //날짜 상관없이 모든 데이터 가져오기  
+					if (iterator != null) {  
+                        while (iterator.hasNext()) {  
+                            var item = iterator.next()  
+                            var year = item.year;  
+							var month = item.month;  
+							var day = item.day  
+							setDate.add(CalendarDay.from(year, month, day))  
+                        }  
+                    }  
+                    activity?.runOnUiThread {  
+					if (calendarView != null) {  
+                            calendarView.addDecorator(object : DayViewDecorator {  
+                                override fun shouldDecorate(day: CalendarDay?): Boolean {  
+                                    return setDate.contains(day)  
+                                }  
+  
+                                override fun decorate(view: DayViewFacade?) {  
+                                    view?.addSpan(DotSpan(5f, Color.RED))  
+                                }  
+                            })  
+                        }  
+                    }  
+				 }  val thread = Thread(r)  
+	                thread.start()
+			}  
+			loading.dismiss()  
+        }  
+  
+        override fun onFailure(call: Call<List<Tracking>>, t: Throwable) {  
+            Log.d("walk Error2", t.message.toString())  
+        }  
+    })  
+}
+```
 #### DetailTrackingFragment.kt
 
 ### 실시간 산책 기록
-
 #### TrackingFragment.kt
 
 ## 장소
-
 지도에서 장소를 추천하고 즐겨 찾기 추가 및 공유가 가능하다.
-
 * 키워드로 검색하여 장소를 추천 받는다.
 * 나만의 장소를 즐겨찾기로 관리한다.
 
 ### 장소 검색
-
 #### MapFragment.kt
 
 ### 즐겨찾기
-
 #### LikePlaceFragment.kt
-
-
-
-## Server 부문
-
