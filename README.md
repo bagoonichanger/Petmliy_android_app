@@ -128,7 +128,7 @@ https://github.com/wolfdate25/Petmily_flask_server
 
 #### 2. 동물 감정 분석
 
-<center class="half">
+<figure class="half">
 <img src="Images/3_2-1.png" width="360" height="720" />
 <img src="Images/3_2-2.png" width="360" height="720" />
 figure>
