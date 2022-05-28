@@ -72,7 +72,7 @@ https://github.com/wolfdate25/Petmily_flask_server
 
 ### 앱 소개
 
-<img src="Images/Logo.jpg" width="200" height="200" />
+<img src="Images/petmily.jpg" style="zoom: 50%;" />
 
 이 어플리케이션은 총 5가지의 기능을 제공한다.
 
