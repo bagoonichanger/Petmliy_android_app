@@ -120,6 +120,8 @@ https://github.com/wolfdate25/Petmily_flask_server
 
 <img src="Images/3_1.png" width="360" height="720" align="left" />
 
+
+
 - 구글 연동을 통한 로그인
 - 실시간 날씨 확인 (온도, 바람, 구름, 습도)
 - 즐겨찾기, 감정분석으로 이동할 수 있는 버튼
