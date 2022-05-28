@@ -1,17 +1,16 @@
 package com.bagooni.petmliy_android_app
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.bagooni.petmliy_android_app.Constants.ACTION_SHOW_TRACKING_FRAGMENT
-import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -20,7 +19,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-
+//check0528
 class MainActivity : AppCompatActivity() { // phone check
     private var mGoogleSignInClient: GoogleSignInClient? = null
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
