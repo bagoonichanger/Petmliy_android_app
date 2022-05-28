@@ -2,7 +2,7 @@
 
 **2022-1학기 한성대학교 컴퓨터공학부 캡스톤디자인**
 
-<img src="Images/petmily.jpg" style="zoom: 50%;" />
+<img src="Images/petmily.jpg" style="zoom: 33%;" />
 
 ## 팀 구성
 
@@ -72,7 +72,7 @@ https://github.com/wolfdate25/Petmily_flask_server
 
 ### 앱 소개
 
-<img src="Images/petmily.jpg" style="zoom: 50%;" />
+<img src="Images/petmily.jpg" style="zoom: 33%;" />
 
 이 어플리케이션은 총 5가지의 기능을 제공한다.
 
@@ -152,6 +152,7 @@ https://github.com/wolfdate25/Petmily_flask_server
 
 - GPS을 이용한 실시간 산책 위치 확인
 - 산책 종료 시 자동으로 기록 저장
+- background에서도 작동할 수 있게 상태바 기능
 - 날짜 별 산책 기록 확인
 
 #### 5. 장소 공유 화면
