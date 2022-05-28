@@ -159,12 +159,10 @@ https://github.com/wolfdate25/Petmily_flask_server
 <img src="Images/a3_5.png"/>
 
 - 키워드 검색 장소 추천 기능
+
 - 나만의 장소 즐겨찾기, 공유 및 삭제 기능
 
-
-### 앱 사용 방법(시나리오)(X)
-
-
+  
 
 ## 2. 사전 설정 및 환경 구축
 
@@ -201,6 +199,8 @@ Google 로그인을 사용 하므로 '디버그 서명 인증서 SHA-1'을 알�
 ## 3. 기능구현
 
 > [Petmily Android Application 기능구현](https://github.com/bagoonichanger/Petmliy_android_app/blob/master/Functional%20implementation.md)
+>
+> 상세 설명은 링크를 통해 확인 하세요!
 
 
 
