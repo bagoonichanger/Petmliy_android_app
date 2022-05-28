@@ -128,8 +128,11 @@ https://github.com/wolfdate25/Petmily_flask_server
 
 #### 2. 동물 감정 분석
 
-![3_2](Images/3_2.png)
-
+<center class="half">
+<img src="Images/3_2-1.png" width="360" height="720" />
+<img src="Images/3_2-2.png" width="360" height="720" />
+figure>
+  
 - 개/고양이 분류, 종 분류, 감정 분석
 - 앨범 속 사진이나 카메라로 찍어서 사용
 
