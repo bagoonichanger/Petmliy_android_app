@@ -61,7 +61,7 @@ bottomNavigationView.setOnItemSelectedListener { item ->
 
 ## 홈 화면
 #### HomeFragment.kt
-(홈 화면 추가)
+<img src="Images/3_1.png" width="360" height="720" />
 
 ### 로그인
 로그인 방법은 구글 로그인이다.
@@ -197,7 +197,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 * 로딩 시간이 흐른 후 결과를 받아온다.
 * 결과 값은 개, 고양이의 종과 화남, 행복, 슬픔의 감정을 퍼센트로 보내준다.
 
-(감정 분석 사진 추가)
+<img src="Images/a3_2.png"/>
 
 #### AnalysisFragment.kt
 
@@ -409,7 +409,8 @@ private fun updateUI(result: AnalysisResult){
 * 게시물마다 좋아요, 댓글, 공유를 할 수 있다.
 * 자신이 '좋아요'한 게시물을 모아볼 수 있다.
 
-(커뮤니티 사진 추가)
+<img src="Images/a3_3.png"/>
+
 ### 게시물 가져오기
 #### PostFragment.kt
 게시물을 서버로부터 받아오기 위해 Retrofit을 이용한다.
@@ -971,7 +972,10 @@ class CommentRecyclerViewAdapter(
 * 실시간으로 산책하는 위치를 지도로 볼 수 있고 경로를 추적하여 저장한다.
 * 날짜 별로 산책 기록을 확인, 삭제, 공유가 가능하다
 
-(산책 사진 추가)
+<img src="Images/a3_4-1.png"/>
+	
+	
+<img src="Images/a3_4-2.png"/>
 
 ### 산책 저장 확인
 #### WalkFragment.kt
@@ -1701,6 +1705,8 @@ private fun customAPi(id: Int, year: Int, month: Int, day: Int) {
 지도에서 장소를 추천하고 즐겨 찾기 추가 및 공유가 가능하다.
 * 키워드로 검색하여 장소를 추천 받는다.
 * 나만의 장소를 즐겨찾기로 관리한다.
+	
+<img src="Images/a3_5.png"/>
 
 ### 장소 검색
 KakaoApi을 이용해 키워드를 검색하면 장소를 추천 받을 수 있고 맘에 드는 장소는 즐겨 찾기 및 공유할 수 있다.
