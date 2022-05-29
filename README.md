@@ -2,7 +2,7 @@
 
 **2022-1학기 한성대학교 컴퓨터공학부 캡스톤디자인**
 
-<img src="Images/Logo.jpg" width="200" height="200" />
+<img src="Images/petmily.jpg" style="zoom: 33%;" />
 
 ## 팀 구성
 
@@ -72,7 +72,7 @@ https://github.com/wolfdate25/Petmily_flask_server
 
 ### 앱 소개
 
-<img src="Images/Logo.jpg" width="200" height="200" />
+<img src="Images/petmily.jpg" style="zoom: 33%;" />
 
 이 어플리케이션은 총 5가지의 기능을 제공한다.
 
@@ -128,12 +128,14 @@ https://github.com/wolfdate25/Petmily_flask_server
 
 #### 2. 동물 감정 분석
 
-![3_2](Images/3_2.png)
+<img src="Images/a3_2.png"/>
 
 - 개/고양이 분류, 종 분류, 감정 분석
 - 앨범 속 사진이나 카메라로 찍어서 사용
 
 #### 3. 커뮤니티 화면
+
+<img src="Images/a3_3.png"/>
 
 - 개, 고양이 사진만 업로드 가능
 - 딥 러닝을 이용한 자동 태그 기능 (개, 고양이 종 / 감정)
@@ -142,23 +144,26 @@ https://github.com/wolfdate25/Petmily_flask_server
 
 #### 4. 산책 화면
 
-![3_4](Images/3_4.PNG)
+<img src="Images/a3_4-1.png"/>
+
+
+
+<img src="Images/a3_4-2.png"/>
 
 - GPS을 이용한 실시간 산책 위치 확인
 - 산책 종료 시 자동으로 기록 저장
+- background에서도 작동할 수 있게 상태바 기능
 - 날짜 별 산책 기록 확인
 
 #### 5. 장소 공유 화면
 
-![3_5](Images/3_5.PNG)
+<img src="Images/a3_5.png"/>
 
 - 키워드 검색 장소 추천 기능
+
 - 나만의 장소 즐겨찾기, 공유 및 삭제 기능
 
-
-### 앱 사용 방법(시나리오)(X)
-
-
+  
 
 ## 2. 사전 설정 및 환경 구축
 
@@ -195,6 +200,8 @@ Google 로그인을 사용 하므로 '디버그 서명 인증서 SHA-1'을 알�
 ## 3. 기능구현
 
 > [Petmily Android Application 기능구현](https://github.com/bagoonichanger/Petmliy_android_app/blob/master/Functional%20implementation.md)
+>
+> 상세 설명은 링크를 통해 확인 하세요!
 
 
 
