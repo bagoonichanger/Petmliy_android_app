@@ -61,7 +61,7 @@ bottomNavigationView.setOnItemSelectedListener { item ->
 
 ## 홈 화면
 #### HomeFragment.kt
-<img src="Images/3_1.png" width="360" height="720" />
+(홈 화면 추가)
 
 ### 로그인
 로그인 방법은 구글 로그인이다.
@@ -197,7 +197,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 * 로딩 시간이 흐른 후 결과를 받아온다.
 * 결과 값은 개, 고양이의 종과 화남, 행복, 슬픔의 감정을 퍼센트로 보내준다.
 
-<img src="Images/a3_2.png"/>
+(감정 분석 사진 추가)
 
 #### AnalysisFragment.kt
 
@@ -409,8 +409,7 @@ private fun updateUI(result: AnalysisResult){
 * 게시물마다 좋아요, 댓글, 공유를 할 수 있다.
 * 자신이 '좋아요'한 게시물을 모아볼 수 있다.
 
-<img src="Images/a3_3.png"/>
-
+(커뮤니티 사진 추가)
 ### 게시물 가져오기
 #### PostFragment.kt
 게시물을 서버로부터 받아오기 위해 Retrofit을 이용한다.
@@ -1183,7 +1182,7 @@ private fun allDataAPi(calendarView: MaterialCalendarView) {
     })  
 }
 ```
-#### 해당 날짜에 저장된 산책 기록 가져오기 customAPi
+#### 해당 날짜에 저장된 산책 기록 가져오기 customAPi searchData
 ```kotlin
 private fun customAPi(year: Int, month: Int, day: Int) {  
     val retrofit = Retrofit.Builder()  
@@ -1218,6 +1217,15 @@ private fun customAPi(year: Int, month: Int, day: Int) {
 ### 실시간 산책 기록
 산책할 때 실시간으로 산책 시간, 산책 거리, 속도, 칼로리가 기록된다.
 #### TrackingFragment.kt
+WalkFragment에서 추가 버튼 클릭시 TrackingFragment로 이동한다.
+```kotlin
+private fun initButtons(view: View) {  
+    view.findViewById<FloatingActionButton>(R.id.changeTrackingFragment).setOnClickListener {  
+  getPermissions()  
+        findNavController().navigate(R.id.action_walkFragment_to_trackingFragment)  
+    }  
+}
+```
 
 ## 장소
 지도에서 장소를 추천하고 즐겨 찾기 추가 및 공유가 가능하다.
