@@ -1101,15 +1101,6 @@ data class Tracking(
 #### CustomWalkApi
 ```kotlin
 interface CustomWalkApi {
-	@DELETE("/api/walk/delete/{id}/{year}/{month}/{day}")  
-	fun deleteDate(  
-	    @Header("email") email: String,  
-		@Path("id") id: Int,  
-		@Path("year") year: Int,  
-		@Path("month") month: Int,  
-		@Path("day") day: Int  
-	):Call<Void>  
-	
 	@GET("/api/walk/findByDate/{year}/{month}/{day}")  
 	fun searchData(  
 	    @Header("email") email: String,  
@@ -1212,21 +1203,500 @@ private fun customAPi(year: Int, month: Int, day: Int) {
     })  
 }
 ```
-#### DetailTrackingFragment.kt
 
 ### 실시간 산책 기록
 산책할 때 실시간으로 산책 시간, 산책 거리, 속도, 칼로리가 기록된다.
-#### TrackingFragment.kt
-WalkFragment에서 추가 버튼 클릭시 TrackingFragment로 이동한다.
+
+WalkFragment에서 추가 버튼 클릭 시 TrackingFragment로 이동한다.
 ```kotlin
 private fun initButtons(view: View) {  
     view.findViewById<FloatingActionButton>(R.id.changeTrackingFragment).setOnClickListener {  
-  getPermissions()  
+		getPermissions()  
         findNavController().navigate(R.id.action_walkFragment_to_trackingFragment)  
     }  
 }
 ```
+#### TrackingFragment.kt
+```kotlin
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {  
+    super.onViewCreated(view, savedInstanceState)  
+  
+    mapView = view.findViewById(R.id.googleMapView)  
+    mapView.onCreate(savedInstanceState)  
+  
+    initViews(view)  
+    initButtons(view)  
+  
+    mapView.getMapAsync {  
+	map = it  
+	addAllPolyLines()  
+    }  
+  
+  subscribeToObservers(view)  
+}
+private fun initViews(view: View) {  //첫 화면 초기화
+    view.findViewById<AppCompatImageButton>(R.id.startButton).visibility = View.VISIBLE  
+  view.findViewById<AppCompatImageButton>(R.id.pauseButton).visibility = View.GONE  
+}
+```
+* 각각의 버튼을 클릭했을 때 실행할 액션을 정한다.
+```kotlin
+private fun initButtons(view: View) {  
+    view.findViewById<AppCompatImageButton>(R.id.startButton).setOnClickListener {  //시작 버튼
+		if (!isTracking) {  
+            sendCommandToService(ACTION_START_OR_RESUME_SERVICE)  
+            view.findViewById<AppCompatImageButton>(R.id.startButton).visibility = View.GONE  
+			view.findViewById<AppCompatImageButton>(R.id.pauseButton).visibility = View.VISIBLE  
+			view.findViewById<AppCompatImageButton>(R.id.disabledStopButton).visibility =  
+                View.VISIBLE  
+  
+			view.findViewById<AppCompatImageButton>(R.id.disabledCaptureButton).visibility =  
+                View.VISIBLE  
+		}  
+    }  
+  
+	view.findViewById<AppCompatImageButton>(R.id.pauseButton).setOnClickListener {  //멈춤 버튼
+		if (isTracking) {  
+            sendCommandToService(ACTION_PAUSE_SERVICE)  
+            view.findViewById<AppCompatImageButton>(R.id.startButton).visibility = View.VISIBLE  
+			view.findViewById<AppCompatImageButton>(R.id.pauseButton).visibility = View.GONE  
+			view.findViewById<AppCompatImageButton>(R.id.disabledStopButton).visibility =  
+                View.GONE  
+			view.findViewById<AppCompatImageButton>(R.id.disabledCaptureButton).visibility =  
+                View.GONE  
+		}  
+    }  
+  
+	view.findViewById<AppCompatImageButton>(R.id.stopButton).setOnClickListener {  //종료 버튼
+		showSaveTrackingDialog()  
+    }  
+  
+	view.findViewById<AppCompatImageButton>(R.id.disabledStopButton).setOnClickListener {  
+		Toast.makeText(requireContext(), "산책을 멈추고 중지 해주세요", Toast.LENGTH_SHORT).show()  
+    }  
+  
+	view.findViewById<AppCompatImageButton>(R.id.captureButton).setOnClickListener {  
+		showCaptureTrackingDialog()  
+    }  
+	view.findViewById<AppCompatImageButton>(R.id.disabledCaptureButton).setOnClickListener {  
+		Toast.makeText(requireContext(), "산책을 멈추고 스크린샷 해주세요", Toast.LENGTH_SHORT).show()  
+    }  
+	view.findViewById<AppCompatImageButton>(R.id.cancel_tracking).setOnClickListener {  
+		showCancelTrackingDialog()  
+    }  
+}
+```
+TrackingService에 action을 전달하는 함수 sendCommandToService
+```kotlin
+private fun sendCommandToService(action: String) {  
+    Intent(requireContext(), TrackingService::class.java).also {  
+		it.action = action  
+        requireContext().startService(it)  
+    }  
+}
+```
+#### TrackingService
+```kotlin
+override fun onCreate() {  
+    super.onCreate()  
+    //초기화
+    initNotificationBuilder()  
+    postInitialValues()  
+    initLocationRequest()  
+  
+    fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)  
+    isTracking.observe(this, Observer {  
+		startLocationUpdates(it)  
+        updateNotificationTrackingState(it)  
+    })  
+    initLocationClient()  
+}
+```
+알림 초기화
+```kotlin
+private fun initNotificationBuilder() {  
+    basenotificationBuilder =  
+        NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID).setAutoCancel(false)  
+            .setOngoing(true)  
+            .setSmallIcon(R.drawable.ic_premium_icon_paw)  
+            .setContentTitle("Petmily")  
+            .setContentText("00:00")  
+            .setContentIntent(getTrackingActivityPendingIntent())  
+  
+    curNotificationBuilder = basenotificationBuilder  
+}
+```
+정보 초기화
+```kotlin
+private fun postInitialValues() {  
+    isTracking.postValue(false)  
+    pathPoints.postValue(mutableListOf())  
+    timeRunInMillis.postValue(0L)  
+    timeRunInSeconds.postValue(0L)  
+}
+```
+위치 정보 초기화
+```kotlin
+private fun initLocationRequest() {  
+    locationRequest = LocationRequest.create().apply {  
+	interval = LOCATION_UPDATE_INTERVAL  
+	fastestInterval = FASTEST_LOCATION_INTERVAL  
+	priority = LocationRequest.PRIORITY_HIGH_ACCURACY  
+  }  
+}
+```
+시작 위치 업데이트
+```kotlin
+private fun startLocationUpdates(isTracking: Boolean) {  
+    Log.d("tracking", isTracking.toString())  
+    if (isTracking) {  
+        if (ActivityCompat.checkSelfPermission(  
+                this, Manifest.permission.ACCESS_FINE_LOCATION  
+		) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(  
+                this, Manifest.permission.ACCESS_COARSE_LOCATION  
+		) != PackageManager.PERMISSION_GRANTED  
+	) {  
+            return  
+	}  
+        fusedLocationProviderClient.requestLocationUpdates(  
+            locationRequest,  
+			locationCallback,  
+			Looper.getMainLooper()  
+        )  
+    } else {  
+        stopLocationUpdates()  
+    }  
+}
+private fun stopLocationUpdates() {  
+    fusedLocationProviderClient.removeLocationUpdates(locationCallback)  
+}
+```
 
+```kotlin
+private fun updateNotificationTrackingState(isTracking: Boolean) {  
+    val notificationActionText = if (isTracking) "Pause" else "Resume"  
+  
+	val pendingIntent = if (isTracking) {  
+        val pauseIntent = Intent(this, TrackingService::class.java).apply {  
+			action = ACTION_PAUSE_SERVICE  
+		}  
+		PendingIntent.getService(this, 1, pauseIntent, FLAG_UPDATE_CURRENT)  
+    } else {  
+        val resumeIntent = Intent(this, TrackingService::class.java).apply {  
+			action = ACTION_START_OR_RESUME_SERVICE  
+		}  
+		PendingIntent.getService(this, 2, resumeIntent, FLAG_UPDATE_CURRENT)  
+    }  
+  
+    val notificationManager =  
+        getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager  
+  
+    curNotificationBuilder.javaClass.getDeclaredField("mActions").apply { isAccessible = true  
+		set(curNotificationBuilder, ArrayList<NotificationCompat.Action>())  
+    }  
+  
+	if (!serviceKilled) {  
+        curNotificationBuilder = basenotificationBuilder  
+			.addAction(R.drawable.ic_baseline_pause_24, notificationActionText, pendingIntent)  
+        notificationManager.notify(NOTIFICATION_ID, curNotificationBuilder.build())  
+    }  
+}
+```
+```kotlin
+override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {  
+    intent?.let {  
+		when (it.action) {  
+            ACTION_START_OR_RESUME_SERVICE -> {  
+                if (isFirstRun) {  
+                    Log.d("service", "Started service")  
+                    startForegroundService()  
+                    isFirstRun = false  
+				} else {  
+                    startTimer()  
+                    Log.d("service", "resumed service")  
+                }  
+            }  
+            ACTION_PAUSE_SERVICE -> {  
+                pauseService()  
+                Log.d("service", "Pause service")  
+            }  
+            ACTION_STOP_SERVICE -> {  
+                Log.d("service", "Stop service")  
+                killService()  
+            }  
+            else -> {}  
+        }  
+    }  
+  return super.onStartCommand(intent, flags, startId)  
+}
+```
+#### startForegroundService
+```kotlin
+private fun startForegroundService() {  
+        startTimer()  
+        isTracking.postValue(true)  
+  
+		val notificationManager =  
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager  
+        createNotificationChannel(notificationManager)  
+  
+        startForeground(NOTIFICATION_ID, basenotificationBuilder.build())  
+  
+        timeRunInSeconds.observe(this, Observer {  
+			if (!serviceKilled) {  
+                val notification = curNotificationBuilder  
+					.setContentText(TrackingUtility.getFormattedStopWatchTime(it * 1000L))  
+                notificationManager.notify(NOTIFICATION_ID, notification.build())  
+            }  
+		})  
+}
+private fun startTimer() {  
+    addEmptyPolyline()  
+    isTracking.postValue(true)  
+    timeStarted = System.currentTimeMillis()  
+    isTimerEnabled = true  
+	CoroutineScope(Dispatchers.Main).launch {  
+		while (isTracking.value!!) {  
+            lapTime = System.currentTimeMillis() - timeStarted  
+			timeRunInMillis.postValue(totalTime + lapTime)  
+            if (timeRunInMillis.value!! >= lastSecondTimestamp + 1000L) {  
+                timeRunInSeconds.postValue(timeRunInSeconds.value!! + 1)  
+                lastSecondTimestamp += 1000L  
+			}  
+            delay(TIMER_UPDATE_INTERVAL)  
+        }  
+        totalTime += lapTime  
+  }  
+}
+```
+#### pauseService
+```kotlin
+private fun pauseService() {  
+    isTracking.postValue(false)  
+    isTimerEnabled = false  
+}
+```
+#### killService
+```kotlin
+private fun killService() {  
+    serviceKilled = true  
+	isFirstRun = true  
+	pauseService()  
+    postInitialValues()  
+    stopForeground(true)  
+    stopSelf()  
+}
+```
+#### 산책 종료 버튼 클릭 시 showSaveTrackingDialog
+```kotlin
+private fun showSaveTrackingDialog() {  
+    AlertDialog.Builder(requireContext())  
+        .setTitle("산책 기록을 저장하시겠습니까?")  
+        .setMessage("현재까지의 기록을 저장할까요?")  
+        .setPositiveButton("저장") { _, _ ->  
+			zoomToSeeWholeTrack()  
+            saveServer()  
+        }  
+		.setNegativeButton("취소") { dialog, _ ->  
+			dialog.cancel()  
+        }  
+		.create()  
+        .show()  
+}
+```
+#### 산책 기록 저장 saveServer
+```kotlin
+private fun saveServer() {  
+    map?.snapshot { bitmap ->  
+		var distanceInMeters = 0  
+		for (polyline in pathPoints) {  
+            distanceInMeters += TrackingUtility.calculatePolylineLength(polyline).toInt()  
+        }  
+        val avgSpeed =  
+            round((distanceInMeters / 100f) / (curTimeInMillis / 1000f / 60 / 60) * 10) / 100f  
+		val year = Calendar.getInstance().get(Calendar.YEAR)  
+        val month = Calendar.getInstance().get(Calendar.MONTH) + 1  
+		val day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)  
+        val caloriesBurned = ((distanceInMeters / 1000f) * 70f).toInt()  
+
+		//request body 형식으로 바꿈
+		val post_year =  
+            year.toString().toRequestBody("application/json;charset=utf-8".toMediaType())  
+        val post_month =  
+            month.toString().toRequestBody("application/json;charset=utf-8".toMediaType())  
+        val post_day =  
+            day.toString().toRequestBody("application/json;charset=utf-8".toMediaType())  
+        val post_time = curTimeInMillis.toString()  
+            .toRequestBody("application/json;charset=utf-8".toMediaType())  
+        val post_distance = distanceInMeters.toString()  
+            .toRequestBody("application/json;charset=utf-8".toMediaType())  
+        val post_speed =  
+            avgSpeed.toString().toRequestBody("application/json;charset=utf-8".toMediaType())  
+        val post_calories = caloriesBurned.toString()  
+            .toRequestBody("application/json;charset=utf-8".toMediaType())  
+        val post_googleImage = googleImage.toString().toRequestBody("application/json;charset=utf-8".toMediaType())  
+        val randomId = Random().nextInt()  
+  
+        val textHashMap = hashMapOf<String, RequestBody>()  
+        textHashMap["id"] =  
+            randomId.toString().toRequestBody("application/json;charset=utf-8".toMediaType())  
+        textHashMap["year"] = post_year  
+        textHashMap["month"] = post_month  
+        textHashMap["day"] = post_day  
+        textHashMap["timeInMillis"] = post_time  
+        textHashMap["distanceInMeters"] = post_distance  
+        textHashMap["avgSpeedInKMH"] = post_speed  
+        textHashMap["caloriesBurned"] = post_calories  
+        textHashMap["userImg"] = post_googleImage  
+  
+        val post_img = bitmapToRequestBody(bitmap)  
+        customAPi(post_img, textHashMap) 
+        
+		view?.let {  
+			Snackbar.make(it, "산책이 저장되었습니다.", Snackbar.LENGTH_LONG).show()  
+        }  
+		stopTracking()  
+    }  
+}
+```
+#### 산책 저장 CustomWalkApi
+```kotlin
+interface CustomWalkApi {
+	@Multipart  
+	@POST("/api/walk/save")  
+	fun sendTrackingData(  
+		@Header("email") email: String,  
+		@Part postImg: MultipartBody.Part,  
+		@PartMap data: HashMap<String, RequestBody>  
+	): Call<sendTrackingDto>
+}
+```
+#### 데이터 모델 sendTrackingDto
+```kotlin
+data class sendTrackingDto(  
+    @SerializedName("id") var id: Int?,  
+	@SerializedName("year") var year: String?,  
+	@SerializedName("month") var month: String?,  
+	@SerializedName("day") var day: String?,  
+	@SerializedName("timeInMillis") var timeInMillis: String?,  
+	@SerializedName("distanceInMeters") var distanceInMeters: String?,  
+	@SerializedName("avgSpeedInKMH") var avgSpeed: String?,  
+	@SerializedName("caloriesBurned") var caloriesBurned: String?,  
+	@SerializedName("img") var img: String?  
+)
+```
+#### 산책 기록 전송 customAPi sendTrackingData
+```kotlin
+private fun customAPi(postImg: MultipartBody.Part, data: HashMap<String, RequestBody>) {  
+    val retrofit = Retrofit.Builder()  
+        .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080")  
+        .client(client)  
+        .addConverterFactory(GsonConverterFactory.create())  
+        .build()  
+  
+    val api = retrofit.create(CustomWalkApi::class.java)  
+  
+    googleEmail?.let { email ->  
+		api.sendTrackingData(email, postImg, data)  
+    }?.enqueue(object : Callback<sendTrackingDto> {  
+        override fun onResponse(  
+            call: Call<sendTrackingDto>,  
+			response: Response<sendTrackingDto>  
+        ) {  
+            if (!response.isSuccessful) return  
+		}  
+  
+        override fun onFailure(call: Call<sendTrackingDto>, t: Throwable) {  
+            Log.d("walk Error", t.message.toString())  
+        }  
+    })  
+}
+```
+#### 산책 캡쳐 버튼 클릭 시 showCaptureTrackingDialog
+```kotlin
+private fun showCaptureTrackingDialog() {  
+    AlertDialog.Builder(requireContext())  
+        .setMessage("산책 기록을 캡쳐하시겠습니까?")  
+        .setPositiveButton("캡쳐") { dialog, _ ->  
+			view?.let {  
+				getBitmapFromView(it, requireActivity()) { bitmap ->  
+					captureTracking(bitmap)  
+                }  
+			}  
+			dialog.dismiss()  
+		}  
+		.setNegativeButton("취소") { dialog, _ ->  
+			dialog.dismiss()  
+		}  
+		.create()  
+		.show()  
+}
+```
+#### 산책 취소 버튼 클릭 시 showCancelTrackingDialog
+```kotlin
+private fun showCancelTrackingDialog() {  
+    AlertDialog.Builder(requireContext())  
+        .setTitle("산책 기록을 취소하시겠습니까?")  
+        .setMessage("현재까지의 기록을 취소하고 모든 데이터를 삭제하시겠습니까?")  
+        .setPositiveButton("삭제") { _, _ ->  
+			stopTracking()  
+        }  
+		.setNegativeButton("아니오") { dialog, _ ->  
+			dialog.cancel()  
+        }  
+		.create()  
+        .show()  
+}
+//산책 트래킹 멈춤
+private fun stopTracking() {  
+    sendCommandToService(ACTION_STOP_SERVICE)  
+    findNavController().navigate(R.id.action_trackingFragment_to_walkFragment)  
+}
+```
+#### DetailTrackingFragment.kt
+산책 기록 상세 화면이고 저장된 산책 기록 화면을 불러오며 삭제할 수 있다.
+#### 산책 삭제 CustomWalkApi
+```kotlin
+interface CustomWalkApi {
+	@DELETE("/api/walk/delete/{id}/{year}/{month}/{day}")  
+	fun deleteDate(  
+	    @Header("email") email: String,  
+		@Path("id") id: Int,  
+		@Path("year") year: Int,  
+		@Path("month") month: Int,  
+		@Path("day") day: Int  
+	):Call<Void>
+}
+```
+#### 산책 삭제 customAPi deleteDate
+```kotlin
+private fun customAPi(id: Int, year: Int, month: Int, day: Int) {  
+    val retrofit = Retrofit.Builder()  
+        .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080")  
+        .client(client)  
+        .addConverterFactory(GsonConverterFactory.create())  
+        .build()  
+  
+    val api = retrofit.create(CustomWalkApi::class.java)  
+  
+    googleEmail?.let { email ->  
+		api.deleteDate(email, id, year, month, day)  
+    }?.enqueue(object : Callback<Void> {  
+        override fun onResponse(  
+            call: Call<Void>,  
+			response: Response<Void>  
+        ) {  
+            if (!response.isSuccessful) {  
+                viewModel.deleteTracking(args.tracking)  
+            }  
+        }  
+        
+        override fun onFailure(call: Call<Void>, t: Throwable) {  
+            Log.d("walk Error", t.message.toString())  
+        }  
+    })  
+}
+```
 ## 장소
 지도에서 장소를 추천하고 즐겨 찾기 추가 및 공유가 가능하다.
 * 키워드로 검색하여 장소를 추천 받는다.
