@@ -20,7 +20,7 @@
 
 어플이 실행 되면 가장 먼저 보여지는 화면이다.
 
-(로딩 화면 추가)
+<img src="upload.png" width="360" height="720"/>
 
 #### splashActivity.kt
 
