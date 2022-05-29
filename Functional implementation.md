@@ -1578,7 +1578,7 @@ interface CustomWalkApi {
 #### 데이터 모델 sendTrackingDto
 ```kotlin
 data class sendTrackingDto(  
-    @SerializedName("id") var id: Int?,  
+	@SerializedName("id") var id: Int?,  
 	@SerializedName("year") var year: String?,  
 	@SerializedName("month") var month: String?,  
 	@SerializedName("day") var day: String?,  
@@ -1622,18 +1622,18 @@ private fun showCaptureTrackingDialog() {
     AlertDialog.Builder(requireContext())  
         .setMessage("산책 기록을 캡쳐하시겠습니까?")  
         .setPositiveButton("캡쳐") { dialog, _ ->  
-			view?.let {  
-				getBitmapFromView(it, requireActivity()) { bitmap ->  
-					captureTracking(bitmap)  
-                }  
-			}  
-			dialog.dismiss()  
+		view?.let {  
+			getBitmapFromView(it, requireActivity()) { bitmap ->  
+				captureTracking(bitmap)  
+                	}  
 		}  
+		dialog.dismiss()  
+	}  
 		.setNegativeButton("취소") { dialog, _ ->  
 			dialog.dismiss()  
 		}  
-		.create()  
-		.show()  
+	.create()  
+	.show()  
 }
 ```
 #### 산책 취소 버튼 클릭 시 showCancelTrackingDialog
@@ -1664,7 +1664,7 @@ private fun stopTracking() {
 interface CustomWalkApi {
 	@DELETE("/api/walk/delete/{id}/{year}/{month}/{day}")  
 	fun deleteDate(  
-	    @Header("email") email: String,  
+		@Header("email") email: String,  
 		@Path("id") id: Int,  
 		@Path("year") year: Int,  
 		@Path("month") month: Int,  
@@ -1687,8 +1687,8 @@ private fun customAPi(id: Int, year: Int, month: Int, day: Int) {
 		api.deleteDate(email, id, year, month, day)  
     }?.enqueue(object : Callback<Void> {  
         override fun onResponse(  
-            call: Call<Void>,  
-			response: Response<Void>  
+		call: Call<Void>,  
+		response: Response<Void>  
         ) {  
             if (!response.isSuccessful) {  
                 viewModel.deleteTracking(args.tracking)  
@@ -1713,16 +1713,16 @@ KakaoApi을 이용해 키워드를 검색하면 장소를 추천 받을 수 있�
 #### MapFragment.kt
 ```kotlin
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {  
-    super.onViewCreated(view, savedInstanceState)  
+	super.onViewCreated(view, savedInstanceState)  
   
-    mapView = binding.mapView  
+	mapView = binding.mapView  
 	mapView.onCreate(savedInstanceState)  
-    mapView.getMapAsync(this)  
+	mapView.getMapAsync(this)  
       
-    initButtons()  
-    clickViewPager()  
+	initButtons()  
+	clickViewPager()  
   
-    viewPager.adapter = viewPagerAdapter  
+	viewPager.adapter = viewPagerAdapter  
 	recyclerView.adapter = recyclerAdapter  
 	recyclerView.layoutManager = LinearLayoutManager(activity)  
 }  
@@ -1779,11 +1779,11 @@ class PlaceViewPagerAdapter(
 			titleTextView.text = placeModel.place_name  
 			addressTextView.text = placeModel.address_name  
 			if(placeModel.phone == ""){  
-                callNumberTextView.text = "전화번호가 없습니다."  
+                		callNumberTextView.text = "전화번호가 없습니다."  
 			} else {  
-                callNumberTextView.text = placeModel.phone  
+                		callNumberTextView.text = placeModel.phone  
 			}  
-            categoryTextView.text = placeModel.category_name  
+            		categoryTextView.text = placeModel.category_name  
   
 			binding.viewpagerShareButton.setOnClickListener { shareButton(placeModel) }  
 			binding.viewPagerLikeButton.setOnClickListener { likeButton(placeModel) }  
@@ -1854,9 +1854,9 @@ private val recyclerAdapter = PlaceRecyclerAdapter(linkButton = {
 	val url = it.place_url  
 	val categories = it.category_name  
 	val userImg = googleImage.toString()  
-    val data = LikePlaceDto(null, name, phone, address, url, categories,userImg)  
-    customAPi(data)  
-    Toast.makeText(requireContext(), "장소가 저장되었습니다.", Toast.LENGTH_SHORT).show()  
+	val data = LikePlaceDto(null, name, phone, address, url, categories,userImg)  
+	customAPi(data)  
+	Toast.makeText(requireContext(), "장소가 저장되었습니다.", Toast.LENGTH_SHORT).show()  
 }, shareButton = {  
 	val sharingIntent = Intent(Intent.ACTION_SEND).apply {  
 		type = "text/plain"  
@@ -1870,7 +1870,7 @@ private val recyclerAdapter = PlaceRecyclerAdapter(linkButton = {
 interface KakaoApi {  
     @GET("/v2/local/search/keyword.json")  
     fun getSearchPlaces(  
-        @Header("Authorization") key: String,  
+		@Header("Authorization") key: String,  
 		@Query("query") query: String,  
 		@Query("page") page: Int,  
 		@Query("size") size: Int  
@@ -1887,7 +1887,7 @@ data class PlaceDto(
 #### Meta
 ```kotlin
 data class Meta(  
-    var total_count: Int, // 검색어에 검색된 문서 수  
+	var total_count: Int, // 검색어에 검색된 문서 수  
 	var pageable_count: Int, //total_count 중 노출 가능 문서 수 (최대: 45)  
 	var same_name: RegionInfo          // 질의어의 지역 및 키워드 분석 정보  
 )
@@ -1896,7 +1896,7 @@ data class Meta(
 장소 데이터 모델
 ```kotlin
 data class PlaceModel(  
-    var id: String, // 장소 ID  var place_name: String, // 장소명, 업체명  
+	var id: String, // 장소 ID  var place_name: String, // 장소명, 업체명  
 	var category_name: String, // 카테고리 이름  
 	var phone: String, // 전화번호  
 	var address_name: String, // 전체 지번 주소  
@@ -1939,7 +1939,7 @@ private fun searchPlace(keyword: String) {
 #### 위치 이동 updateMarker, deleteMarkers
 ```kotlin
 private fun updateMarker(documents: List<PlaceModel>?) {  
-    documents?.forEach { document ->  
+	documents?.forEach { document ->  
 		val marker = Marker()  
         val lat = document.y.toDouble()  
         val lng = document.x.toDouble()  
@@ -1954,7 +1954,7 @@ private fun updateMarker(documents: List<PlaceModel>?) {
 	}  
 }
 private fun deleteMarkers(markers: MutableList<Marker>) {  
-    markers.let { Markers ->  
+	markers.let { Markers ->  
 		Markers.forEach { marker ->  
 			marker.map = null  
 		}  
@@ -1965,23 +1965,23 @@ private fun deleteMarkers(markers: MutableList<Marker>) {
 #### 장소 즐겨찾기 관리 API : CustomMapApi 
 ```kotlin
 interface CustomMapApi {  
-    @POST("/api/place/save")  
-    fun sendLikePlaces(  
-        @Header("email") email: String,  
+	@POST("/api/place/save")  
+	fun sendLikePlaces(  
+		@Header("email") email: String,  
 		@Body data: LikePlaceDto  
-    ): Call<LikePlaceDto>  
+	): Call<LikePlaceDto>  
   
-    @DELETE("/api/place/delete/{placeId}")  
-    fun deletePlace(  
-        @Header("email") email: String,  
+	@DELETE("/api/place/delete/{placeId}")  
+	fun deletePlace(  
+		@Header("email") email: String,  
 		@Path("placeId") placeId: Int  
-    ):Call<Void>  
+	):Call<Void>  
 }
 ```
 #### LikePlaceDto
 ```kotlin
 data class LikePlaceDto(  
-    @SerializedName("placeId") var placeId: Int?,  
+	@SerializedName("placeId") var placeId: Int?,  
 	@SerializedName("placeName") var placeName: String?,  
 	@SerializedName("phone") var phone: String?,  
 	@SerializedName("address") var address: String?,  
@@ -2025,13 +2025,13 @@ private fun customAPi(data: LikePlaceDto) {
 #### LikePlaceRecyclerAdapter
 ```kotlin
 class LikePlaceRecyclerAdapter(  
-    val shareButton: (LikePlaceDto) -> Unit,  
+	val shareButton: (LikePlaceDto) -> Unit,  
 	val linkButton: (LikePlaceDto) -> Unit,  
 	val deleteButton: (LikePlaceDto) -> Unit  
 ) : ListAdapter<LikePlaceDto, LikePlaceRecyclerAdapter.ItemViewHolder>(differ) {
 	inner class ItemViewHolder(private val binding: LikeplaceRecycleviewDetailBinding) :  
-	    RecyclerView.ViewHolder(binding.root) {
-	    fun bind(placeModel: LikePlaceDto) {  
+		RecyclerView.ViewHolder(binding.root) {
+		fun bind(placeModel: LikePlaceDto) {  
 			val titleTextView = binding.titleTextView  
 			val addressTextView = binding.addressTextView  
 			val callNumberTextView = binding.callNumberTextView  
@@ -2044,13 +2044,13 @@ class LikePlaceRecyclerAdapter(
 ```kotlin
 private val recyclerAdapter = LikePlaceRecyclerAdapter(deleteButton = { place ->  
 	Log.d("map",place.placeId.toString())  
-    place.placeId?.let { customAPi(it) }  
+	place.placeId?.let { customAPi(it) }  
 }, linkButton = { place ->  
-  val intent = Intent().apply {  
-	  action = Intent.ACTION_VIEW  
+	val intent = Intent().apply {  
+		action = Intent.ACTION_VIEW  
 		data = Uri.parse(place.url)  
 	}  
-  startActivity(intent)  
+	startActivity(intent)  
 }, shareButton = { place ->  
 	val sharingIntent = Intent(Intent.ACTION_SEND).apply {  
 		type = "text/plain"  
@@ -2062,9 +2062,9 @@ private val recyclerAdapter = LikePlaceRecyclerAdapter(deleteButton = { place ->
 #### 즐겨찾기 장소 API : LikePlaceApi
 ```kotlin
 interface LikePlaceApi {  
-    @GET("/api/place/findByEmail")  
-    fun searchAllData(  
-        @Header("email") email: String,  
+	@GET("/api/place/findByEmail")  
+	fun searchAllData(  
+        	@Header("email") email: String,  
 	): Call<List<LikePlaceDto>>  
 }
 ```
@@ -2082,11 +2082,11 @@ private fun customAPi() {
   
 	allData?.enqueue(object : Callback<List<LikePlaceDto>> {  
         override fun onResponse(  
-            call: Call<List<LikePlaceDto>>,  
-			response: Response<List<LikePlaceDto>>  
+		call: Call<List<LikePlaceDto>>,  
+		response: Response<List<LikePlaceDto>>  
         ) {  
-            response.body().let{ dto ->  
-				recyclerAdapter.submitList(dto)  
+		response.body().let{ dto ->  
+		recyclerAdapter.submitList(dto)  
             }  
 		}  
   
