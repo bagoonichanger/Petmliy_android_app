@@ -26,38 +26,11 @@
             android:layout_marginEnd="15dp"
             android:background="@drawable/toolbar_background">
 
-            <TextView
-                android:id="@+id/textTitle1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:text="PET"
-                android:textColor="#474B4F"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/TitleImage"
-                app:layout_constraintEnd_toStartOf="@id/TitleImage"
-                app:layout_constraintTop_toTopOf="@id/TitleImage" />
-
-            <TextView
-                android:id="@+id/textTitle2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="MILY"
-                android:textColor="#474B4F"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/TitleImage"
-                app:layout_constraintStart_toEndOf="@id/TitleImage"
-                app:layout_constraintTop_toTopOf="@id/TitleImage" />
-
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/TitleImage"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_logo"
+                android:layout_height="70dp"
+                android:src="@drawable/petmily"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
