@@ -1,4 +1,14 @@
 
+# Petmily Android Application 기능 구현
+
+## 목차
+
+- [Client 부문](#Client-부문)
+- [Server 부문](#Server-부문)
+
+
+## Client 부문
+
 # 3. 기능 구현
 ##   각 액티비티 기능 설명
 
@@ -62,7 +72,8 @@ bottomNavigationView.setOnItemSelectedListener { item ->
 
 ## 홈 화면
 #### HomeFragment.kt
-<img src="Images/3_1.png" width="360" height="720" />
+
+<img src="Images/FI_home.jpg" width="360" height="720" />
 
 ### 로그인
 로그인 방법은 구글 로그인이다.
@@ -192,6 +203,8 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 }
 ```
 ## 동물 감정 분석
+
+<img src="https://user-images.githubusercontent.com/70479375/170906822-5b84fbf2-54d2-459a-b926-2c5867ea4d69.gif" width="360" height="720" />
 
 개, 고양이가 있는 사진을 선택하고 전송하여 감정 분석 값을 받아볼 수 있다.
 * 사진을 앨범에서 고르거나 카메라로 찍어서 전송한다.
@@ -404,6 +417,10 @@ private fun updateUI(result: AnalysisResult){
 }
 ```
 ## 커뮤니티
+
+
+<img src="https://user-images.githubusercontent.com/70479375/170906975-22cc374e-a766-44e5-bf6f-ee998f881be4.gif" width="360" height="720" />
+
 자신의 반려 동물 사진을 올리고 여러 사람들과 소통하며 공유할 수 있다.
 * 강아지, 고양이 사진만 업로드할 수 있다.
 * 자동으로 태그를 달아준다. (종 분류, 감정 분석)
@@ -961,7 +978,6 @@ class CommentRecyclerViewAdapter(
         holder.userEmail.text = comment.email.split("@")[0]  
         holder.commentText.text = comment.commentContent  
 	}  
-
     override fun getItemCount(): Int {  
         return commentList.size  
     }  
@@ -969,6 +985,8 @@ class CommentRecyclerViewAdapter(
 ```
 
 ## 산책
+  
+<img src="https://user-images.githubusercontent.com/70479375/170906984-12fb98d4-16a6-4a59-83c8-e8ef60e442bb.gif" width="420" height="720" />
 산책 기록을 저장하고 날짜 별로 확인할 수 있다.
 * 실시간으로 산책하는 위치를 지도로 볼 수 있고 경로를 추적하여 저장한다.
 * 날짜 별로 산책 기록을 확인, 삭제, 공유가 가능하다
@@ -1376,7 +1394,6 @@ private fun stopLocationUpdates() {
     fusedLocationProviderClient.removeLocationUpdates(locationCallback)  
 }
 ```
-
 ```kotlin
 private fun updateNotificationTrackingState(isTracking: Boolean) {  
     val notificationActionText = if (isTracking) "Pause" else "Resume"  
@@ -1703,7 +1720,11 @@ private fun customAPi(id: Int, year: Int, month: Int, day: Int) {
 }
 ```
 ## 장소
+
+<img src="https://user-images.githubusercontent.com/70479375/170906934-0a771e97-e2a4-4ece-a2be-c5a6ca16a569.gif" width="360" height="720" />
+
 지도에서 장소를 추천하고 즐겨 찾기 추가 및 공유가 가능하다.
+
 * 키워드로 검색하여 장소를 추천 받는다.
 * 나만의 장소를 즐겨찾기로 관리한다.
 	
@@ -2022,6 +2043,378 @@ private fun customAPi(data: LikePlaceDto) {
 ```
 #### 즐겨찾기에 저장한 장소 모아보기
 #### LikePlaceFragment.kt
+
+
+
+## Server 부문
+### Spring
+	
+### Flask
+# Petmily Flask 서버
+## 개요
+Petmily 앱의 감정 분석, 종 분류, 개고양이 탐지와 같은 이미지 처리를 담당하는 서버이다.  
+Flask와 PyTorch를 이용하여 구성했다.
+
+`server.py` REST 방식으로 통신이 가능한 Flask 서버이다.  
+모델을 로드하고 메모리에 적재하여 요청된 이미지를 처리한다.
+
+#### 라이브러리 import, 모델 초기 세팅
+```python
+from flask import Flask, request  # 서버 구현을 위한 Flask 객체 importfrom flask_restx import Api, Resource  # Api 구현을 위한 Api 객체 importimport torch, torchvision  # torch 모듈 
+import from torchvision import transforms  
+import mmdet  # mmdetection 모듈 
+import from mmdet.apis 
+import inference_detector, init_detector, show_result_pyplot  
+from werkzeug.datastructures import FileStorage  
+from PIL import Image  
+  
+"""
+ 사전학습된 Swing Transformer 모델을 불러오는 코드
+ 객체 감지를 위해 사용할 설정과 학습된 모델 파라미터를 불러온다
+"""
+config = 'configs/swin/mask_rcnn_swin-s-p4-w7_fpn_fp16_ms-crop-3x_coco.py'  
+# Setup a checkpoint file to load  
+checkpoint = 'models/mask_rcnn_swin-s-p4-w7_fpn_fp16_ms-crop-3x_coco_20210903_104808-b92c91f1.pth'  
+# initialize the detector  
+model = init_detector(config, checkpoint, device='cpu:0')  
+"""
+ 학습된 CoAtNet 모델을 불러오는 코드
+"""  
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')  
+# load a pre=trained model for coatnet  
+dog_model = torch.load('models/dogbreed2.pth', map_location=device)  
+dog_model.to(device)  
+dog_model.eval()  
+cat_model = torch.load('models/catbreed3.pth', map_location=device)  
+cat_model.to(device)  
+cat_model.eval()  
+emotion_model = torch.load('models/emotion1.pth', map_location=device)  
+emotion_model.to(device)  
+emotion_model.eval()  
+
+
+"""
+ Flask 서버를 사용하기 위한 설정
+"""
+app = Flask(__name__)  # Flask 객체 선언, 파라미터로 어플리케이션 패키지의 이름을 넣어줌.  
+api = Api(app)  # Flask 객체에 Api 객체 등록  
+
+# 이미지를 multipart로 받아오기 위함
+upload_parser = api.parser()  
+upload_parser.add_argument('file', location='files',  
+                           type=FileStorage, required=True)
+```
+
+REST 형식으로 요청을 보내면 결과 값을 반환시켜주는 코드
+GET과 POST 메소드로 요청을 받음.  
+GET 메소드는 서버내에 있는 이미지의 경로를 가지고 작업, POST 메소드는 직접 multipart로 보낼 경우
+
+#### 개와 고양이를 찾아주는 기능
+```python
+@api.route('/detect', methods=['GET', 'POST'])  
+class FindCatsAndDogs(Resource):  
+    def __init__(self, *args, **kwargs):  
+        super().__init__(*args, **kwargs)  
+        self.file_name = 0  
+  
+    def post(self):  
+        # 이미지 전송 받기  
+        args = upload_parser.parse_args()  
+        # 이미지 전송 받은 파일을 이미지 파일로 변환  
+        uploaded_file = args['file']  
+        uploaded_file.save(f'imgs/find{self.file_name}.jpg')  
+        try:  
+            result = inference_detector(model, './imgs/find' + str(self.file_name) + '.jpg')  
+            find = "false"  
+            if all([any(result[0][15].T[4] > 0.3), any(result[0][16].T[4] > 0.3)]):  # 개와 고양이 모두가 있으면  
+                if (result[0][15].T[4][0] < result[0][16].T[4][0]):  # 고양이가 개보다 확률 up?                    find = "cat"  
+                else:  # 개가 확률이 더 높다  
+                    find = "dog"  
+            else:  
+                if any(result[0][15].T[4] > 0.3):  # 고양이가 있으면  
+                    find = "cat"  
+                if any(result[0][16].T[4] > 0.3):  # 개가 있으면  
+                    find = "dog"  
+  
+            return {"detected": find}  
+        except:  
+            json_object = {"message": "Image analysis error"}  
+  
+        self.file_name = (self.file_name + 1) % 20  
+        # GET 요청시 리턴 값에 해당 하는 dict를 JSON 형태로 반환  
+        return json_object  
+  
+    def get(self):  
+        path = request.args.get('path')  
+        if path is None:  
+            return {"error": "The parameter path is not exist."}  
+        try:  
+            result = inference_detector(model, path)  
+            find = "false"  
+            if all([any(result[0][15].T[4] > 0.3), any(result[0][16].T[4] > 0.3)]):  # 개와 고양이 모두가 있으면  
+                if (result[0][15].T[4][0] < result[0][16].T[4][0]):  # 고양이가 개보다 확률 up?                    find = "cat"  
+                else:  # 개가 확률이 더 높다  
+                    find = "dog"  
+            else:  
+                if any(result[0][15].T[4] > 0.3):  # 고양이가 있으면  
+                    find = "cat"  
+                if any(result[0][16].T[4] > 0.3):  # 개가 있으면  
+                    find = "dog"  
+  
+            return {"detected": find}  
+        except:  
+            json_object = {"message": "Image analysis error"}  
+  
+        # GET 요청시 리턴 값에 해당 하는 dict를 JSON 형태로 반환  
+        return json_object
+```
+
+#### 고양이의 품종을 분류하는 기능
+```python
+@api.route('/predict/breed/cat')
+class DistinguishCatBreed(Resource):  
+    def __init__(self, *args, **kwargs):  
+        super().__init__(*args, **kwargs)  
+        self.file_name = 0  
+        self.transformer = transforms.Compose([  
+            transforms.Resize((224, 224)),  
+            transforms.ToTensor(),  
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])  
+        ])  
+        self.classes = ['bengal', 'british shorthair', 'domestic long-haired', 'domestic short-haired', 'maine coon',  
+                        'Munchkin', 'Norwegian forest', 'persian', 'ragdoll', 'russian blue', 'scottish fold',  
+                        'selkirk rex', 'siamese', 'sphynx']  
+  
+    def post(self):  
+        global cat_file_name  
+        # 이미지 전송 받기  
+        args = upload_parser.parse_args()  
+        # 이미지 전송 받은 파일을 이미지 파일로 변환  
+        uploaded_file = args['file']  
+        path = f'imgs/cat{cat_file_name}.jpg'  
+        uploaded_file.save(path)  
+        try:  
+            img = Image.open(path).convert('RGB')  
+            result = inference_detector(model, path)  
+            json_object = {"error": "Can't find a cat"}  
+            if any(result[0][15][:, 4] > 0.3):  
+                position = [int(i) for i in result[0][15][0]]  
+                img = img.crop(position[:-1])  
+                img = self.transformer(img)  
+                output = cat_model(img.unsqueeze(0).to(device))  
+                top3 = torch.topk(output, 3, dim=1)  
+                predict_list = [self.classes[x] for x in top3.indices.squeeze()]  # find cat breed  
+                values_list = [float(x) for x in top3.values.squeeze()]  
+                json_object = {"crop_position": position[:-1],  
+                               "top3": [{"breed": predict_list[0], "value": values_list[0]},  
+                                        {"breed": predict_list[1], "value": values_list[1]},  
+                                        {"breed": predict_list[2], "value": values_list[2]}]}  
+        except:  
+            json_object = {"message": "Image analysis error"}  
+            cat_file_name = (cat_file_name + 1) % 20  
+        # GET 요청시 리턴 값에 해당 하는 dict를 JSON 형태로 반환  
+        return json_object  
+  
+    def get(self):  
+        path = request.args.get('path')  
+        if path is None:  
+            return {"error": "The parameter path is not exist."}  
+        try:  
+            img = Image.open(path).convert('RGB')  
+            result = inference_detector(model, path)  
+            json_object = {"error": "Can't find a cat"}  
+            if any(result[0][15][:, 4] > 0.3):  
+                position = [int(i) for i in result[0][15][0]]  
+                img = img.crop(position[:-1])  
+                img = self.transformer(img)  
+                output = cat_model(img.unsqueeze(0).to(device))  
+                top3 = torch.topk(output, 3, dim=1)  
+                predict_list = [self.classes[x] for x in top3.indices.squeeze()]  # find cat breed  
+                values_list = [float(x) for x in top3.values.squeeze()]  
+                json_object = {"crop_position": position[:-1],  
+                               "top3": [{"breed": predict_list[0], "value": values_list[0]},  
+                                        {"breed": predict_list[1], "value": values_list[1]},  
+                                        {"breed": predict_list[2], "value": values_list[2]}]}  
+        except:  
+            json_object = {"message": "Image analysis error"}  
+        return json_object
+```
+개와 고양이를 찾고, 찾은 개나 고양이의 위치를 crop 하여 종 분류를 위한 모델에 입력 값으로 넣어 얻은 결과를 반환한다.
+
+### 머신러닝
+1. 사진에서 반려동물을 찾을 수 있어야 한다 -> 객체 인식
+2. 주어진 사진의 동물이 어떤 감정, 품종인지 찾아야 한다 -> 이미지 분류
+
+객체 인식 모델에서 사진에서 반려동물을 찾고, 찾은 반려동물을 이미지 분류 모델에 넣는 방식
+
+### 학습 코드 설명
+
+#### load_datasets 함수
+
+```python
+# 데이터 셋을 불러오는 함수  
+def load_datasets(input_size=224):  
+    # 이미지를 모델에 넣기 전에 라사이징, 노멀라이즈와 같은 전처리를 정하는 부분  
+    train_transforms = transforms.Compose([  
+        transforms.RandomHorizontalFlip(),  
+        transforms.Resize((224, 224)),  
+        transforms.ToTensor(),  
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])  
+    ])  
+    test_transform = transforms.Compose([  
+        transforms.Resize((224, 224)),  
+        transforms.ToTensor(),  
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])  
+  
+    # dogs 메소드로 견종에 대한 데이터셋을 불러온다.  
+    train_dataset = dogs(root="./data",  
+                         train=True,  
+                         cropped=True,  
+                         transform=train_transforms,  
+                         download=False)  
+    test_dataset = dogs(root="./data",  
+                        train=False,  
+                        cropped=True,  
+                        transform=test_transform,  
+                        download=False)  
+  
+    # combine train and test datasets  
+  
+    classes = train_dataset.classes # 이 변수에는 분류할 종의 목록이 들어있음  
+    print("Training set stats:")  
+    train_dataset.stats()  
+    print("Testing set stats:")  
+    test_dataset.stats()  
+  
+    return train_dataset, test_dataset, classes
+```
+데이터 셋을 불러온다. (dogs 함수에는 데이터 셋을 불러오고 전처리 하는 과정에 포함되어 있음)  
+전처리된 데이터 셋과 클래스(라벨)를 리턴
+
+#### 학습과 비교를 위한 테스트를 하는 코드
+
+```python
+def train(model, train_loader, test_loader,  
+          optimizer, loss_function, epoch_num=1, device=device):  
+    model.to(device)  
+    torch.manual_seed(14)  
+  
+    start = time.time()  
+    print(f"Training Process Starts at {datetime.now().strftime('%H:%M:%S')} ... ")  
+  
+    epoch = 1  
+  
+    # 학습과 테스트를 하는 코드  
+    while epoch <= epoch_num:  
+        # 학습  
+        train_loss, train_acc, train_f1 = fwd_pass(model, train_loader, loss_function, optimizer, train=True)  
+  
+        # 테스트  
+        with torch.no_grad():  
+            test_loss, test_acc, test_f1 = fwd_pass(model, test_loader, loss_function, optimizer, train=False)  
+  
+        reset = '\n' if epoch <= 5 or epoch % 5 == 0 else '\r'  
+        print(f"Epoch[{epoch:2d}]>>>",  
+              f"Train/Test loss: {train_loss:.7f}/{test_loss:.7f},",  
+              f"Acc.: {train_acc:.2f}/{test_acc:.2f}",  
+              f"[[{timeSince(start)}]]", end=reset)  
+  
+        # ===================log========================  
+        logs['trainlosses'].append(train_loss)  
+        logs['trainaccs'].append(train_acc)  
+        logs['testlosses'].append(test_loss)  
+        logs['testaccs'].append(test_acc)  
+  
+        epoch += 1  
+  
+    print(f'F1 Score: {test_f1}')  
+    print(f'Finished in {timeSince(start)}')  
+    return logs
+```
+`fwd_pass` 함수에 train=True 파라미터를 주어 학습, 학습한 결과를 매 에폭마다 출력
+
+```python
+# 실질적으로 학습을 하는 코드  
+def fwd_pass(model, loader, loss_function, optimizer, train=False):  
+    # train 파라미터로 학습을 할 것인지 그냥 결과만 얻을 것인지 정함  
+    if train:  
+        model.train()  
+    else:  
+        model.eval()  
+  
+    total_loss = 0  
+    y_pred, y = [], []  
+    for X, labels in loader:  
+        labels = labels.type(torch.LongTensor) # 10가지의 종이 있다면 0~9까지의 라벨이 달림, 이를 텐서로 바꿔줌  
+        X, labels = X.to(device), labels.to(device) # GPU를 이용한 학습을 하기 위해 메모리 할당 위치를 바꿔줌  
+        # ===================손실 함수 계산=====================  
+        outputs = model(X) # 모델을 거쳐서 출력 값을 얻고  
+        loss = loss_function(outputs, labels) # 그 출력 값과 실제 값에 대한 손실 값을 구함  
+        total_loss += loss.item() # (손실에 대한 평균을 구하기 위해 따로 값을 더하는 변수)  
+        # ===================학습====================  
+        if train: # 학습으로 세팅 시에  
+            optimizer.zero_grad() # 기울기를 0으로 초기화하고  
+            loss.backward() # 구한 손실을 모델 네트워크에 역전파  
+            optimizer.step() # 역전파 단계에서 수집된 변화도로 매개변수를 조정  
+        # ===============평가===============  
+        with torch.no_grad(): # 모델 평가에 사용되는 값을 저장하는 코드  
+            y_hat = outputs.argmax(dim=1)  
+            y_pred.extend(y_hat.cpu().numpy().tolist())  
+            y.extend(labels.cpu().numpy().tolist())  
+  
+    with torch.no_grad(): # 멀티 라벨 분류에서 서브셋의 정확도를 계산하는 코드  
+        total_loss /= len(loader.dataset)  
+        acc = accuracy_score(y, y_pred) * 100  
+        f1 = f1_score(y, y_pred, average="weighted") * 100  
+  
+    return total_loss, acc, f1
+```
+
+```python
+train_data, test_data, classes = load_datasets(224) # 224 크기의 이미지를 가진 데이터 셋  
+dataset_sizes = train_data.__len__()  
+batch_size = 16 # 한번에 몇개의 이미지를 사용하여 학습할 것인지  
+  
+train_loader = torch.utils.data.DataLoader(train_data, batch_size=batch_size, shuffle=True, num_workers=0)  
+test_loader = torch.utils.data.DataLoader(test_data, batch_size=1, shuffle=False, num_workers=0)  
+  
+# CoAtNet 모델 구조 설정  
+num_blocks = [2, 2, 6, 12, 2]  # L  
+channels = [64, 96, 192, 384, 768]  # D  
+block_types = ['C', 'C', 'T', 'T']  
+  
+model = CoAtNet((224, 224), 3, num_blocks, channels, num_classes=len(classes), block_types=block_types)  
+  
+criterion = nn.CrossEntropyLoss() # 손실 함수 설정  
+learning_rate = 1e-3 # 학습률 설정  
+optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=0.9) # 옵타마이저 설정  
+# exp_lr_scheduler = lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
+```
+1. 데이터 셋을 불러온다. (전처리 포함)
+2. 배치 크기를 결정한다. (여러 이미지를 배치 입력으로 받아, 학습 속도를 높임)
+3. 불러온 데이터 셋을 데이터로더에 넣어 모델이 학습할 때 사용할 수 있게 한다.
+4. CoAtNet 모델의 구조를 결정한다. (C = CNN, T = Transformer)
+5. criterion(손실을 구하는 공식)으로 CrossEntropyLoss, learning_rate(모델의 파라미터를 한번에 이동시킬 값) = 0.001, optmizer(경사하강법)로 SGD를 설정하였다.
+
+#### 학습하는 코드
+```python
+logs = train(model, train_loader=train_loader, test_loader=test_loader,  
+             optimizer=optimizer, loss_function=criterion,  
+             epoch_num=3, device=device)
+```
+
+Training Process Starts at 17:43:26 ...   
+Epoch[ 1]>>> Train/Test loss: 0.0078367/0.0714398, Acc.: 95.81/97.84 [[10m 53s]]  
+Epoch[ 2]>>> Train/Test loss: 0.0067343/0.0763198, Acc.: 96.58/97.63 [[21m 47s]]  
+Epoch[ 3]>>> Train/Test loss: 0.0064167/0.0631362, Acc.: 96.53/98.15 [[32m 38s]]  
+F1 Score: 98.15673013989462  
+Finished in 32m 38s  
+
+학습을 위한 함수들을 파라미터로 넣고, epoch_num만큼 학습을 시작한다. 
+학습된 모델은 torch.save() 함수로 저장한다.
+	
+
+=======
 즐겨찾기에 추가한 장소들을 리스트 형식으로 한 번에 모아볼 수 있고 삭제도 가능하다.
 #### LikePlaceRecyclerAdapter
 ```kotlin
