@@ -2,10 +2,8 @@
 
 ## 목차
 
-- ### Client 부문
-
-- ### Server 부문
-
+- [Client 부문](#Client-부문)
+- [Server 부문](#Server-부문)
 
 
 ## Client 부문
@@ -871,9 +869,11 @@ PostFragment에서 '좋아요'한 게시물만 모아보도록 한다.
 ### Flask
 # Petmily Flask 서버
 ## 개요
-Petmily 앱의 감정 분석, 종 분류, 개고양이 탐지와 같은 이미지 처리를 담당하는 서버이다. Flask와 PyTorch를 이용하여 구성했다.
+Petmily 앱의 감정 분석, 종 분류, 개고양이 탐지와 같은 이미지 처리를 담당하는 서버이다.  
+Flask와 PyTorch를 이용하여 구성했다.
 
-`server.py` REST 방식으로 통신이 가능한 Flask 서버이다. 모델을 로드하고 메모리에 적재하여 요청된 이미지를 처리한다.
+`server.py` REST 방식으로 통신이 가능한 Flask 서버이다.  
+모델을 로드하고 메모리에 적재하여 요청된 이미지를 처리한다.
 
 #### 라이브러리 import, 모델 초기 세팅
 ```python
@@ -923,7 +923,8 @@ upload_parser.add_argument('file', location='files',
 ```
 
 REST 형식으로 요청을 보내면 결과 값을 반환시켜주는 코드
-GET과 POST 메소드가 있는데, GET 메소드는 서버내에 있는 이미지의 경로를 가지고 작업, POST 메소드는 직접 multipart로 보낼 경우
+GET과 POST 메소드로 요청을 받음.  
+GET 메소드는 서버내에 있는 이미지의 경로를 가지고 작업, POST 메소드는 직접 multipart로 보낼 경우
 
 #### 개와 고양이를 찾아주는 기능
 ```python
@@ -1055,7 +1056,7 @@ class DistinguishCatBreed(Resource):
             json_object = {"message": "Image analysis error"}  
         return json_object
 ```
-개와 고양이를 찾고, 찾은 개나 고양이의 위치를 crop 하여 종 분류를 위한 모델에 입력 값으로 넣어 얻은 결과를 반환한다,
+개와 고양이를 찾고, 찾은 개나 고양이의 위치를 crop 하여 종 분류를 위한 모델에 입력 값으로 넣어 얻은 결과를 반환한다.
 
 ### 머신러닝
 1. 사진에서 반려동물을 찾을 수 있어야 한다 -> 객체 인식
@@ -1104,7 +1105,8 @@ def load_datasets(input_size=224):
   
     return train_dataset, test_dataset, classes
 ```
-데이터 셋을 불러온다, dogs 함수에는 데이터 셋을 불러오고 전처리 하는 과정에 포함되어 있음. 전처리된 데이터 셋과 클래스(라벨)를 리턴
+데이터 셋을 불러온다. (dogs 함수에는 데이터 셋을 불러오고 전처리 하는 과정에 포함되어 있음)  
+전처리된 데이터 셋과 클래스(라벨)를 리턴
 
 #### 학습과 비교를 위한 테스트를 하는 코드
 
@@ -1218,11 +1220,14 @@ logs = train(model, train_loader=train_loader, test_loader=test_loader,
              epoch_num=3, device=device)
 ```
 
-Training Process Starts at 17:43:26 ... 
-Epoch[ 1]>>> Train/Test loss: 0.0078367/0.0714398, Acc.: 95.81/97.84 [[10m 53s]]
-Epoch[ 2]>>> Train/Test loss: 0.0067343/0.0763198, Acc.: 96.58/97.63 [[21m 47s]]
-Epoch[ 3]>>> Train/Test loss: 0.0064167/0.0631362, Acc.: 96.53/98.15 [[32m 38s]]
-F1 Score: 98.15673013989462
-Finished in 32m 38s
+Training Process Starts at 17:43:26 ...   
+Epoch[ 1]>>> Train/Test loss: 0.0078367/0.0714398, Acc.: 95.81/97.84 [[10m 53s]]  
+Epoch[ 2]>>> Train/Test loss: 0.0067343/0.0763198, Acc.: 96.58/97.63 [[21m 47s]]  
+Epoch[ 3]>>> Train/Test loss: 0.0064167/0.0631362, Acc.: 96.53/98.15 [[32m 38s]]  
+F1 Score: 98.15673013989462  
+Finished in 32m 38s  
 
-학습을 위한 함수들을 파라미터로 넣고, epoch_num만큼 학습을 시작
+학습을 위한 함수들을 파라미터로 넣고, epoch_num만큼 학습을 시작한다. 
+학습된 모델은 torch.save() 함수로 저장한다.
+	
+
