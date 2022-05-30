@@ -215,7 +215,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 ## 동물 감정 분석
 
-<img src="Images/FI_analysis.gif" width="360" height="720" />
+<img src="https://user-images.githubusercontent.com/70479375/170906822-5b84fbf2-54d2-459a-b926-2c5867ea4d69.gif" width="360" height="720" />
 
 개, 고양이가 있는 사진을 선택하고 전송하여 감정 분석 값을 받아볼 수 있다.
 
@@ -444,7 +444,7 @@ private fun updateUI(result: AnalysisResult){
 
 ## 커뮤니티
 
-<img src="Images/FI_story.gif" width="360" height="720" />
+<img src="https://user-images.githubusercontent.com/70479375/170906975-22cc374e-a766-44e5-bf6f-ee998f881be4.gif" width="360" height="720" />
 
 자신의 반려 동물 사진을 올리고 여러 사람들과 소통하며 공유할 수 있다.
 
@@ -829,7 +829,7 @@ PostFragment에서 '좋아요'한 게시물만 모아보도록 한다.
 
 ## 산책
 
-<img src="Images/FI_walk.gif" width="420" height="720" />
+<img src="https://user-images.githubusercontent.com/70479375/170906984-12fb98d4-16a6-4a59-83c8-e8ef60e442bb.gif" width="420" height="720" />
 
 산책 기록을 저장하고 날짜 별로 확인할 수 있다.
 
@@ -848,9 +848,8 @@ PostFragment에서 '좋아요'한 게시물만 모아보도록 한다.
 
 ## 장소
 
-<img src="Images/FI_map.gif" width="360" height="720" />
+<img src="https://user-images.githubusercontent.com/70479375/170906934-0a771e97-e2a4-4ece-a2be-c5a6ca16a569.gif" width="360" height="720" />
 
-	
 지도에서 장소를 추천하고 즐겨 찾기 추가 및 공유가 가능하다.
 
 * 키워드로 검색하여 장소를 추천 받는다.
