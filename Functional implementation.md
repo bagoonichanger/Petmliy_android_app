@@ -871,9 +871,11 @@ PostFragment에서 '좋아요'한 게시물만 모아보도록 한다.
 ### Flask
 # Petmily Flask 서버
 ## 개요
-Petmily 앱의 감정 분석, 종 분류, 개고양이 탐지와 같은 이미지 처리를 담당하는 서버이다. Flask와 PyTorch를 이용하여 구성했다.
+Petmily 앱의 감정 분석, 종 분류, 개고양이 탐지와 같은 이미지 처리를 담당하는 서버이다.  
+Flask와 PyTorch를 이용하여 구성했다.
 
-`server.py` REST 방식으로 통신이 가능한 Flask 서버이다. 모델을 로드하고 메모리에 적재하여 요청된 이미지를 처리한다.
+`server.py` REST 방식으로 통신이 가능한 Flask 서버이다.  
+모델을 로드하고 메모리에 적재하여 요청된 이미지를 처리한다.
 
 #### 라이브러리 import, 모델 초기 세팅
 ```python
