@@ -2041,6 +2041,113 @@ private fun customAPi(data: LikePlaceDto) {
 ```
 #### 즐겨찾기에 저장한 장소 모아보기
 #### LikePlaceFragment.kt
+즐겨찾기에 추가한 장소들을 리스트 형식으로 한 번에 모아볼 수 있고 삭제도 가능하다.
+#### LikePlaceRecyclerAdapter
+```kotlin
+class LikePlaceRecyclerAdapter(  
+	val shareButton: (LikePlaceDto) -> Unit,  
+	val linkButton: (LikePlaceDto) -> Unit,  
+	val deleteButton: (LikePlaceDto) -> Unit  
+) : ListAdapter<LikePlaceDto, LikePlaceRecyclerAdapter.ItemViewHolder>(differ) {
+	inner class ItemViewHolder(private val binding: LikeplaceRecycleviewDetailBinding) :  
+		RecyclerView.ViewHolder(binding.root) {
+		fun bind(placeModel: LikePlaceDto) {  
+			val titleTextView = binding.titleTextView  
+			val addressTextView = binding.addressTextView  
+			val callNumberTextView = binding.callNumberTextView  
+			val categoryTextView = binding.categoryTextView
+			...
+		}
+	}
+}
+```
+```kotlin
+private val recyclerAdapter = LikePlaceRecyclerAdapter(deleteButton = { place ->  
+	Log.d("map",place.placeId.toString())  
+	place.placeId?.let { customAPi(it) }  
+}, linkButton = { place ->  
+	val intent = Intent().apply {  
+		action = Intent.ACTION_VIEW  
+		data = Uri.parse(place.url)  
+	}  
+	startActivity(intent)  
+}, shareButton = { place ->  
+	val sharingIntent = Intent(Intent.ACTION_SEND).apply {  
+		type = "text/plain"  
+		putExtra(Intent.EXTRA_TEXT, place.url)  
+    }  
+	startActivity(Intent.createChooser(sharingIntent, "공유하기"))  
+})
+```
+#### 즐겨찾기 장소 API : LikePlaceApi
+```kotlin
+interface LikePlaceApi {  
+	@GET("/api/place/findByEmail")  
+	fun searchAllData(  
+        	@Header("email") email: String,  
+	): Call<List<LikePlaceDto>>  
+}
+```
+#### 즐겨찾기 장소 받기 searchAllData
+```kotlin
+private fun customAPi() {  
+    val retrofit = Retrofit.Builder()  
+        .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080")  
+        .client(client)  
+        .addConverterFactory(GsonConverterFactory.create())  
+        .build()  
+  
+    val api = retrofit.create(LikePlaceApi::class.java)  
+    val allData = googleEmail?.let { email -> api.searchAllData(email) }  
+  
+	allData?.enqueue(object : Callback<List<LikePlaceDto>> {  
+        override fun onResponse(  
+		call: Call<List<LikePlaceDto>>,  
+		response: Response<List<LikePlaceDto>>  
+        ) {  
+		response.body().let{ dto ->  
+		recyclerAdapter.submitList(dto)  
+            }  
+		}  
+  
+        override fun onFailure(call: Call<List<LikePlaceDto>>, t: Throwable) {  
+            Log.d("bookmark",t.message.toString())  
+        }  
+    })  
+}
+```
+#### 즐겨찾기 장소 삭제 deletePlace
+```kotlin
+private fun customAPi(placeId: Int) {  
+    val retrofit = Retrofit.Builder()  
+        .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080")  
+        .client(client)  
+        .addConverterFactory(GsonConverterFactory.create())  
+        .build()  
+  
+    val api = retrofit.create(CustomMapApi::class.java)  
+  
+    googleEmail?.let { email ->  
+		api.deletePlace(email, placeId)  
+    }?.enqueue(object : Callback<Void> {  
+  
+        override fun onResponse(  
+            call: Call<Void>,  
+			response: Response<Void>  
+        ) {Log.d("map", "2")  
+            if (!response.isSuccessful) {  
+            }  
+        }  
+  
+        override fun onFailure(call: Call<Void>, t: Throwable) {  
+            Log.d("map Error", t.message.toString())  
+        }  
+  
+    })  
+    Toast.makeText(context,"장소가 삭제되었습니다.",Toast.LENGTH_SHORT).show()  
+    findNavController().navigate(R.id.bookMarkFragment)  
+}
+```
 
 
 
@@ -2411,112 +2518,3 @@ Finished in 32m 38s
 학습을 위한 함수들을 파라미터로 넣고, epoch_num만큼 학습을 시작한다. 
 학습된 모델은 torch.save() 함수로 저장한다.
 	
-
-=======
-즐겨찾기에 추가한 장소들을 리스트 형식으로 한 번에 모아볼 수 있고 삭제도 가능하다.
-#### LikePlaceRecyclerAdapter
-```kotlin
-class LikePlaceRecyclerAdapter(  
-	val shareButton: (LikePlaceDto) -> Unit,  
-	val linkButton: (LikePlaceDto) -> Unit,  
-	val deleteButton: (LikePlaceDto) -> Unit  
-) : ListAdapter<LikePlaceDto, LikePlaceRecyclerAdapter.ItemViewHolder>(differ) {
-	inner class ItemViewHolder(private val binding: LikeplaceRecycleviewDetailBinding) :  
-		RecyclerView.ViewHolder(binding.root) {
-		fun bind(placeModel: LikePlaceDto) {  
-			val titleTextView = binding.titleTextView  
-			val addressTextView = binding.addressTextView  
-			val callNumberTextView = binding.callNumberTextView  
-			val categoryTextView = binding.categoryTextView
-			...
-		}
-	}
-}
-```
-```kotlin
-private val recyclerAdapter = LikePlaceRecyclerAdapter(deleteButton = { place ->  
-	Log.d("map",place.placeId.toString())  
-	place.placeId?.let { customAPi(it) }  
-}, linkButton = { place ->  
-	val intent = Intent().apply {  
-		action = Intent.ACTION_VIEW  
-		data = Uri.parse(place.url)  
-	}  
-	startActivity(intent)  
-}, shareButton = { place ->  
-	val sharingIntent = Intent(Intent.ACTION_SEND).apply {  
-		type = "text/plain"  
-		putExtra(Intent.EXTRA_TEXT, place.url)  
-    }  
-	startActivity(Intent.createChooser(sharingIntent, "공유하기"))  
-})
-```
-#### 즐겨찾기 장소 API : LikePlaceApi
-```kotlin
-interface LikePlaceApi {  
-	@GET("/api/place/findByEmail")  
-	fun searchAllData(  
-        	@Header("email") email: String,  
-	): Call<List<LikePlaceDto>>  
-}
-```
-#### 즐겨찾기 장소 받기 searchAllData
-```kotlin
-private fun customAPi() {  
-    val retrofit = Retrofit.Builder()  
-        .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080")  
-        .client(client)  
-        .addConverterFactory(GsonConverterFactory.create())  
-        .build()  
-  
-    val api = retrofit.create(LikePlaceApi::class.java)  
-    val allData = googleEmail?.let { email -> api.searchAllData(email) }  
-  
-	allData?.enqueue(object : Callback<List<LikePlaceDto>> {  
-        override fun onResponse(  
-		call: Call<List<LikePlaceDto>>,  
-		response: Response<List<LikePlaceDto>>  
-        ) {  
-		response.body().let{ dto ->  
-		recyclerAdapter.submitList(dto)  
-            }  
-		}  
-  
-        override fun onFailure(call: Call<List<LikePlaceDto>>, t: Throwable) {  
-            Log.d("bookmark",t.message.toString())  
-        }  
-    })  
-}
-```
-#### 즐겨찾기 장소 삭제 deletePlace
-```kotlin
-private fun customAPi(placeId: Int) {  
-    val retrofit = Retrofit.Builder()  
-        .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080")  
-        .client(client)  
-        .addConverterFactory(GsonConverterFactory.create())  
-        .build()  
-  
-    val api = retrofit.create(CustomMapApi::class.java)  
-  
-    googleEmail?.let { email ->  
-		api.deletePlace(email, placeId)  
-    }?.enqueue(object : Callback<Void> {  
-  
-        override fun onResponse(  
-            call: Call<Void>,  
-			response: Response<Void>  
-        ) {Log.d("map", "2")  
-            if (!response.isSuccessful) {  
-            }  
-        }  
-  
-        override fun onFailure(call: Call<Void>, t: Throwable) {  
-            Log.d("map Error", t.message.toString())  
-        }  
-  
-    })  
-    Toast.makeText(context,"장소가 삭제되었습니다.",Toast.LENGTH_SHORT).show()  
-    findNavController().navigate(R.id.bookMarkFragment)  
-}
-```
