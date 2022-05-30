@@ -1218,12 +1218,12 @@ logs = train(model, train_loader=train_loader, test_loader=test_loader,
              epoch_num=3, device=device)
 ```
 
-Training Process Starts at 17:43:26 ... 
-Epoch[ 1]>>> Train/Test loss: 0.0078367/0.0714398, Acc.: 95.81/97.84 [[10m 53s]]
-Epoch[ 2]>>> Train/Test loss: 0.0067343/0.0763198, Acc.: 96.58/97.63 [[21m 47s]]
-Epoch[ 3]>>> Train/Test loss: 0.0064167/0.0631362, Acc.: 96.53/98.15 [[32m 38s]]
-F1 Score: 98.15673013989462
-Finished in 32m 38s
+Training Process Starts at 17:43:26 ...   
+Epoch[ 1]>>> Train/Test loss: 0.0078367/0.0714398, Acc.: 95.81/97.84 [[10m 53s]]  
+Epoch[ 2]>>> Train/Test loss: 0.0067343/0.0763198, Acc.: 96.58/97.63 [[21m 47s]]  
+Epoch[ 3]>>> Train/Test loss: 0.0064167/0.0631362, Acc.: 96.53/98.15 [[32m 38s]]  
+F1 Score: 98.15673013989462  
+Finished in 32m 38s  
 
 학습을 위한 함수들을 파라미터로 넣고, epoch_num만큼 학습을 시작
 	
