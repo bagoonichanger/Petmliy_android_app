@@ -210,8 +210,6 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 * 로딩 시간이 흐른 후 결과를 받아온다.
 * 결과 값은 개, 고양이의 종과 화남, 행복, 슬픔의 감정을 퍼센트로 보내준다.
 
-<img src="Images/a3_2.png"/>
-
 #### AnalysisFragment.kt
 
 앨범, 카메라 접근 권한이 있는지 확인한다.
@@ -990,11 +988,6 @@ class CommentRecyclerViewAdapter(
 * 실시간으로 산책하는 위치를 지도로 볼 수 있고 경로를 추적하여 저장한다.
 * 날짜 별로 산책 기록을 확인, 삭제, 공유가 가능하다
 
-<img src="Images/a3_4-1.png"/>
-	
-	
-<img src="Images/a3_4-2.png"/>
-
 ### 산책 저장 확인
 #### WalkFragment.kt
 * MaterialCalendarView에 산책 기록이 있는 날은 빨간 점으로 표시한다.
@@ -1726,8 +1719,7 @@ private fun customAPi(id: Int, year: Int, month: Int, day: Int) {
 
 * 키워드로 검색하여 장소를 추천 받는다.
 * 나만의 장소를 즐겨찾기로 관리한다.
-	
-<img src="Images/a3_5.png"/>
+
 
 ### 장소 검색
 KakaoApi을 이용해 키워드를 검색하면 장소를 추천 받을 수 있고 맘에 드는 장소는 즐겨 찾기 및 공유할 수 있다.
@@ -2042,6 +2034,113 @@ private fun customAPi(data: LikePlaceDto) {
 ```
 #### 즐겨찾기에 저장한 장소 모아보기
 #### LikePlaceFragment.kt
+즐겨찾기에 추가한 장소들을 리스트 형식으로 한 번에 모아볼 수 있고 삭제도 가능하다.
+#### LikePlaceRecyclerAdapter
+```kotlin
+class LikePlaceRecyclerAdapter(  
+    val shareButton: (LikePlaceDto) -> Unit,  
+	val linkButton: (LikePlaceDto) -> Unit,  
+	val deleteButton: (LikePlaceDto) -> Unit  
+) : ListAdapter<LikePlaceDto, LikePlaceRecyclerAdapter.ItemViewHolder>(differ) {
+	inner class ItemViewHolder(private val binding: LikeplaceRecycleviewDetailBinding) :  
+	    RecyclerView.ViewHolder(binding.root) {
+	    fun bind(placeModel: LikePlaceDto) {  
+			val titleTextView = binding.titleTextView  
+			val addressTextView = binding.addressTextView  
+			val callNumberTextView = binding.callNumberTextView  
+			val categoryTextView = binding.categoryTextView
+			...
+		}
+	}
+}
+```
+```kotlin
+private val recyclerAdapter = LikePlaceRecyclerAdapter(deleteButton = { place ->  
+	Log.d("map",place.placeId.toString())  
+    place.placeId?.let { customAPi(it) }  
+}, linkButton = { place ->  
+  val intent = Intent().apply {  
+	  action = Intent.ACTION_VIEW  
+		data = Uri.parse(place.url)  
+	}  
+  startActivity(intent)  
+}, shareButton = { place ->  
+	val sharingIntent = Intent(Intent.ACTION_SEND).apply {  
+		type = "text/plain"  
+		putExtra(Intent.EXTRA_TEXT, place.url)  
+    }  
+	startActivity(Intent.createChooser(sharingIntent, "공유하기"))  
+})
+```
+#### 즐겨찾기 장소 API : LikePlaceApi
+```kotlin
+interface LikePlaceApi {  
+    @GET("/api/place/findByEmail")  
+    fun searchAllData(  
+        @Header("email") email: String,  
+	): Call<List<LikePlaceDto>>  
+}
+```
+#### 즐겨찾기 장소 받기 searchAllData
+```kotlin
+private fun customAPi() {  
+    val retrofit = Retrofit.Builder()  
+        .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080")  
+        .client(client)  
+        .addConverterFactory(GsonConverterFactory.create())  
+        .build()  
+  
+    val api = retrofit.create(LikePlaceApi::class.java)  
+    val allData = googleEmail?.let { email -> api.searchAllData(email) }  
+  
+	allData?.enqueue(object : Callback<List<LikePlaceDto>> {  
+        override fun onResponse(  
+            call: Call<List<LikePlaceDto>>,  
+			response: Response<List<LikePlaceDto>>  
+        ) {  
+            response.body().let{ dto ->  
+				recyclerAdapter.submitList(dto)  
+            }  
+		}  
+  
+        override fun onFailure(call: Call<List<LikePlaceDto>>, t: Throwable) {  
+            Log.d("bookmark",t.message.toString())  
+        }  
+    })  
+}
+```
+#### 즐겨찾기 장소 삭제 deletePlace
+```kotlin
+private fun customAPi(placeId: Int) {  
+    val retrofit = Retrofit.Builder()  
+        .baseUrl("http://ec2-54-180-166-236.ap-northeast-2.compute.amazonaws.com:8080")  
+        .client(client)  
+        .addConverterFactory(GsonConverterFactory.create())  
+        .build()  
+  
+    val api = retrofit.create(CustomMapApi::class.java)  
+  
+    googleEmail?.let { email ->  
+		api.deletePlace(email, placeId)  
+    }?.enqueue(object : Callback<Void> {  
+  
+        override fun onResponse(  
+            call: Call<Void>,  
+			response: Response<Void>  
+        ) {Log.d("map", "2")  
+            if (!response.isSuccessful) {  
+            }  
+        }  
+  
+        override fun onFailure(call: Call<Void>, t: Throwable) {  
+            Log.d("map Error", t.message.toString())  
+        }  
+  
+    })  
+    Toast.makeText(context,"장소가 삭제되었습니다.",Toast.LENGTH_SHORT).show()  
+    findNavController().navigate(R.id.bookMarkFragment)  
+}
+```
 
 
 
