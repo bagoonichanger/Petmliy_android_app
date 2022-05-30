@@ -913,8 +913,7 @@ buildscript {
 
 
 #### Rest API 한눈에 보기
-![스크린샷 2022-05-30 오전 2 03 11](https://user-images.githubusercontent.com/95841885/170882524-041ec5fa-f351-47b2-a415-4c9952981936.png)
-
+<img width="958" alt="스크린샷 2022-05-30 오후 1 41 27" src="https://user-images.githubusercontent.com/95841885/170918550-31211bb8-ac33-44da-8701-da2835b1b936.png">
 
 
 ### 3-1. 로그인
