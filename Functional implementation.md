@@ -2,10 +2,8 @@
 
 ## 목차
 
-- ### Client 부문
-
-- ### Server 부문
-
+- [Client 부문](#Client-부문)
+- [Server 부문](#Server-부문)
 
 
 ## Client 부문
@@ -75,7 +73,7 @@ bottomNavigationView.setOnItemSelectedListener { item ->
 
 #### HomeFragment.kt
 
-(홈 화면 추가)
+<img src="Images/FI_home.jpg" width="360" height="720" />
 
 ### 로그인
 
@@ -215,13 +213,13 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 ## 동물 감정 분석
 
+<img src="https://user-images.githubusercontent.com/70479375/170906822-5b84fbf2-54d2-459a-b926-2c5867ea4d69.gif" width="360" height="720" />
+
 개, 고양이가 있는 사진을 선택하고 전송하여 감정 분석 값을 받아볼 수 있다.
 
 * 사진을 앨범에서 고르거나 카메라로 찍어서 전송한다.
 * 로딩 시간이 흐른 후 결과를 받아온다.
 * 결과 값은 개, 고양이의 종과 화남, 행복, 슬픔의 감정을 퍼센트로 보내준다.
-
-(감정 분석 사진 추가)
 
 #### AnalysisFragment.kt
 
@@ -444,14 +442,14 @@ private fun updateUI(result: AnalysisResult){
 
 ## 커뮤니티
 
+<img src="https://user-images.githubusercontent.com/70479375/170906975-22cc374e-a766-44e5-bf6f-ee998f881be4.gif" width="360" height="720" />
+
 자신의 반려 동물 사진을 올리고 여러 사람들과 소통하며 공유할 수 있다.
 
 * 강아지, 고양이 사진만 업로드할 수 있다.
 * 자동으로 태그를 달아준다. (종 분류, 감정 분석)
 * 게시글마다 좋아요, 댓글, 공유를 할 수 있다.
 * 자신이 '좋아요'한 게시물을 모아볼 수 있다.
-
-(커뮤니티 사진 추가)
 
 ### 게시물 가져오기
 
@@ -829,6 +827,8 @@ PostFragment에서 '좋아요'한 게시물만 모아보도록 한다.
 
 ## 산책
 
+<img src="https://user-images.githubusercontent.com/70479375/170906984-12fb98d4-16a6-4a59-83c8-e8ef60e442bb.gif" width="420" height="720" />
+
 산책 기록을 저장하고 날짜 별로 확인할 수 있다.
 
 * 실시간으로 산책하는 위치를 지도로 볼 수 있고 경로를 추적하여 저장한다.
@@ -846,6 +846,8 @@ PostFragment에서 '좋아요'한 게시물만 모아보도록 한다.
 
 ## 장소
 
+<img src="https://user-images.githubusercontent.com/70479375/170906934-0a771e97-e2a4-4ece-a2be-c5a6ca16a569.gif" width="360" height="720" />
+
 지도에서 장소를 추천하고 즐겨 찾기 추가 및 공유가 가능하다.
 
 * 키워드로 검색하여 장소를 추천 받는다.
@@ -862,9 +864,9 @@ PostFragment에서 '좋아요'한 게시물만 모아보도록 한다.
 
 
 ## Server 부문
-	
 ### Spring Boot
-# Petmily 서버
+	
+
 ## 1. 개요
 
 Petmily 모바일 어플리케이션의 메인 서버이다. 
@@ -914,6 +916,7 @@ buildscript {
 
 #### Rest API 한눈에 보기
 <img width="958" alt="스크린샷 2022-05-30 오후 1 41 27" src="https://user-images.githubusercontent.com/95841885/170918550-31211bb8-ac33-44da-8701-da2835b1b936.png">
+
 
 
 ### 3-1. 로그인
@@ -1368,13 +1371,16 @@ public class PlaceService {
 ## 4. 테이블 구조
 
 ![table](https://user-images.githubusercontent.com/95841885/170878351-5ac1778e-2113-4a6d-a3e3-28cd41c14546.png)
+
 	
 ### Flask
 # Petmily Flask 서버
 ## 개요
-Petmily 앱의 감정 분석, 종 분류, 개고양이 탐지와 같은 이미지 처리를 담당하는 서버이다. Flask와 PyTorch를 이용하여 구성했다.
+Petmily 앱의 감정 분석, 종 분류, 개고양이 탐지와 같은 이미지 처리를 담당하는 서버이다.  
+Flask와 PyTorch를 이용하여 구성했다.
 
-`server.py` REST 방식으로 통신이 가능한 Flask 서버이다. 모델을 로드하고 메모리에 적재하여 요청된 이미지를 처리한다.
+`server.py` REST 방식으로 통신이 가능한 Flask 서버이다.  
+모델을 로드하고 메모리에 적재하여 요청된 이미지를 처리한다.
 
 #### 라이브러리 import, 모델 초기 세팅
 ```python
@@ -1424,9 +1430,10 @@ upload_parser.add_argument('file', location='files',
 ```
 
 REST 형식으로 요청을 보내면 결과 값을 반환시켜주는 코드
-GET과 POST 메소드가 있는데, GET 메소드는 서버내에 있는 이미지의 경로를 가지고 작업, POST 메소드는 직접 multipart로 보낼 경우
+GET과 POST 메소드로 요청을 받음.  
+GET 메소드는 서버내에 있는 이미지의 경로를 가지고 작업, POST 메소드는 직접 multipart로 보낼 경우
 
-#### 개와 고양이를 찾아주는 기능능
+#### 개와 고양이를 찾아주는 기능
 ```python
 @api.route('/detect', methods=['GET', 'POST'])  
 class FindCatsAndDogs(Resource):  
@@ -1556,7 +1563,7 @@ class DistinguishCatBreed(Resource):
             json_object = {"message": "Image analysis error"}  
         return json_object
 ```
-개와 고양이를 찾고, 찾은 개나 고양이의 위치를 crop 하여 종 분류를 위한 모델에 입력 값으로 넣어 얻은 결과를 반환한다,
+개와 고양이를 찾고, 찾은 개나 고양이의 위치를 crop 하여 종 분류를 위한 모델에 입력 값으로 넣어 얻은 결과를 반환한다.
 
 ### 머신러닝
 1. 사진에서 반려동물을 찾을 수 있어야 한다 -> 객체 인식
@@ -1605,7 +1612,8 @@ def load_datasets(input_size=224):
   
     return train_dataset, test_dataset, classes
 ```
-데이터 셋을 불러온다, dogs 함수에는 데이터 셋을 불러오고 전처리 하는 과정에 포함되어 있음. 전처리된 데이터 셋과 클래스(라벨)를 리턴
+데이터 셋을 불러온다. (dogs 함수에는 데이터 셋을 불러오고 전처리 하는 과정에 포함되어 있음)  
+전처리된 데이터 셋과 클래스(라벨)를 리턴
 
 #### 학습과 비교를 위한 테스트를 하는 코드
 
@@ -1719,11 +1727,13 @@ logs = train(model, train_loader=train_loader, test_loader=test_loader,
              epoch_num=3, device=device)
 ```
 
-Training Process Starts at 17:43:26 ... 
-Epoch[ 1]>>> Train/Test loss: 0.0078367/0.0714398, Acc.: 95.81/97.84 [[10m 53s]]
-Epoch[ 2]>>> Train/Test loss: 0.0067343/0.0763198, Acc.: 96.58/97.63 [[21m 47s]]
-Epoch[ 3]>>> Train/Test loss: 0.0064167/0.0631362, Acc.: 96.53/98.15 [[32m 38s]]
-F1 Score: 98.15673013989462
-Finished in 32m 38s
+Training Process Starts at 17:43:26 ...   
+Epoch[ 1]>>> Train/Test loss: 0.0078367/0.0714398, Acc.: 95.81/97.84 [[10m 53s]]  
+Epoch[ 2]>>> Train/Test loss: 0.0067343/0.0763198, Acc.: 96.58/97.63 [[21m 47s]]  
+Epoch[ 3]>>> Train/Test loss: 0.0064167/0.0631362, Acc.: 96.53/98.15 [[32m 38s]]  
+F1 Score: 98.15673013989462  
+Finished in 32m 38s  
 
-학습을 위한 함수들을 파라미터로 넣고, epoch_num만큼 학습을 시작
+학습을 위한 함수들을 파라미터로 넣고, epoch_num만큼 학습을 시작한다. 
+학습된 모델은 torch.save() 함수로 저장한다.
+	
