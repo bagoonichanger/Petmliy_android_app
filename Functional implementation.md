@@ -983,9 +983,10 @@ class CommentRecyclerViewAdapter(
 ```
 
 ## 산책
+산책 기록을 저장하고 날짜 별로 확인할 수 있다.
   
 <img src="https://user-images.githubusercontent.com/70479375/170906984-12fb98d4-16a6-4a59-83c8-e8ef60e442bb.gif" width="420" height="720" />
-산책 기록을 저장하고 날짜 별로 확인할 수 있다.
+	
 * 실시간으로 산책하는 위치를 지도로 볼 수 있고 경로를 추적하여 저장한다.
 * 날짜 별로 산책 기록을 확인, 삭제, 공유가 가능하다
 
