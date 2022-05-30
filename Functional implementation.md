@@ -4,7 +4,7 @@
 
 - ### Client 부문
 
-- ### Server 부문
+- ### [Server 부문](#Server 부문)
 
 
 
