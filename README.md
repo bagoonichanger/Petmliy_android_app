@@ -12,9 +12,9 @@
 
 ## Server Github
 
-https://github.com/jookwonyoung/petmily-server
+[Petmily-Server](https://github.com/jookwonyoung/petmily-server)
 
-https://github.com/wolfdate25/Petmily_flask_server
+[Petmily-Flask-Server](https://github.com/wolfdate25/Petmily_flask_server)
 
 
 
