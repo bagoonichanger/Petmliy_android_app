@@ -3,7 +3,7 @@
 ## 목차
 
 - [Client 부문](#Client-부문)
-- [Server](#Server-부문)
+- [Server 부문](#Server-부문)
 
 
 ## Client 부문
