@@ -211,8 +211,6 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 * 로딩 시간이 흐른 후 결과를 받아온다.
 * 결과 값은 개, 고양이의 종과 화남, 행복, 슬픔의 감정을 퍼센트로 보내준다.
 
-<img src="Images/a3_2.png"/>
-
 #### AnalysisFragment.kt
 
 앨범, 카메라 접근 권한이 있는지 확인한다.
