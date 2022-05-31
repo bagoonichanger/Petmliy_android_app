@@ -2651,7 +2651,7 @@ public class PlaceService {
 
 ## 4. 테이블 구조
 
-![table](https://user-images.githubusercontent.com/95841885/170878351-5ac1778e-2113-4a6d-a3e3-28cd41c14546.png)
+![스크린샷 2022-06-01 오전 1 58 10](https://user-images.githubusercontent.com/95841885/171232334-2cc4a165-c076-4c4a-89a5-5ffea8b98cd6.png)
 
 	
 ### Flask
