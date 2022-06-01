@@ -10,6 +10,17 @@
 
 **팀원** : 박준석(Server), 주권영(Server), 정예린(Client)
 
+## Youtube Link
+### Youtube 동영상(전시 영상)
+
+[<img src="https://user-images.githubusercontent.com/70479375/170943139-be641897-fd9e-4d55-b515-ad926531100b.png" alt="전시 표지"
+ width = "360" height="180" />](https://youtu.be/CfLEWmCUOZU)
+### Youtube 동영상(발표 영상)
+#### *** 자막 사용해서 시청하세요 ***
+
+[<img src="https://user-images.githubusercontent.com/70479375/170943139-be641897-fd9e-4d55-b515-ad926531100b.png" alt="전시 표지"
+ width = "360" height="180" />](https://youtu.be/OhhwRF_aNI8)
+
 ## Server Github
 
 [Petmily-Server](https://github.com/jookwonyoung/petmily-server)
